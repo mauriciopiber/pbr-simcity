@@ -8,6 +8,7 @@ query {
     name
     slots
     nextSlot
+    parallel
     items {
       _id
       name
@@ -27,6 +28,7 @@ export const QUERY_BUILDING = gql`
       name
       slots
       nextSlot
+      parallel
       items {
         _id
         name

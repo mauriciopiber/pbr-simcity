@@ -37,7 +37,11 @@ fragment itemDepends on Item {
   maxValue
   slug
   productionTime
-
+  building {
+    _id
+    name
+    parallel
+  }
 }
 
 
@@ -73,6 +77,12 @@ fragment itemDepends on Item {
                       quantity
                       item {
                           ...itemDepends
+                          depends {
+                            item {
+                              ...itemDepends
+                            }
+                            quantity
+                          }
                       }
                     }
                 }
@@ -97,6 +107,7 @@ fragment itemDepends on Item {
       building {
         _id
         name
+        parallel
         items {
           _id
           name

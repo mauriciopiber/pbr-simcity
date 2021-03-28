@@ -52,7 +52,7 @@ function Page({ slug }: ItemProps) {
       </div>
       <div className="panel__building">
         <Link href={`/buildings/${item.building._id}`}>
-          <a className="link">{item.building.name}</a>
+          <a className="link">{item.building.name} - {item.building.parallel && 'Parallel' || 'Sequential'}</a>
         </Link>
       </div>
       <table>

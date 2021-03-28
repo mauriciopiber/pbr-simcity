@@ -39,6 +39,9 @@ function Page() {
         <div className="header">
           Next Slot
         </div>
+        <div className="header">
+          Parallel
+        </div>
       </div>
       {buildings.map((p: any) => {
         return (
@@ -61,6 +64,11 @@ function Page() {
             <div className="column">
               <div className="info">
                 {p.nextSlot}
+              </div>
+            </div>
+            <div className="column">
+              <div className="info">
+                {p.parallel && 'Sim' || 'Não'}
               </div>
             </div>
           </div>

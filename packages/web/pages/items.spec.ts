@@ -28,7 +28,42 @@ test('Item Stats - Planks', async t => {
 
   await enterItemPage(t, fixture);
   await t.expect(screen.findByTestId('material-title').exists).ok();
+
+  //await t.expect(screen.findByTestId('dependency-quantity-time-planks').textContent).eql('60');
 });
+
+
+
+test('Item Stats - Ladder', async t => {
+  // Test code
+
+  const fixture = 'Ladder';
+
+  await enterItemPage(t, fixture);
+  await t.expect(screen.findByTestId('material-title').exists).ok();
+
+  await t.expect(screen.findByTestId('dependency-quantity-time-planks').textContent).eql('60');
+  await t.expect(screen.findByTestId('dependency-time-bill-planks').textContent).eql('63');
+});
+
+
+
+test('Item Stats - Cherry Cheesecake', async t => {
+  // Test code
+
+  const fixture = 'Cherry Cheesecake';
+
+  await enterItemPage(t, fixture);
+  await t.expect(screen.findByTestId('material-title').exists).ok();
+
+  // await t.expect(screen.findByTestId('dependency-quantity-time-planks').textContent).eql('60');
+  // await t.expect(screen.findByTestId('dependency-quantity-time-planks').textContent).eql('60');
+
+
+  //await t.expect(screen.findByTestId('dependency-time-bill-planks').textContent).eql('63');
+});
+
+
 
 
 test('Item Stats - Cheese Fries', async t => {
