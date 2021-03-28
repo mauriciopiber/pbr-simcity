@@ -10,6 +10,7 @@ class ItemRepository extends Collection {
     return await docs.toArray();
   }
 
+
   async findByBuilding(building: ObjectId) {
 
 
@@ -19,9 +20,27 @@ class ItemRepository extends Collection {
   }
 
   async findById(id: ObjectId) {
-    console.log(id);
-    const docs = await this.collection.findOne({_id: {$eq: new ObjectId(id)}});
-    return docs;
+
+
+    const docs = await this.collection.aggregate(
+      [
+        {$match: {
+          _id: new ObjectId(id)
+        }},
+        {$project: {
+          slug: 1,
+          name: 1,
+          level: 1,
+          depends: 1,
+          maxValue: 1,
+          productionTime: 1,
+          building: 1,
+        }}
+      ]
+    ).toArray();
+    // console.log(id);
+    // const docs = await this.collection.findOne({_id: {$eq: new ObjectId(id)}});
+    return docs[0] || null;
   }
 
 

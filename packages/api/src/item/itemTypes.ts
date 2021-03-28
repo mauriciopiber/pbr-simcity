@@ -23,6 +23,8 @@ const typeDefs = gql`
     building: Building!
     level: PositiveInt!
     profit: ItemProfit!
+    costMongo: Int!
+    profitMongo: PositiveInt!
     slug: String!
     usedIn: [Item]
     depends: [ItemDepends],

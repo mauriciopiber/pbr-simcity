@@ -12,6 +12,7 @@ query {
     items {
       _id
       name
+      slug
       maxValue,
       productionTime
     }
@@ -33,6 +34,7 @@ export const QUERY_BUILDING = gql`
         _id
         name
         maxValue,
+        slug,
         productionTime
       }
     }

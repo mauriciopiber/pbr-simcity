@@ -24,8 +24,12 @@ const resolvers = {
       const { dataSources } = context;
       const { item } = dataSources;
 
-
-      return await item.findBySlug(args.slug);
+      const model = await item.findBySlug(args.slug);
+      return {
+        ...model,
+        profitMongo: 2,
+      }
+      //return await item.findBySlug(args.slug);
     },
   },
   Item: {
@@ -49,6 +53,7 @@ const resolvers = {
       const maxValue = parent.maxValue;
       const dependencyValues: IItemDependencyValues = await item.findItemDependencyCost(parent.depends);
 
+      console.log(dependencyValues);
 
       // const productionTime = item.productionTime + dependencyValues.time;
       const productionTime = parent.productionTime;

@@ -3,7 +3,13 @@ import Link from 'next/link';
 import { QUERY_ITEM } from '../../lib/items';
 import { useQuery } from "@apollo/react-hooks";
 import MaterialMap from '../../components/Material/MaterialMap';
+import BuildingFlow from '../../components/Material/BuildingFlow';
 import DependencyGraph from '../../components/Material/DependencyGraph';
+import {
+  calculateDependsCostByMaxValue,
+  calculateDependsTime
+} from '../../lib/items';
+
 
 const QUERY_PATHS = gql`
   query {
@@ -43,6 +49,10 @@ function Page({ slug }: ItemProps) {
     item
   } = data;
 
+  const dependsTime = calculateDependsTime(item.depends);
+  const dependsCost = calculateDependsCostByMaxValue(item.depends);
+
+
   console.log(item);
 
   return (
@@ -66,51 +76,96 @@ function Page({ slug }: ItemProps) {
         </tr>
         <tr>
           <th>
+            Buildings Flow
+          </th>
+          <td>
+            <BuildingFlow item={item}/>
+          </td>
+        </tr>
+        <tr>
+          <th>
             Production Time Min
           </th>
-          <td>{item.productionTime}</td>
+          <td>{item.productionTime}m</td>
         </tr>
-
+{/*
         <tr>
           <th>
             Production Time Hour.
           </th>
           <td>{item.productionTime / 60}</td>
-        </tr>
-        <tr>
+        </tr> */}
+        {/* <tr>
           <th>
             Cost
           </th>
           <td>
-            {item.profit.cost}
+            {item.profit.cost} - {item.costMongo}
+          </td>
+        </tr> */}
+        <tr>
+          <th>
+            Bill Cost
+          </th>
+          <td>
+            {dependsCost}
           </td>
         </tr>
         <tr>
           <th>
-            Cost / H
+            Bill Time
           </th>
           <td>
-            {item.profit.cost / (item.productionTime / 60)}
+            {dependsTime} ({dependsTime/60}h)
+          </td>
+        </tr>
+        <tr>
+          <th>
+            Total Production
+          </th>
+          <td>
+            {dependsTime+item.productionTime}m ({(dependsTime+item.productionTime)/60}h)
           </td>
         </tr>
         <tr>
           <th>
             Max Value
           </th>
-          <td>{item.maxValue}</td>
+          <td>
+            {item.maxValue}
+          </td>
         </tr>
         <tr>
           <th>
-            Value / H
+            Profit From Own Production
           </th>
-          <td>{item.maxValue / (item.productionTime / 60)}</td>
+          <td>
+            {item.maxValue - dependsCost} = ({item.maxValue}) - ({dependsCost})
+          </td>
         </tr>
         <tr>
+          <th>
+            Profit/H From Own Production
+          </th>
+          <td>
+            {(item.maxValue - dependsCost)/item.productionTime}
+          </td>
+        </tr>
+        {/* <tr>
+          <th>
+            Total Production Time
+          </th>
+          <td>
+            {item.productionTime + dependsTime} = ({item.productionTime}) + ({dependsTime})
+          </td>
+        </tr> */}
+
+        {/* <tr>
           <th>
             Max Production / H
           </th>
           <td>
-            {60 / item.productionTime}
+            {60 / (item.productionTime + dependsTime)}
           </td>
         </tr>
         <tr>
@@ -118,9 +173,9 @@ function Page({ slug }: ItemProps) {
             Max Production / D
           </th>
           <td>
-            {(60*24) / item.productionTime}
+            {(60*24) / (item.productionTime + dependsTime)}
           </td>
-        </tr>
+        </tr> */}
 
       </table>
       <div>

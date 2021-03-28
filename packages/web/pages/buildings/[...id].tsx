@@ -58,7 +58,7 @@ function Page({ id }: BuildingProps) {
           return (
             <div className="row">
               <div className="column">
-                <Link href={`/items/${p._id}`}>
+                <Link href={`/items/${p.slug}`}>
                   <a className="link">{p.name}</a>
                 </Link>
               </div>
