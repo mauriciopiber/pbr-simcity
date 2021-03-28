@@ -4,17 +4,17 @@ function Header() {
   return (
     <div className="header">
       <Link href="/buildings">
-        <div className="header__item">
+        <div data-testid="menu-buildings" className="header__item">
           <a>Buildings</a>
         </div>
       </Link>
       <Link href="/items">
-        <div className="header__item">
+        <div data-testid="menu-items" className="header__item">
           <a>Items</a>
         </div>
       </Link>
       <Link href="/profits">
-        <div className="header__item">
+        <div data-testid="menu-profits" className="header__item">
           <a>Profits</a>
         </div>
       </Link>

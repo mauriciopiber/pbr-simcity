@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import Head from "next/head";
 import type { AppProps /*, AppContext */ } from 'next/app'
 import withApollo from '../lib/withApollo';
-import Layout from '../components/Layout/Layout';
+import Layout from '../components/UI/Layout/Layout';
 
 
 function MyApp(props: AppProps) {

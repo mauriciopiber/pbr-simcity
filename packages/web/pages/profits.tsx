@@ -1,8 +1,13 @@
 import { QUERY_PROFITS } from "../lib/profits";
 import { useQuery } from "@apollo/react-hooks";
 import Link from 'next/link';
+import React from 'react';
+import AddProfit from './../components/Profit/AddProfit';
 
 function Page() {
+
+
+  const [createMode, setCreateMode] = React.useState(false);
 
   const { loading, error, data } = useQuery(
     QUERY_PROFITS,
@@ -26,6 +31,15 @@ function Page() {
 
   return (
     <div className="table">
+      <div className="row">
+        <button onClick={() => setCreateMode(true)}>Create</button>
+      </div>
+      {createMode && (
+        <div className="modal">
+          <AddProfit/>
+          <button onClick={() => setCreateMode(false)}>Cancel</button>
+        </div>
+      )}
       <div className="row">
         <div className="header">
           <div className="info">

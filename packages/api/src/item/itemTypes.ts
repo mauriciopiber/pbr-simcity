@@ -4,8 +4,15 @@ const typeDefs = gql`
 
 
   type ItemDepends {
-    item: Item!
+    item : Item!
     quantity: PositiveInt!
+  }
+
+  type ItemProfit {
+    cost: Int!
+    profit: Int!
+    profitByMinute: PositiveFloat!
+    profitByHour: PositiveFloat!
   }
 
   type Item {
@@ -15,13 +22,15 @@ const typeDefs = gql`
     maxValue: PositiveInt!
     building: Building!
     level: PositiveInt!
+    profit: ItemProfit!
+    slug: String!
     usedIn: [Item]
     depends: [ItemDepends],
   }
 
   type Query {
     items: [Item]
-    item(_id: ObjectID!): Item!
+    item(_id: ObjectID, slug: String): Item!
   }
 `;
 

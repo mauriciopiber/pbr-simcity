@@ -1,4 +1,4 @@
-import { IProfit } from '../types/types';
+import { IProfit } from '@pbr-simcity/types/types';
 
 const resolvers = {
   Query: {

@@ -9,6 +9,13 @@ export const QUERY_ITEMS = gql`
       maxValue
       productionTime
       level
+      slug
+      profit {
+        cost
+        profit
+        profitByMinute
+        profitByHour
+      }
       building {
         _id
         name
@@ -24,20 +31,68 @@ export const QUERY_ITEMS = gql`
 `
 
 export const QUERY_ITEM = gql`
+fragment itemDepends on Item {
+  _id
+  name
+  maxValue
+  slug
+  productionTime
+
+}
+
+
   query Item(
-    $_id: ObjectID!
+    $slug: String
   ) {
-    item(_id: $_id) {
+    item(slug: $slug) {
       _id
       name
-      maxValue,
-      productionTime,
-      level,
+      maxValue
+      slug
+      productionTime
+      level
+      profit {
+        cost
+        profit
+        profitByMinute
+        profitByHour
+      }
+      depends {
+        quantity
+        item {
+          ...itemDepends
+           depends {
+            quantity
+            item {
+              ...itemDepends
+              depends {
+                quantity
+                item {
+                    ...itemDepends
+                    depends {
+                      quantity
+                      item {
+                          ...itemDepends
+                      }
+                    }
+                }
+              }
+            }
+          }
+        }
+
+      }
       usedIn {
-        name
-        maxValue
-        productionTime
-        level
+
+        ...itemDepends
+        usedIn {
+          ...itemDepends
+            usedIn {
+          ...itemDepends
+        }
+        }
+
+
       }
       building {
         _id

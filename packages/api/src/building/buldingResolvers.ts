@@ -1,4 +1,4 @@
-import { IBuilding, IItem } from '../types/types';
+import { IBuilding, IItem } from '@pbr-simcity/types/types';
 
 const resolvers = {
   Query: {

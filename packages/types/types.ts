@@ -4,11 +4,12 @@ export interface IItem {
   level: number;
   building: IBuilding,
   maxValue: number,
+  slug: string;
   depends: IItemDependency[],
 }
 
 export interface IItemDependency {
-  item?: IItem,
+  item?: any,
   quantity: number,
 }
 
@@ -26,6 +27,7 @@ export interface IBuilding {
   //items: IItem[],
   slots: number,
   parallel: boolean,
+  slug: string;
   nextSlot: number | null,
 }
 

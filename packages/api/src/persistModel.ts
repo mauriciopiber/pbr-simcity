@@ -1,5 +1,5 @@
 import { buildingsList, itemsList } from './itemList';
-import { IItem, IBuilding } from './types/types';
+import { IItem, IBuilding } from '@pbr-simcity/types/types';
 import { MongoClient } from 'mongodb';
 
 

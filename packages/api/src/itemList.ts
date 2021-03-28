@@ -1,11 +1,12 @@
-import { IItem, IBuilding } from './types/types';
+import { IItem, IBuilding } from '@pbr-simcity/types/types';
 /** Define buildings */
 
 const industry: IBuilding = {
   name: 'Industry',
-  slots: (4*4+5*3),
+  slots: ((6*5) + (2*4)),
   parallel: true,
   nextSlot: null,
+  slug: 'industry'
 }
 
 const supplies: IBuilding = {
@@ -13,6 +14,7 @@ const supplies: IBuilding = {
   slots: 8,
   parallel: false,
   nextSlot: 40,
+  slug: 'supplies'
 }
 
 const hardware: IBuilding = {
@@ -20,6 +22,7 @@ const hardware: IBuilding = {
   slots: 8,
   parallel: false,
   nextSlot: 40,
+  slug: 'hardware'
 }
 
 const farmer: IBuilding = {
@@ -27,6 +30,7 @@ const farmer: IBuilding = {
   slots: 5,
   parallel: false,
   nextSlot: 26,
+  slug: 'farmers'
 }
 
 const furniture: IBuilding = {
@@ -34,6 +38,7 @@ const furniture: IBuilding = {
   slots: 4,
   parallel: false,
   nextSlot: 20,
+  slug: 'furniture'
 }
 
 const gardening : IBuilding = {
@@ -41,6 +46,7 @@ const gardening : IBuilding = {
   slots: 3,
   parallel: false,
   nextSlot: 14,
+  slug: 'bardening'
 }
 
 const donut: IBuilding = {
@@ -48,6 +54,7 @@ const donut: IBuilding = {
   slots: 3,
   parallel: false,
   nextSlot: 14,
+  slug: 'donut',
 }
 
 const fashion: IBuilding = {
@@ -55,6 +62,7 @@ const fashion: IBuilding = {
   slots: 2,
   parallel: false,
   nextSlot: 8,
+  slug: 'fashion',
 }
 
 const fastFood: IBuilding = {
@@ -62,6 +70,7 @@ const fastFood: IBuilding = {
   slots: 0,
   parallel: false,
   nextSlot: null,
+  slug: 'fast-food'
 }
 
 const home: IBuilding = {
@@ -69,6 +78,7 @@ const home: IBuilding = {
   slots: 0,
   parallel: false,
   nextSlot: null,
+  slug: 'home-appliances'
 }
 
 export const buildingsList: IBuilding[] = [
@@ -94,6 +104,7 @@ const metal: IItem = {
   building: industry,
   maxValue: 10,
   depends: [],
+  slug: 'metal'
 }
 
 const woods: IItem = {
@@ -103,6 +114,7 @@ const woods: IItem = {
   building: industry,
   maxValue: 20,
   depends: [],
+  slug: 'wood',
 }
 
 
@@ -113,6 +125,7 @@ const plastic: IItem  = {
   building: industry,
   maxValue: 25,
   depends: [],
+  slug: 'plastic',
 }
 
 const seeds: IItem = {
@@ -122,6 +135,7 @@ const seeds: IItem = {
   building: industry,
   maxValue: 30,
   depends: [],
+  slug: 'seeds',
 }
 
 
@@ -132,6 +146,7 @@ const minerals: IItem = {
   building: industry,
   maxValue: 40,
   depends: [],
+  slug: 'minerals',
 }
 
 const chemicals: IItem = {
@@ -141,6 +156,7 @@ const chemicals: IItem = {
   building: industry,
   maxValue: 60,
   depends: [],
+  slug: 'chemicals',
 }
 
 
@@ -151,6 +167,7 @@ const textiles: IItem = {
   building: industry,
   maxValue: 90,
   depends: [],
+  slug: 'textiles',
 }
 
 const sugar: IItem = {
@@ -160,6 +177,7 @@ const sugar: IItem = {
   building: industry,
   maxValue: 110,
   depends: [],
+  slug: 'sugar',
 }
 
 const glass: IItem = {
@@ -169,6 +187,7 @@ const glass: IItem = {
   building: industry,
   maxValue: 120,
   depends: [],
+  slug: 'glass',
 }
 
 const animalFeed: IItem = {
@@ -178,6 +197,7 @@ const animalFeed: IItem = {
   building: industry,
   maxValue: 140,
   depends: [],
+  slug: 'animal-feed',
 };
 
 const electricalComponents = {
@@ -187,6 +207,7 @@ const electricalComponents = {
   building: industry,
   maxValue: 160,
   depends: [],
+  slug: 'electrical-components',
 };
 
 const nails: IItem = {
@@ -195,6 +216,7 @@ const nails: IItem = {
   level: 1,
   building: supplies,
   maxValue: 80,
+  slug: 'nails',
   depends: [
     {
       item: metal,
@@ -206,6 +228,7 @@ const nails: IItem = {
 
 const planks: IItem = {
   name: 'Planks',
+  slug: 'planks',
   productionTime: 30,
   level: 3,
   building: supplies,
@@ -220,6 +243,7 @@ const planks: IItem = {
 
 const bricks: IItem = {
   name: 'Bricks',
+  slug: 'bricks',
   productionTime: 20,
   level: 13,
   building: supplies,
@@ -234,6 +258,7 @@ const bricks: IItem = {
 
 const cement: IItem = {
   name: 'Cement',
+  slug: 'cement',
   productionTime: 50,
   level: 14,
   building: supplies,
@@ -252,6 +277,7 @@ const cement: IItem = {
 
 const glue: IItem = {
   name: 'Glue',
+  slug: 'glue',
   productionTime: 60,
   level: 15,
   building: supplies,
@@ -270,6 +296,7 @@ const glue: IItem = {
 
 const paint: IItem = {
   name: 'Paint',
+  slug: 'paint',
   productionTime: 60,
   level: 16,
   building: supplies,
@@ -293,6 +320,7 @@ const paint: IItem = {
 
 const hammer: IItem = {
   name: 'Hammer',
+  slug: 'hammer',
   productionTime: 14,
   level: 4,
   building: hardware,
@@ -312,6 +340,7 @@ const hammer: IItem = {
 
 const measuringTape: IItem = {
   name: 'Measuring Tape',
+  slug: 'measuring-tape',
   productionTime: 20,
   level: 6,
   building: hardware,
@@ -330,6 +359,7 @@ const measuringTape: IItem = {
 
 const shovel: IItem = {
   name: 'Shovel',
+  slug: 'shovel',
   productionTime: 30,
   level: 9,
   building: hardware,
@@ -352,6 +382,7 @@ const shovel: IItem = {
 
 const cookingUtensils: IItem = {
   name: 'Cooking Utensils',
+  slug: 'cooking-utensils',
   productionTime: 45,
   level: 9,
   building: hardware,
@@ -374,6 +405,7 @@ const cookingUtensils: IItem = {
 
 const ladder: IItem = {
   name: 'Ladder',
+  slug: 'ladder',
   productionTime: 60,
   level: 20,
   building: hardware,
@@ -392,6 +424,7 @@ const ladder: IItem = {
 
 const drill: IItem = {
   name: 'Drill',
+  slug: 'drill',
   productionTime: 120,
   level: 30,
   building: hardware,
@@ -414,6 +447,7 @@ const drill: IItem = {
 
 const grass: IItem = {
   name: 'Grass',
+  slug: 'grass',
   productionTime: 30,
   level: 14,
   building: gardening,
@@ -432,6 +466,7 @@ const grass: IItem = {
 
 const treeSaplings: IItem = {
   name: 'Tree Saplings',
+  slug: 'tree-saplings',
   productionTime: 90,
   level: 16,
   building: gardening,
@@ -450,6 +485,7 @@ const treeSaplings: IItem = {
 
 const gardenFurniture: IItem = {
   name: 'Garden Furniture',
+  slug: 'garden-furniture',
   productionTime: 135,
   level: 21,
   building: gardening,
@@ -472,6 +508,7 @@ const gardenFurniture: IItem = {
 
 const firePit: IItem = {
   name: 'Fire Pit',
+  slug: 'fire-pit',
   productionTime: 240,
   level: 28,
   building: gardening,
@@ -495,6 +532,7 @@ const firePit: IItem = {
 
 const LawnMower: IItem = {
   name: 'Lawn Mower',
+  slug: 'lawn-mower',
   productionTime: 120,
   level: 30,
   building: gardening,
@@ -518,6 +556,7 @@ const LawnMower: IItem = {
 
 const gardenGnomes: IItem = {
   name: 'Garden Gnomes',
+  slug: 'garden-gnomes',
   productionTime: 90,
   level: 34,
   building: gardening,
@@ -539,6 +578,7 @@ const gardenGnomes: IItem = {
 
 const vegetables: IItem = {
   name: 'Vegetables',
+  slug: 'vegetables',
   productionTime: 20,
   level: 8,
   building: farmer,
@@ -553,6 +593,7 @@ const vegetables: IItem = {
 
 const flourBag: IItem = {
   name: 'Flour Bag',
+  slug: 'flour-bag',
   productionTime: 30,
   level: 17,
   building: farmer,
@@ -572,6 +613,7 @@ const flourBag: IItem = {
 
 const fruit: IItem = {
   name: 'Fruit and Berries',
+  slug: 'fruit-and-berries',
   productionTime: 90,
   level: 18,
   building: farmer,
@@ -590,6 +632,7 @@ const fruit: IItem = {
 
 const cream: IItem = {
   name: 'Cream',
+  slug: 'cream',
   productionTime: 75,
   level: 23,
   building: farmer,
@@ -605,6 +648,7 @@ const cream: IItem = {
 
 const corn: IItem = {
   name: 'Corn',
+  slug: 'corn',
   productionTime: 60,
   level: 24,
   building: farmer,
@@ -623,6 +667,7 @@ const corn: IItem = {
 
 const cheese: IItem = {
   name: 'Cheese',
+  slug: 'cheese',
   productionTime: 105,
   level: 26,
   maxValue: 660,
@@ -637,6 +682,7 @@ const cheese: IItem = {
 
 const beef: IItem = {
   name: 'Beef',
+  slug: 'beef',
   productionTime: 150,
   level: 27,
   maxValue: 860,
@@ -653,6 +699,7 @@ const beef: IItem = {
 
 const chairs: IItem = {
   name: 'Chairs',
+  slug: 'chairs',
   productionTime: 20,
   level: 10,
   maxValue: 300,
@@ -675,6 +722,7 @@ const chairs: IItem = {
 
 const tables: IItem = {
   name: 'Tables',
+  slug: 'tables',
   productionTime: 30,
   level: 16,
   maxValue: 500,
@@ -697,6 +745,7 @@ const tables: IItem = {
 
 const homeTextiles: IItem = {
   name: 'Home Textiles',
+  slug: 'home-textiles',
   productionTime: 75,
   maxValue: 610,
   level: 25,
@@ -715,6 +764,7 @@ const homeTextiles: IItem = {
 
 const cupboard: IItem = {
   name: 'Cupboard',
+  slug: 'cupboard',
   level: 26,
   maxValue: 900,
   productionTime: 45,
@@ -736,6 +786,7 @@ const cupboard: IItem = {
 
 const couch: IItem = {
   name: 'Couch',
+  slug: 'couch',
   level: 33,
   maxValue: 1810,
   productionTime: 150,
@@ -759,6 +810,7 @@ const couch: IItem = {
 
 const donuts: IItem = {
   name: 'Donuts',
+  slug: 'donuts',
   level: 18,
   maxValue: 950,
   productionTime: 45,
@@ -777,6 +829,7 @@ const donuts: IItem = {
 
 const greenSmoothie: IItem = {
   name: 'Green Smoothie',
+  slug: 'green-smoothie',
   level: 20,
   maxValue: 1150,
   productionTime: 30,
@@ -795,6 +848,7 @@ const greenSmoothie: IItem = {
 
 const breadRoll: IItem = {
   name: 'Bread Roll',
+  slug: 'bread-roll',
   level: 24,
   maxValue: 1840,
   productionTime: 60,
@@ -814,6 +868,7 @@ const breadRoll: IItem = {
 
 const cherryCheesecake: IItem = {
   name: 'Cherry Cheesecake',
+  slug: 'cherry-cheesecake',
   level: 27,
   maxValue: 2240,
   productionTime: 90,
@@ -836,6 +891,7 @@ const cherryCheesecake: IItem = {
 
 const frozenYogurt: IItem = {
   name: 'Frozen Yogurt',
+  slug: 'frozen-yogurt',
   level: 28,
   maxValue: 1750,
   productionTime: 240,
@@ -856,6 +912,7 @@ const frozenYogurt: IItem = {
 
 const coffee: IItem = {
   name: 'Coffee',
+  slug: 'coffee',
   level: 33,
   maxValue: 750,
   productionTime: 60,
@@ -878,6 +935,7 @@ const coffee: IItem = {
 
 const cap: IItem = {
   name: 'Cap',
+  slug: 'cap',
   level: 19,
   maxValue: 600,
   productionTime: 60,
@@ -897,6 +955,7 @@ const cap: IItem = {
 
 const shoes: IItem = {
   name: 'Shoes',
+  slug: 'shoes',
   level: 21,
   maxValue: 980,
   productionTime: 75,
@@ -918,6 +977,7 @@ const shoes: IItem = {
 }
 
 const watch: IItem = {
+  slug: 'watch',
   name: 'Watch',
   level: 22,
   maxValue: 580,
@@ -941,6 +1001,7 @@ const watch: IItem = {
 
 const businessSuits: IItem = {
   name: 'Business Suits',
+  slug: 'business-suits',
   level: 32,
   maxValue: 1170,
   productionTime: 210,
@@ -962,6 +1023,7 @@ const businessSuits: IItem = {
 
 const backpack: IItem = {
   name: 'Backpack',
+  slug: 'backpack',
   level: 34,
   maxValue: 430,
   productionTime: 150,
@@ -983,7 +1045,8 @@ const backpack: IItem = {
 }
 
 const iceCream: IItem = {
-  name: 'Ice Cream',
+  name: 'Ice Cream Sandwich',
+  slug: 'ice-cream-sandwich',
   level: 25,
   maxValue: 2560,
   productionTime: 14,
@@ -1002,6 +1065,7 @@ const iceCream: IItem = {
 
 const pizza: IItem = {
   name: 'Pizza',
+  slug: 'pizza',
   level: 28,
   maxValue: 2560,
   productionTime: 24,
@@ -1025,6 +1089,7 @@ const pizza: IItem = {
 
 const cheeseFries: IItem = {
   name: 'Cheese Fries',
+  slug: 'cheese-fries',
   level: 33,
   maxValue: 1050,
   productionTime: 20,
@@ -1043,6 +1108,7 @@ const cheeseFries: IItem = {
 
 const lemonade: IItem = {
   name: 'Lemonade',
+  slug: 'lemonade',
   level: 37,
   productionTime: 60,
   maxValue: 1690,
@@ -1069,6 +1135,7 @@ const lemonade: IItem = {
 
 const bbqGrill: IItem = {
   name: 'BBG Grill',
+  slug: 'bbg-grill',
   level: 29,
   maxValue: 530,
   productionTime: 165,
@@ -1086,6 +1153,7 @@ const bbqGrill: IItem = {
 
 const refrigerator: IItem = {
   name: 'Refrigerator',
+  slug: 'refrigerator',
   level: 35,
   maxValue: 1060,
   productionTime: 210,
@@ -1109,6 +1177,7 @@ const refrigerator: IItem = {
 
 const lightingSystem: IItem = {
   name: 'Lighting System',
+  slug: 'lighting-system',
   level: 36,
   maxValue: 890,
   productionTime: 105,
@@ -1133,6 +1202,7 @@ const lightingSystem: IItem = {
 
 const tv: IItem = {
   name: 'TV',
+  slug: 'tv',
   level: 38,
   maxValue: 1280,
   productionTime: 150,
@@ -1156,6 +1226,7 @@ const tv: IItem = {
 
 const microwaveOven: IItem = {
   name: 'Microwave Oven',
+  slug: 'microwave-oven',
   level: 42,
   maxValue: 480,
   productionTime: 120,
@@ -1179,6 +1250,7 @@ const microwaveOven: IItem = {
 
 const popCorn: IItem = {
   name: 'Pop Corn',
+  slug: 'pop-corn',
   level: 43,
   productionTime: 30,
   maxValue: 1250,
@@ -1197,6 +1269,7 @@ const popCorn: IItem = {
 
 const burgers: IItem = {
   name: 'Burgers',
+  slug: 'burgers',
   level: 31,
   maxValue: 3620,
   productionTime: 35,

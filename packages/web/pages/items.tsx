@@ -28,6 +28,11 @@ function Page() {
   return (
     <div className="table">
       <div className="row">
+      <div className="header">
+          <div className="info">
+            Icon
+          </div>
+        </div>
         <div className="header">
           <div className="info">
             Item
@@ -44,13 +49,28 @@ function Page() {
           </div>
         </div>
         <div className="header">
-          <div className="info">
-            Max Value
+        <div className="info">
+          Production Time
           </div>
         </div>
         <div className="header">
-        <div className="info">
-          Production Time
+          <div className="info">
+            Cost
+          </div>
+        </div>
+        <div className="header">
+          <div className="info">
+            Profit
+          </div>
+        </div>
+        <div className="header">
+          <div className="info">
+            PF/Min
+          </div>
+        </div>
+        <div className="header">
+          <div className="info">
+            PF/Hour
           </div>
         </div>
       </div>
@@ -58,7 +78,10 @@ function Page() {
         return (
           <div className="row">
             <div className="column">
-              <Link href={`/items/${p._id}`}>
+              <img className="icon" src={`/img/${p.slug}.png`}/>
+            </div>
+            <div className="column">
+              <Link href={`/items/${p.slug}`}>
                 <a className="link">{p.name}</a>
               </Link>
             </div>
@@ -77,13 +100,32 @@ function Page() {
             </div>
             <div className="column">
               <div className="info">
-                {p.maxValue}
-
+                {p.productionTime}
               </div>
             </div>
             <div className="column">
               <div className="info">
-                {p.productionTime}
+                {p.maxValue}
+              </div>
+            </div>
+            <div className="column">
+              <div className="info">
+                {p.profit.cost}
+              </div>
+            </div>
+            <div className="column">
+              <div className="info">
+                {p.profit.profit}
+              </div>
+            </div>
+            <div className="column">
+              <div className="info">
+                {p.profit.profitByMinute}
+              </div>
+            </div>
+            <div className="column">
+              <div className="info">
+                {p.profit.profitByHour}
               </div>
             </div>
           </div>
@@ -93,6 +135,12 @@ function Page() {
         {`
           .table {
             padding: 25px;
+          }
+
+          .icon {
+            width: 48.5px;
+            height: 53.5px;
+
           }
 
           .row {
