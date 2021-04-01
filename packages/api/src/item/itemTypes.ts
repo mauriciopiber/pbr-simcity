@@ -32,6 +32,7 @@ const typeDefs = gql`
 
   type Query {
     items: [Item]
+    endlineItems: [Item]
     item(_id: ObjectID, slug: String): Item!
   }
 `;

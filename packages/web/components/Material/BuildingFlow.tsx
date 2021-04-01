@@ -14,9 +14,11 @@ const BuildingFlow: FC<BuildingFlowProps> = ({item}) => {
 
   item.depends.map((p: any) => {
 
+
+
   })
   return (
-    <div>Building Flow</div>
+    <div>Building Flow {item._id}</div>
   );
 };
 

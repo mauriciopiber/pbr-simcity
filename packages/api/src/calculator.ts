@@ -1,4 +1,4 @@
-import { IItem, IBuilding, IItemPrint, IItemDependency, IItemDependencyValues } from './types/types';
+import { IItem, IBuilding, IItemPrint, IItemDependency, IItemDependencyValues } from '@pbr-simcity/types/types';
 
 function toFixedNumber(num: number, digits: number, base: number) : number {
   var pow = Math.pow(base||10, digits);
@@ -28,8 +28,6 @@ export function profit(buildings: IBuilding[], items: IItem[]) : IItemPrint[] {
   const calculateItems: IItemPrint[] = items.map(function(item: IItem): IItemPrint {
 
     const factory = buildings.find(p => p.name == item.building.name);
-    console.log(factory);
-
 
     const maxValue = item.maxValue;
     const dependencyValues: IItemDependencyValues = dependency(item.depends);
