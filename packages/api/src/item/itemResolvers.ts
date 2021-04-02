@@ -6,7 +6,7 @@ import {
 } from '@pbr-simcity/types/types';
 
 function toFixedNumber(num: number, digits: number, base: number): number {
-  var pow = Math.pow(base || 10, digits);
+  const pow = Math.pow(base || 10, digits);
   return Math.round(num * pow) / pow;
 }
 
@@ -28,9 +28,9 @@ const resolvers = {
 
       return {
         ...model,
-        //profitMongo: 2,
+        // profitMongo: 2,
       };
-      //return await item.findBySlug(args.slug);
+      // return await item.findBySlug(args.slug);
     },
   },
   Item: {
@@ -55,14 +55,14 @@ const resolvers = {
       const { dataSources } = context;
       const { item } = dataSources;
 
-      const maxValue = parent.maxValue;
+      const { maxValue } = parent;
       const dependencyValues: IItemDependencyValues = await item.findItemDependencyCost(
         parent.depends,
       );
 
       // const productionTime = item.productionTime + dependencyValues.time;
-      const productionTime = parent.productionTime;
-      const cost = dependencyValues.cost;
+      const { productionTime } = parent;
+      const { cost } = dependencyValues;
       const profit = maxValue - cost;
 
       const profitByMinute = toFixedNumber(profit / productionTime, 2, 10);

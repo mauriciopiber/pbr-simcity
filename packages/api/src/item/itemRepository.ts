@@ -1,5 +1,4 @@
-//import { MongoDataSource } from 'apollo-datasource-mongodb'
-import Collection from '../collection';
+// import { MongoDataSource } from 'apollo-datasource-mongodb'
 import { ObjectId } from 'mongodb';
 import {
   IItemDependency,
@@ -8,6 +7,7 @@ import {
   IItemModel,
   IItemFilter,
 } from '@pbr-simcity/types/types';
+import Collection from '../collection';
 
 class ItemRepository extends Collection {
   async getAll() {
@@ -16,7 +16,7 @@ class ItemRepository extends Collection {
   }
 
   async findManyByFilter(args: IItemArgs): Promise<IItemModel[]> {
-    //console.log(args);
+    // console.log(args);
     const order = (args.order == 'desc' && 1) || -1;
 
     const sort = { [args.orderBy]: order };
@@ -24,9 +24,9 @@ class ItemRepository extends Collection {
     const match: IItemFilter = {};
 
     if (args.filter?.level) {
-      match['level'] = { $lte: args.filter.level };
+      match.level = { $lte: args.filter.level };
     }
-    //console.log(sort);
+    // console.log(sort);
 
     const docs = await this.collection
       .aggregate([
@@ -42,15 +42,13 @@ class ItemRepository extends Collection {
       .toArray();
 
     // const docs = await this.collection.findOne({_id: {$eq: new ObjectId(id)}});
-    //return docs;
+    // return docs;
 
     return docs.map(
-      (p: IItemModel): IItemModel => {
-        return {
-          ...p,
-          depends: p.depends.filter((p: any) => p.item),
-        };
-      },
+      (p: IItemModel): IItemModel => ({
+        ...p,
+        depends: p.depends.filter((p: any) => p.item),
+      }),
     );
   }
 
@@ -179,7 +177,7 @@ class ItemRepository extends Collection {
             },
           },
         },
-        //billCost: {$sum: {$multiply: ["$depends.item.maxValue", "$depends.quantity"]}},
+        // billCost: {$sum: {$multiply: ["$depends.item.maxValue", "$depends.quantity"]}},
       },
     },
     { $unwind: '$depends' },
@@ -213,7 +211,7 @@ class ItemRepository extends Collection {
           },
         },
         billTime: { $max: '$billTime' },
-        //billCost: {$sum: {$multiply: ["$depends.item.maxValue", "$depends.quantity"]}},
+        // billCost: {$sum: {$multiply: ["$depends.item.maxValue", "$depends.quantity"]}},
       },
     },
     { $unwind: { path: '$depends', preserveNullAndEmptyArrays: true } },
@@ -255,7 +253,7 @@ class ItemRepository extends Collection {
     },
     {
       $project: {
-        //dependsLvl2: "$dependsItem.depends",
+        // dependsLvl2: "$dependsItem.depends",
         name: 1,
         slug: 1,
         productionTime: 1,
@@ -269,13 +267,13 @@ class ItemRepository extends Collection {
 
         billCost: 1,
         billTime: 1,
-        //billTime: {$max: {$sum: ['$billTimeLvl2', "$billTimeLvl3"]}},
+        // billTime: {$max: {$sum: ['$billTimeLvl2', "$billTimeLvl3"]}},
         depends: 1,
       },
     },
     {
       $addFields: {
-        //profitOwnProduction: { $subtract: [ "$maxValue", "$billCost"  ] },
+        // profitOwnProduction: { $subtract: [ "$maxValue", "$billCost"  ] },
         profitOwnByHour: { $multiply: ['$profitOwnByMinute', 60] },
       },
     },
@@ -310,7 +308,7 @@ class ItemRepository extends Collection {
       .toArray();
 
     // const docs = await this.collection.findOne({_id: {$eq: new ObjectId(id)}});
-    //return docs;
+    // return docs;
     const model: IItemModel | undefined = docs[0];
 
     if (!model) {
@@ -336,9 +334,9 @@ class ItemRepository extends Collection {
       .toArray();
 
     // const docs = await this.collection.findOne({_id: {$eq: new ObjectId(id)}});
-    //return docs;
-    //return docs[0] || null;
-    //const docs = await this.collection.findOne({slug: {$eq: slug}});
+    // return docs;
+    // return docs[0] || null;
+    // const docs = await this.collection.findOne({slug: {$eq: slug}});
 
     const model: IItemModel | undefined = docs[0];
 
@@ -358,34 +356,32 @@ class ItemRepository extends Collection {
     });
 
     return docs.toArray();
-    //return [];
+    // return [];
   }
 
   async findItemDependencyCost(
     items: IItemDependency[],
   ): Promise<IItemDependencyValues> {
-    const itemsPromise = items.map(async (p) => {
-      return {
-        item: await this.findById(p.item),
-        quantity: p.quantity,
-      };
-    });
+    const itemsPromise = items.map(async (p) => ({
+      item: await this.findById(p.item),
+      quantity: p.quantity,
+    }));
 
     const itemsDeps = await Promise.all(itemsPromise);
 
-    const cost = itemsDeps.reduce(function (
+    const cost = itemsDeps.reduce((
       a: number,
       b: IItemDependency,
-    ): number {
+    ): number => {
       const maxValue = b?.item?.maxValue || 0;
       return a + maxValue * b.quantity;
     },
     0);
 
-    const time = itemsDeps.reduce(function (
+    const time = itemsDeps.reduce((
       a: number,
       b: IItemDependency,
-    ): number {
+    ): number => {
       const maxTime = b?.item?.productionTime || 0;
       return a + maxTime;
     },

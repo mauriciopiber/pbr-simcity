@@ -1,6 +1,6 @@
-//import { MongoDataSource } from 'apollo-datasource-mongodb'
-import Collection from '../collection';
+// import { MongoDataSource } from 'apollo-datasource-mongodb'
 import { ObjectId } from 'mongodb';
+import Collection from '../collection';
 
 class ProfitRepository extends Collection {
   async getAll() {

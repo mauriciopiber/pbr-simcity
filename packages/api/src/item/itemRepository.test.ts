@@ -1,9 +1,9 @@
 import { MongoClient, ObjectID } from 'mongodb';
 import { IItemModel } from '@pbr-simcity/types/types';
 
-const mongoStr = 'mongodb://localhost:27017/simcity';
-
 import ItemRepository from './itemRepository';
+
+const mongoStr = 'mongodb://localhost:27017/simcity';
 
 describe('Item Repository', () => {
   test('find one by id full data - Planks', async () => {
@@ -59,8 +59,8 @@ describe('Item Repository', () => {
       expect(findOne.billTime).toEqual(465);
       return;
       // to add
-      //expect(findOne.totalProductionTime).toEqual(555);
-      //expect(findOne.hourProfitOwnProduction).toEqual(280);
+      // expect(findOne.totalProductionTime).toEqual(555);
+      // expect(findOne.hourProfitOwnProduction).toEqual(280);
     } catch (e) {
       throw e;
     } finally {
@@ -86,12 +86,12 @@ describe('Item Repository', () => {
       expect(findOne.profitOwnProduction).toEqual(390);
 
       /** @TODO add not parallel sum to */
-      //expect(findOne.billTime).toEqual(150+105+360);
+      // expect(findOne.billTime).toEqual(150+105+360);
       expect(findOne.billTime).toEqual(510);
       return;
       // to add
-      //expect(findOne.totalProductionTime).toEqual(555);
-      //expect(findOne.hourProfitOwnProduction).toEqual(280);
+      // expect(findOne.totalProductionTime).toEqual(555);
+      // expect(findOne.hourProfitOwnProduction).toEqual(280);
     } catch (e) {
       throw e;
     } finally {
@@ -152,10 +152,10 @@ describe('Item Repository', () => {
       /** @TODO parallel sum */
       // expect(findOne.billTime).toEqual(219);
       expect(findOne.billTime).toEqual(180);
-      //return;
+      // return;
       // to add
-      //expect(findOne.totalProductionTime).toEqual(555);
-      //expect(findOne.hourProfitOwnProduction).toEqual(280);
+      // expect(findOne.totalProductionTime).toEqual(555);
+      // expect(findOne.hourProfitOwnProduction).toEqual(280);
     } catch (e) {
       throw e;
     } finally {
@@ -184,8 +184,8 @@ describe('Item Repository', () => {
       expect(findOne.billTime).toEqual(510);
 
       // to add
-      //expect(findOne.totalProductionTime).toEqual(555);
-      //expect(findOne.hourProfitOwnProduction).toEqual(280);
+      // expect(findOne.totalProductionTime).toEqual(555);
+      // expect(findOne.hourProfitOwnProduction).toEqual(280);
     } catch (e) {
       throw e;
     } finally {
@@ -212,8 +212,8 @@ describe('Item Repository', () => {
       expect(findOne.billTime).toEqual(300);
       return;
       // to add
-      //expect(findOne.totalProductionTime).toEqual(555);
-      //expect(findOne.hourProfitOwnProduction).toEqual(280);
+      // expect(findOne.totalProductionTime).toEqual(555);
+      // expect(findOne.hourProfitOwnProduction).toEqual(280);
     } catch (e) {
       throw e;
     } finally {
@@ -240,8 +240,8 @@ describe('Item Repository', () => {
       expect(findOne.billTime).toEqual(220);
       return;
       // to add
-      //expect(findOne.totalProductionTime).toEqual(555);
-      //expect(findOne.hourProfitOwnProduction).toEqual(280);
+      // expect(findOne.totalProductionTime).toEqual(555);
+      // expect(findOne.hourProfitOwnProduction).toEqual(280);
     } catch (e) {
       throw e;
     } finally {
@@ -268,8 +268,8 @@ describe('Item Repository', () => {
       // to add
       expect(findOne.billTime).toEqual(180);
       return;
-      //expect(findOne.totalProductionTime).toEqual(555);
-      //expect(findOne.hourProfitOwnProduction).toEqual(280);
+      // expect(findOne.totalProductionTime).toEqual(555);
+      // expect(findOne.hourProfitOwnProduction).toEqual(280);
     } catch (e) {
       throw e;
     } finally {
@@ -304,8 +304,8 @@ describe('Item Repository', () => {
       expect(findOne.profitOwnByHour).toEqual(360);
 
       // to add
-      //expect(findOne.totalProductionTime).toEqual(555);
-      //expect(findOne.hourProfitOwnProduction).toEqual(280);
+      // expect(findOne.totalProductionTime).toEqual(555);
+      // expect(findOne.hourProfitOwnProduction).toEqual(280);
     } catch (e) {
       throw e;
     } finally {
@@ -332,8 +332,8 @@ describe('Item Repository', () => {
       expect(findOne.billTime).toEqual(435);
       return;
       // to add
-      //expect(findOne.totalProductionTime).toEqual(555);
-      //expect(findOne.hourProfitOwnProduction).toEqual(280);
+      // expect(findOne.totalProductionTime).toEqual(555);
+      // expect(findOne.hourProfitOwnProduction).toEqual(280);
     } catch (e) {
       throw e;
     } finally {
