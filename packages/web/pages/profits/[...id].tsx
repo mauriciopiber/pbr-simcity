@@ -17,18 +17,12 @@ interface BuildingProps {
 }
 
 function Page({ id }: BuildingProps) {
-  const { loading, error, data } = useQuery(
-    QUERY_PROFIT,
-    {
-      variables:
-      { _id: id },
-    },
-  );
+  const { loading, error, data } = useQuery(QUERY_PROFIT, {
+    variables: { _id: id },
+  });
 
   if (loading) {
-    return (
-      <div>Loading</div>
-    );
+    return <div>Loading</div>;
   }
 
   if (error) {
@@ -40,15 +34,11 @@ function Page({ id }: BuildingProps) {
     );
   }
 
-  const {
-    profit,
-  } = data;
+  const { profit } = data;
 
   return (
     <div className="panel">
-      <div className="panel__title">
-        {profit.name}
-      </div>
+      <div className="panel__title">{profit.name}</div>
 
       <div>
         <Link href="/items">
@@ -99,7 +89,6 @@ export async function getStaticProps(ctx: any) {
   return {
     props: {
       id: id[0],
-
     },
   };
 }

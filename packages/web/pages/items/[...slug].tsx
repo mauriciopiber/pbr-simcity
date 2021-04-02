@@ -24,18 +24,12 @@ interface ItemProps {
 }
 
 function Page({ slug }: ItemProps) {
-  const { loading, error, data } = useQuery(
-    QUERY_ITEM,
-    {
-      variables:
-      { slug },
-    },
-  );
+  const { loading, error, data } = useQuery(QUERY_ITEM, {
+    variables: { slug },
+  });
 
   if (loading) {
-    return (
-      <div>Loading</div>
-    );
+    return <div>Loading</div>;
   }
 
   if (error) {
@@ -47,117 +41,72 @@ function Page({ slug }: ItemProps) {
     );
   }
 
-  const {
-    item,
-  } = data;
+  const { item } = data;
 
   const dependsTime = calculateDependsTime(item.depends);
   const dependsCost = calculateDependsCostByMaxValue(item.depends);
 
   return (
     <div className="panel">
-      <div className="panel__title">
-        {item.name}
-      </div>
+      <div className="panel__title">{item.name}</div>
       <div className="panel__building">
         <Link href={`/buildings/${item.building._id}`}>
           <a className="link">
-            {item.building.name}
-            {' '}
-            -
-            {' '}
+            {item.building.name} -{' '}
             {(item.building.parallel && 'Parallel') || 'Sequential'}
           </a>
         </Link>
       </div>
       <table>
         <tr>
-          <th>
-            Dependency Graph
-          </th>
+          <th>Dependency Graph</th>
           <td>
             <DependencyGraph items={item.depends} />
           </td>
         </tr>
         <tr>
-          <th>
-            Buildings Flow
-          </th>
+          <th>Buildings Flow</th>
           <td>
             <BuildingFlow item={item} />
           </td>
         </tr>
         <tr>
-          <th>
-            Production Time Min
-          </th>
-          <td>
-            {item.productionTime}
-            m
-          </td>
+          <th>Production Time Min</th>
+          <td>{item.productionTime}m</td>
         </tr>
         <tr>
-          <th>
-            Bill Cost
-          </th>
-          <td>
-            {dependsCost}
-          </td>
+          <th>Bill Cost</th>
+          <td>{dependsCost}</td>
         </tr>
         <tr>
-          <th>
-            Bill Time
-          </th>
+          <th>Bill Time</th>
           <td>
-            {dependsTime}
-            {' '}
-            (
-            {dependsTime / 60}
+            {dependsTime} ({dependsTime / 60}
             h)
           </td>
         </tr>
         <tr>
-          <th>
-            Total Production
-          </th>
+          <th>Total Production</th>
           <td>
-            {dependsTime + item.productionTime}
-            m (
+            {dependsTime + item.productionTime}m (
             {(dependsTime + item.productionTime) / 60}
             h)
           </td>
         </tr>
         <tr>
-          <th>
-            Max Value
-          </th>
+          <th>Max Value</th>
+          <td>{item.maxValue}</td>
+        </tr>
+        <tr>
+          <th>Profit From Own Production</th>
           <td>
-            {item.maxValue}
+            {item.maxValue - dependsCost} = ({item.maxValue}) - ({dependsCost})
           </td>
         </tr>
         <tr>
-          <th>
-            Profit From Own Production
-          </th>
-          <td>
-            {item.maxValue - dependsCost}
-            {' '}
-            = (
-            {item.maxValue}
-            ) - (
-            {dependsCost}
-            )
-          </td>
+          <th>Profit/H From Own Production</th>
+          <td>{(item.maxValue - dependsCost) / item.productionTime}</td>
         </tr>
-        <tr>
-          <th>
-            Profit/H From Own Production
-          </th>
-          <td>
-            {(item.maxValue - dependsCost) / item.productionTime}
-          </td>
-        </tr>
-
       </table>
       <div>
         <img alt={item.name} src={`/img/${item.slug}.png`} />
@@ -212,7 +161,6 @@ export async function getStaticProps(ctx: any) {
   return {
     props: {
       slug: slug[0],
-
     },
   };
 }

@@ -1,9 +1,8 @@
+import React from 'react';
 import { useForm } from 'react-hook-form';
 
 function AddProfit() {
-  const {
-    register, handleSubmit, watch, errors,
-  } = useForm();
+  const { register, handleSubmit, watch, errors } = useForm();
   const onSubmit = (data: any) => console.log(data);
 
   console.log(watch('example')); // watch input value by passing the name of it

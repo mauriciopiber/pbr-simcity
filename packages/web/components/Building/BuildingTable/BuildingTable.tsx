@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import cx from 'classnames';
+// import cx from 'classnames';
 import { IBuildingModel } from '@pbr-simcity/types/types';
 import Link from 'next/link';
 
@@ -29,7 +29,7 @@ const BuildingTable: FC<BuildingTableProps> = ({ buildings, setOrder }) => (
     </thead>
     <tbody>
       {buildings.map((p: IBuildingModel) => (
-        <tr>
+        <tr key={p.slug}>
           <td>
             <Link href={`/buildings/${p.slug}`}>
               <a>{p.name}</a>

@@ -1,6 +1,5 @@
-import {
-  render, fireEvent, waitFor, screen,
-} from '@testing-library/react';
+import React from 'react';
+import { render } from '@testing-library/react';
 import ItemTable, { ItemTableProps } from './ItemTable';
 import '@testing-library/jest-dom/extend-expect';
 

@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import Link from 'next/link';
-import { IItem } from '@pbr-simcity/types/types';
 import cx from 'classnames';
 import {
   calculateDependsCostByMaxValue,
@@ -33,8 +32,9 @@ const DependencyGraph: FC<DependencyGraphProps> = ({
           item.item.depends,
         );
 
-        const dependencyQuantityTime = (item.item.building.parallel && item.item.productionTime)
-            || item.item.productionTime * item.quantity;
+        const dependencyQuantityTime =
+          (item.item.building.parallel && item.item.productionTime) ||
+          item.item.productionTime * item.quantity;
         return (
           <>
             <tr data-testid={`dependency-${parentSlug + item.item.slug}`}>
@@ -93,12 +93,12 @@ const DependencyGraph: FC<DependencyGraphProps> = ({
                 {billCostMaxValue}
               </td>
               {item?.item?.depends?.length > 0 && (
-              <td>
-                <DependencyGraph
-                  parentSlug={`${item.item.slug}-`}
-                  items={item.item.depends}
-                />
-              </td>
+                <td>
+                  <DependencyGraph
+                    parentSlug={`${item.item.slug}-`}
+                    items={item.item.depends}
+                  />
+                </td>
               )}
             </tr>
           </>
@@ -107,40 +107,40 @@ const DependencyGraph: FC<DependencyGraphProps> = ({
     </>
     <style jsx>
       {`
-          .dependency-graph {
-            border: 1px solid black;
-            background-color: #ffffff;
-            color: #000000;
-            border-collapse: collapse;
-            box-sizing: border-box;
-          }
+        .dependency-graph {
+          border: 1px solid black;
+          background-color: #ffffff;
+          color: #000000;
+          border-collapse: collapse;
+          box-sizing: border-box;
+        }
 
-          .time-bill {
-            background-color: #3474eb;
-          }
+        .time-bill {
+          background-color: #3474eb;
+        }
 
-          .cost-bill {
-            background-color: #246cbf;
-          }
+        .cost-bill {
+          background-color: #246cbf;
+        }
 
-          .max-value {
-            background-color: #0b59b3;
-          }
+        .max-value {
+          background-color: #0b59b3;
+        }
 
-          tr,
-          th,
-          td {
-            border: 1px solid black;
-          }
+        tr,
+        th,
+        td {
+          border: 1px solid black;
+        }
 
-          .parallel {
-            background-color: orange;
-          }
+        .parallel {
+          background-color: orange;
+        }
 
-          .sequential {
-            background-color: green;
-          }
-        `}
+        .sequential {
+          background-color: green;
+        }
+      `}
     </style>
   </table>
 );

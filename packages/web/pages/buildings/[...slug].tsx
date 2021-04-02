@@ -20,23 +20,20 @@ function Page({ slug }: BuildingProps) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('level');
 
-  const setColumnOrder = React.useCallback((column) => {
-    setOrderBy(column);
-    setOrder((order === 'asc' && 'desc') || 'asc');
-  }, [order, orderBy]);
-
-  const { loading, error, data } = useQuery(
-    QUERY_BUILDING,
-    {
-      variables:
-      { slug },
+  const setColumnOrder = React.useCallback(
+    (column) => {
+      setOrderBy(column);
+      setOrder((order === 'asc' && 'desc') || 'asc');
     },
+    [order, orderBy],
   );
 
+  const { loading, error, data } = useQuery(QUERY_BUILDING, {
+    variables: { slug },
+  });
+
   if (loading) {
-    return (
-      <div>Loading</div>
-    );
+    return <div>Loading</div>;
   }
 
   if (error) {
@@ -48,17 +45,11 @@ function Page({ slug }: BuildingProps) {
     );
   }
 
-  const {
-    building,
-  } = data;
+  const { building } = data;
 
-  const {
-    items,
-  } = building;
+  const { items } = building;
 
-  return (
-    <ItemTable setOrder={setColumnOrder} items={items} />
-  );
+  return <ItemTable setOrder={setColumnOrder} items={items} />;
 }
 
 export async function getStaticPaths() {
@@ -84,7 +75,6 @@ export async function getStaticProps(ctx: any) {
   return {
     props: {
       slug: slug[0],
-
     },
   };
 }

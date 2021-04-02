@@ -11,11 +11,11 @@ const Layout: FC<ILayoutProps> = ({ children }) => (
     {children}
     <style jsx>
       {`
-          .layout {
-            max-width: 1400px;
-            margin: 0 auto;
-          }
-        `}
+        .layout {
+          max-width: 1400px;
+          margin: 0 auto;
+        }
+      `}
     </style>
   </div>
 );

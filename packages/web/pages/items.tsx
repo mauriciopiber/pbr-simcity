@@ -14,26 +14,24 @@ function Page() {
 
   const [filter, setFilter] = React.useState(defaultFilter);
 
-  const { loading, error, data } = useQuery(
-    QUERY_ITEMS,
-    {
-      variables: {
-        order,
-        orderBy,
-        filter,
-      },
+  const { loading, error, data } = useQuery(QUERY_ITEMS, {
+    variables: {
+      order,
+      orderBy,
+      filter,
     },
+  });
+
+  const setColumnOrder = React.useCallback(
+    (column) => {
+      setOrderBy(column);
+      setOrder((order === 'asc' && 'desc') || 'asc');
+    },
+    [order, orderBy],
   );
 
-  const setColumnOrder = React.useCallback((column) => {
-    setOrderBy(column);
-    setOrder((order === 'asc' && 'desc') || 'asc');
-  }, [order, orderBy]);
-
   if (loading) {
-    return (
-      <div>Loading</div>
-    );
+    return <div>Loading</div>;
   }
 
   if (error) {
@@ -45,9 +43,7 @@ function Page() {
     );
   }
 
-  const {
-    items,
-  } = data;
+  const { items } = data;
 
   // console.log(items);
 

@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@pbr-simcity/web/components/*": ["./components/*"],
+      "@pbr-simcity/web/lib/*": ["./lib/*"],
+    }
+  }
+}

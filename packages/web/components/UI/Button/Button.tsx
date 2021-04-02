@@ -5,6 +5,8 @@ export interface ButtonProps {
   onClick: MouseEventHandler<HTMLButtonElement>;
 }
 
-const Button: FC<ButtonProps> = ({ label, onClick }) => <button onClick={onClick}>{label}</button>;
+const Button: FC<ButtonProps> = ({ label, onClick }) => (
+  <button onClick={onClick}>{label}</button>
+);
 
 export default Button;

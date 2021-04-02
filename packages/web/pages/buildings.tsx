@@ -7,19 +7,18 @@ function Page() {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('level');
 
-  const setColumnOrder = React.useCallback((column) => {
-    setOrderBy(column);
-    setOrder((order === 'asc' && 'desc') || 'asc');
-  }, [order, orderBy]);
-
-  const { loading, error, data } = useQuery(
-    QUERY_BUILDINGS,
+  const setColumnOrder = React.useCallback(
+    (column) => {
+      setOrderBy(column);
+      setOrder((order === 'asc' && 'desc') || 'asc');
+    },
+    [order, orderBy],
   );
 
+  const { loading, error, data } = useQuery(QUERY_BUILDINGS);
+
   if (loading) {
-    return (
-      <div>Loading</div>
-    );
+    return <div>Loading</div>;
   }
 
   if (error) {
@@ -31,13 +30,9 @@ function Page() {
     );
   }
 
-  const {
-    buildings,
-  } = data;
+  const { buildings } = data;
 
-  return (
-    <BuildingTable setOrder={setColumnOrder} buildings={buildings} />
-  );
+  return <BuildingTable setOrder={setColumnOrder} buildings={buildings} />;
 }
 
 export default Page;

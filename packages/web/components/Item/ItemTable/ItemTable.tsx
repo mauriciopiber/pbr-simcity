@@ -56,7 +56,7 @@ const ItemTable: FC<ItemTableProps> = ({ items, setOrder }) => (
     </thead>
     <tbody>
       {items.map((p: IItemModel) => (
-        <tr>
+        <tr key={p.slug}>
           <td>
             <img className="icon" src={`/img/${p.slug}.png`} />
           </td>
@@ -87,39 +87,39 @@ const ItemTable: FC<ItemTableProps> = ({ items, setOrder }) => (
     </tbody>
     <style jsx>
       {`
-          .table {
-            width: 100%;
-            padding: 0 20px;
-            border-collapse: collapse;
-          }
+        .table {
+          width: 100%;
+          padding: 0 20px;
+          border-collapse: collapse;
+        }
 
-          .item--used-in {
-            background-color: green;
-          }
+        .item--used-in {
+          background-color: green;
+        }
 
-          .item--endline {
-            background-color: red;
-          }
+        .item--endline {
+          background-color: red;
+        }
 
-          .header--order {
-            text-decoration: underline;
-          }
+        .header--order {
+          text-decoration: underline;
+        }
 
-          tr,
-          th,
-          td {
-            border: 1px solid black;
-          }
+        tr,
+        th,
+        td {
+          border: 1px solid black;
+        }
 
-          td {
-            padding: 0 5px;
-          }
+        td {
+          padding: 0 5px;
+        }
 
-          .icon {
-            width: 48.5px;
-            height: 53.5px;
-          }
-        `}
+        .icon {
+          width: 48.5px;
+          height: 53.5px;
+        }
+      `}
     </style>
   </table>
 );

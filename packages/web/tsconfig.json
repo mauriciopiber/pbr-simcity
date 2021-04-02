@@ -26,5 +26,10 @@
   ],
   "exclude": [
     "node_modules"
-  ]
+  ],
+  // "baseUrl": "./",
+  // "paths": {
+  //   "@components/*": ["components/*"],
+  //   "@libs/*": ["libs/*"],
+  // }
 }
