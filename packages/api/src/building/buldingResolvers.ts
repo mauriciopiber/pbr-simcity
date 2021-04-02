@@ -10,7 +10,6 @@ const resolvers = {
       return await building.getAll();
     },
     async building(_: any, args: any, context: any): Promise<IItem[]> {
-
       const { dataSources } = context;
       const { building } = dataSources;
 
@@ -19,19 +18,14 @@ const resolvers = {
   },
   Building: {
     async items(parent: any, _args: any, context: any): Promise<IItem[]> {
-
       const { dataSources } = context;
-      const {
-        item
-      } = dataSources;
+      const { item } = dataSources;
 
       const items = await item.findManyByBuilding(parent._id);
 
       return items;
-    }
-  }
-
-
+    },
+  },
 };
 
 export default resolvers;

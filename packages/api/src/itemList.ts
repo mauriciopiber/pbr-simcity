@@ -3,51 +3,51 @@ import { IItem, IBuilding } from '@pbr-simcity/types/types';
 
 const industry: IBuilding = {
   name: 'Industry',
-  slots: ((6*5) + (2*4)),
+  slots: 6 * 5 + 2 * 4,
   parallel: true,
   nextSlot: null,
-  slug: 'industry'
-}
+  slug: 'industry',
+};
 
 const supplies: IBuilding = {
   name: 'Supplies Store',
   slots: 8,
   parallel: false,
   nextSlot: 40,
-  slug: 'supplies'
-}
+  slug: 'supplies',
+};
 
 const hardware: IBuilding = {
   name: 'Hardware Store',
   slots: 8,
   parallel: false,
   nextSlot: 40,
-  slug: 'hardware'
-}
+  slug: 'hardware',
+};
 
 const farmer: IBuilding = {
-  name: 'Farmer\'s Market',
+  name: "Farmer's Market",
   slots: 5,
   parallel: false,
   nextSlot: 26,
-  slug: 'farmers'
-}
+  slug: 'farmers',
+};
 
 const furniture: IBuilding = {
   name: 'Furniture Store',
   slots: 4,
   parallel: false,
   nextSlot: 20,
-  slug: 'furniture'
-}
+  slug: 'furniture',
+};
 
-const gardening : IBuilding = {
+const gardening: IBuilding = {
   name: 'Bardening Supplies',
   slots: 3,
   parallel: false,
   nextSlot: 14,
-  slug: 'bardening'
-}
+  slug: 'bardening',
+};
 
 const donut: IBuilding = {
   name: 'Donut Shop',
@@ -55,7 +55,7 @@ const donut: IBuilding = {
   parallel: false,
   nextSlot: 14,
   slug: 'donut',
-}
+};
 
 const fashion: IBuilding = {
   name: 'Fashion Store',
@@ -63,23 +63,23 @@ const fashion: IBuilding = {
   parallel: false,
   nextSlot: 8,
   slug: 'fashion',
-}
+};
 
 const fastFood: IBuilding = {
   name: 'Fast Food Restaurant',
   slots: 0,
   parallel: false,
   nextSlot: null,
-  slug: 'fast-food'
-}
+  slug: 'fast-food',
+};
 
 const home: IBuilding = {
   name: 'Home Appliances',
   slots: 0,
   parallel: false,
   nextSlot: null,
-  slug: 'home-appliances'
-}
+  slug: 'home-appliances',
+};
 
 export const buildingsList: IBuilding[] = [
   industry,
@@ -92,9 +92,7 @@ export const buildingsList: IBuilding[] = [
   fashion,
   fastFood,
   home,
-]
-
-
+];
 
 /* Define Items */
 const metal: IItem = {
@@ -104,8 +102,8 @@ const metal: IItem = {
   building: industry,
   maxValue: 10,
   depends: [],
-  slug: 'metal'
-}
+  slug: 'metal',
+};
 
 const woods: IItem = {
   name: 'Wood',
@@ -115,10 +113,9 @@ const woods: IItem = {
   maxValue: 20,
   depends: [],
   slug: 'wood',
-}
+};
 
-
-const plastic: IItem  = {
+const plastic: IItem = {
   name: 'Plastic',
   productionTime: 9,
   level: 5,
@@ -126,7 +123,7 @@ const plastic: IItem  = {
   maxValue: 25,
   depends: [],
   slug: 'plastic',
-}
+};
 
 const seeds: IItem = {
   name: 'Seeds',
@@ -136,8 +133,7 @@ const seeds: IItem = {
   maxValue: 30,
   depends: [],
   slug: 'seeds',
-}
-
+};
 
 const minerals: IItem = {
   name: 'Minerals',
@@ -147,7 +143,7 @@ const minerals: IItem = {
   maxValue: 40,
   depends: [],
   slug: 'minerals',
-}
+};
 
 const chemicals: IItem = {
   name: 'Chemicals',
@@ -157,8 +153,7 @@ const chemicals: IItem = {
   maxValue: 60,
   depends: [],
   slug: 'chemicals',
-}
-
+};
 
 const textiles: IItem = {
   name: 'Textiles',
@@ -168,7 +163,7 @@ const textiles: IItem = {
   maxValue: 90,
   depends: [],
   slug: 'textiles',
-}
+};
 
 const sugar: IItem = {
   name: 'Sugar and Spices',
@@ -178,7 +173,7 @@ const sugar: IItem = {
   maxValue: 110,
   depends: [],
   slug: 'sugar',
-}
+};
 
 const glass: IItem = {
   name: 'Glass',
@@ -188,7 +183,7 @@ const glass: IItem = {
   maxValue: 120,
   depends: [],
   slug: 'glass',
-}
+};
 
 const animalFeed: IItem = {
   name: 'Animal Feed',
@@ -221,10 +216,9 @@ const nails: IItem = {
     {
       item: metal,
       quantity: 2,
-    }
-  ]
-}
-
+    },
+  ],
+};
 
 const planks: IItem = {
   name: 'Planks',
@@ -237,9 +231,9 @@ const planks: IItem = {
     {
       item: woods,
       quantity: 2,
-    }
-  ]
-}
+    },
+  ],
+};
 
 const bricks: IItem = {
   name: 'Bricks',
@@ -252,9 +246,9 @@ const bricks: IItem = {
     {
       item: minerals,
       quantity: 2,
-    }
-  ]
-}
+    },
+  ],
+};
 
 const cement: IItem = {
   name: 'Cement',
@@ -271,9 +265,9 @@ const cement: IItem = {
     {
       item: chemicals,
       quantity: 1,
-    }
-  ]
-}
+    },
+  ],
+};
 
 const glue: IItem = {
   name: 'Glue',
@@ -290,9 +284,9 @@ const glue: IItem = {
     {
       item: chemicals,
       quantity: 2,
-    }
-  ]
-}
+    },
+  ],
+};
 
 const paint: IItem = {
   name: 'Paint',
@@ -308,15 +302,14 @@ const paint: IItem = {
     },
     {
       item: minerals,
-      quantity: 1
+      quantity: 1,
     },
     {
       item: chemicals,
       quantity: 2,
-    }
-  ]
-}
-
+    },
+  ],
+};
 
 const hammer: IItem = {
   name: 'Hammer',
@@ -332,11 +325,10 @@ const hammer: IItem = {
     },
     {
       item: woods,
-      quantity: 1
-    }
-  ]
-}
-
+      quantity: 1,
+    },
+  ],
+};
 
 const measuringTape: IItem = {
   name: 'Measuring Tape',
@@ -352,10 +344,10 @@ const measuringTape: IItem = {
     },
     {
       item: plastic,
-      quantity: 1
-    }
-  ]
-}
+      quantity: 1,
+    },
+  ],
+};
 
 const shovel: IItem = {
   name: 'Shovel',
@@ -371,14 +363,14 @@ const shovel: IItem = {
     },
     {
       item: woods,
-      quantity: 1
+      quantity: 1,
     },
     {
       item: plastic,
-      quantity: 1
-    }
-  ]
-}
+      quantity: 1,
+    },
+  ],
+};
 
 const cookingUtensils: IItem = {
   name: 'Cooking Utensils',
@@ -394,14 +386,14 @@ const cookingUtensils: IItem = {
     },
     {
       item: woods,
-      quantity: 2
+      quantity: 2,
     },
     {
       item: plastic,
-      quantity: 2
-    }
-  ]
-}
+      quantity: 2,
+    },
+  ],
+};
 
 const ladder: IItem = {
   name: 'Ladder',
@@ -417,10 +409,10 @@ const ladder: IItem = {
     },
     {
       item: planks,
-      quantity: 2
+      quantity: 2,
     },
-  ]
-}
+  ],
+};
 
 const drill: IItem = {
   name: 'Drill',
@@ -436,14 +428,14 @@ const drill: IItem = {
     },
     {
       item: plastic,
-      quantity: 2
+      quantity: 2,
     },
     {
       item: electricalComponents,
       quantity: 1,
-    }
-  ]
-}
+    },
+  ],
+};
 
 const grass: IItem = {
   name: 'Grass',
@@ -459,10 +451,10 @@ const grass: IItem = {
     },
     {
       item: shovel,
-      quantity: 1
+      quantity: 1,
     },
-  ]
-}
+  ],
+};
 
 const treeSaplings: IItem = {
   name: 'Tree Saplings',
@@ -478,10 +470,10 @@ const treeSaplings: IItem = {
     },
     {
       item: shovel,
-      quantity: 1
+      quantity: 1,
     },
-  ]
-}
+  ],
+};
 
 const gardenFurniture: IItem = {
   name: 'Garden Furniture',
@@ -501,10 +493,10 @@ const gardenFurniture: IItem = {
     },
     {
       item: plastic,
-      quantity: 2
+      quantity: 2,
     },
-  ]
-}
+  ],
+};
 
 const firePit: IItem = {
   name: 'Fire Pit',
@@ -524,11 +516,10 @@ const firePit: IItem = {
     },
     {
       item: cement,
-      quantity: 2
+      quantity: 2,
     },
-  ]
-
-}
+  ],
+};
 
 const LawnMower: IItem = {
   name: 'Lawn Mower',
@@ -544,15 +535,14 @@ const LawnMower: IItem = {
     },
     {
       item: electricalComponents,
-      quantity: 1
+      quantity: 1,
     },
     {
       item: paint,
-      quantity: 1
+      quantity: 1,
     },
-  ]
-
-}
+  ],
+};
 
 const gardenGnomes: IItem = {
   name: 'Garden Gnomes',
@@ -568,13 +558,10 @@ const gardenGnomes: IItem = {
     },
     {
       item: glue,
-      quantity: 1
+      quantity: 1,
     },
-  ]
-
-}
-
-
+  ],
+};
 
 const vegetables: IItem = {
   name: 'Vegetables',
@@ -588,8 +575,8 @@ const vegetables: IItem = {
       item: seeds,
       quantity: 2,
     },
-  ]
-}
+  ],
+};
 
 const flourBag: IItem = {
   name: 'Flour Bag',
@@ -606,10 +593,9 @@ const flourBag: IItem = {
     {
       item: textiles,
       quantity: 2,
-    }
-  ]
-
-}
+    },
+  ],
+};
 
 const fruit: IItem = {
   name: 'Fruit and Berries',
@@ -625,10 +611,10 @@ const fruit: IItem = {
     },
     {
       item: treeSaplings,
-      quantity: 1
-    }
-  ]
-}
+      quantity: 1,
+    },
+  ],
+};
 
 const cream: IItem = {
   name: 'Cream',
@@ -641,10 +627,9 @@ const cream: IItem = {
     {
       item: animalFeed,
       quantity: 1,
-    }
-  ]
-
-}
+    },
+  ],
+};
 
 const corn: IItem = {
   name: 'Corn',
@@ -660,10 +645,10 @@ const corn: IItem = {
     },
     {
       item: seeds,
-      quantity: 4
-    }
-  ]
-}
+      quantity: 4,
+    },
+  ],
+};
 
 const cheese: IItem = {
   name: 'Cheese',
@@ -676,9 +661,9 @@ const cheese: IItem = {
     {
       item: animalFeed,
       quantity: 2,
-    }
-  ]
-}
+    },
+  ],
+};
 
 const beef: IItem = {
   name: 'Beef',
@@ -691,11 +676,9 @@ const beef: IItem = {
     {
       item: animalFeed,
       quantity: 3,
-    }
-  ]
-
-}
-
+    },
+  ],
+};
 
 const chairs: IItem = {
   name: 'Chairs',
@@ -715,10 +698,10 @@ const chairs: IItem = {
     },
     {
       item: hammer,
-      quantity: 1
-    }
-  ]
-}
+      quantity: 1,
+    },
+  ],
+};
 
 const tables: IItem = {
   name: 'Tables',
@@ -739,9 +722,9 @@ const tables: IItem = {
     {
       item: hammer,
       quantity: 1,
-    }
-  ]
-}
+    },
+  ],
+};
 
 const homeTextiles: IItem = {
   name: 'Home Textiles',
@@ -758,9 +741,9 @@ const homeTextiles: IItem = {
     {
       item: measuringTape,
       quantity: 1,
-    }
-  ]
-}
+    },
+  ],
+};
 
 const cupboard: IItem = {
   name: 'Cupboard',
@@ -773,16 +756,17 @@ const cupboard: IItem = {
     {
       item: glass,
       quantity: 2,
-    }, {
+    },
+    {
       item: planks,
       quantity: 2,
-    }, {
+    },
+    {
       item: paint,
-      quantity: 1
-    }
-  ]
-
-}
+      quantity: 1,
+    },
+  ],
+};
 
 const couch: IItem = {
   name: 'Couch',
@@ -803,10 +787,9 @@ const couch: IItem = {
     {
       item: drill,
       quantity: 1,
-    }
-  ]
-}
-
+    },
+  ],
+};
 
 const donuts: IItem = {
   name: 'Donuts',
@@ -818,14 +801,14 @@ const donuts: IItem = {
   depends: [
     {
       item: sugar,
-      quantity: 1
+      quantity: 1,
     },
     {
       item: flourBag,
       quantity: 1,
-    }
-  ]
-}
+    },
+  ],
+};
 
 const greenSmoothie: IItem = {
   name: 'Green Smoothie',
@@ -842,9 +825,9 @@ const greenSmoothie: IItem = {
     {
       item: fruit,
       quantity: 1,
-    }
-  ]
-}
+    },
+  ],
+};
 
 const breadRoll: IItem = {
   name: 'Bread Roll',
@@ -861,10 +844,9 @@ const breadRoll: IItem = {
     {
       item: cream,
       quantity: 1,
-    }
-  ]
-
-}
+    },
+  ],
+};
 
 const cherryCheesecake: IItem = {
   name: 'Cherry Cheesecake',
@@ -885,9 +867,9 @@ const cherryCheesecake: IItem = {
     {
       item: cheese,
       quantity: 1,
-    }
-  ]
-}
+    },
+  ],
+};
 
 const frozenYogurt: IItem = {
   name: 'Frozen Yogurt',
@@ -900,15 +882,17 @@ const frozenYogurt: IItem = {
     {
       item: sugar,
       quantity: 1,
-    }, {
+    },
+    {
       item: fruit,
       quantity: 1,
-    }, {
+    },
+    {
       item: cream,
       quantity: 1,
-    }
-  ]
-}
+    },
+  ],
+};
 
 const coffee: IItem = {
   name: 'Coffee',
@@ -929,9 +913,9 @@ const coffee: IItem = {
     {
       item: cream,
       quantity: 1,
-    }
-  ]
-}
+    },
+  ],
+};
 
 const cap: IItem = {
   name: 'Cap',
@@ -948,10 +932,9 @@ const cap: IItem = {
     {
       item: measuringTape,
       quantity: 1,
-    }
-  ]
-
-}
+    },
+  ],
+};
 
 const shoes: IItem = {
   name: 'Shoes',
@@ -972,9 +955,9 @@ const shoes: IItem = {
     {
       item: glue,
       quantity: 1,
-    }
-  ]
-}
+    },
+  ],
+};
 
 const watch: IItem = {
   slug: 'watch',
@@ -984,20 +967,20 @@ const watch: IItem = {
   productionTime: 90,
   building: fashion,
   depends: [
-
     {
       item: plastic,
       quantity: 2,
-    }, {
+    },
+    {
       item: chemicals,
-      quantity: 1
-    }, {
+      quantity: 1,
+    },
+    {
       item: glass,
       quantity: 1,
-    }
-  ]
-
-}
+    },
+  ],
+};
 
 const businessSuits: IItem = {
   name: 'Business Suits',
@@ -1010,16 +993,17 @@ const businessSuits: IItem = {
     {
       item: textiles,
       quantity: 3,
-    }, {
+    },
+    {
       item: glue,
       quantity: 1,
-    }, {
+    },
+    {
       item: measuringTape,
       quantity: 1,
-    }
-  ]
-
-}
+    },
+  ],
+};
 
 const backpack: IItem = {
   name: 'Backpack',
@@ -1036,13 +1020,13 @@ const backpack: IItem = {
     {
       item: textiles,
       quantity: 2,
-    }, {
+    },
+    {
       item: measuringTape,
       quantity: 1,
-    }
-  ]
-
-}
+    },
+  ],
+};
 
 const iceCream: IItem = {
   name: 'Ice Cream Sandwich',
@@ -1059,9 +1043,9 @@ const iceCream: IItem = {
     {
       item: breadRoll,
       quantity: 1,
-    }
-  ]
-}
+    },
+  ],
+};
 
 const pizza: IItem = {
   name: 'Pizza',
@@ -1074,18 +1058,17 @@ const pizza: IItem = {
     {
       item: flourBag,
       quantity: 1,
-    }, {
+    },
+    {
       item: cheese,
       quantity: 1,
-    }, {
+    },
+    {
       item: beef,
       quantity: 1,
-    }
-  ]
-
-}
-
-
+    },
+  ],
+};
 
 const cheeseFries: IItem = {
   name: 'Cheese Fries',
@@ -1098,13 +1081,13 @@ const cheeseFries: IItem = {
     {
       item: cheese,
       quantity: 1,
-    }, {
+    },
+    {
       item: vegetables,
       quantity: 1,
-    }
-  ]
-
-}
+    },
+  ],
+};
 
 const lemonade: IItem = {
   name: 'Lemonade',
@@ -1117,21 +1100,17 @@ const lemonade: IItem = {
     {
       item: sugar,
       quantity: 2,
-
     },
     {
       item: glass,
-      quantity: 2
+      quantity: 2,
     },
     {
       item: fruit,
       quantity: 1,
-    }
-  ]
-
-}
-
-
+    },
+  ],
+};
 
 const bbqGrill: IItem = {
   name: 'BBG Grill',
@@ -1144,12 +1123,13 @@ const bbqGrill: IItem = {
     {
       item: metal,
       quantity: 3,
-    }, {
+    },
+    {
       item: cookingUtensils,
       quantity: 1,
-    }
-  ]
-}
+    },
+  ],
+};
 
 const refrigerator: IItem = {
   name: 'Refrigerator',
@@ -1170,10 +1150,9 @@ const refrigerator: IItem = {
     {
       item: electricalComponents,
       quantity: 2,
-    }
-  ]
-
-}
+    },
+  ],
+};
 
 const lightingSystem: IItem = {
   name: 'Lighting System',
@@ -1194,11 +1173,9 @@ const lightingSystem: IItem = {
     {
       item: electricalComponents,
       quantity: 1,
-    }
-  ]
-
-
-}
+    },
+  ],
+};
 
 const tv: IItem = {
   name: 'TV',
@@ -1219,10 +1196,9 @@ const tv: IItem = {
     {
       item: electricalComponents,
       quantity: 2,
-    }
-  ]
-
-}
+    },
+  ],
+};
 
 const microwaveOven: IItem = {
   name: 'Microwave Oven',
@@ -1242,11 +1218,10 @@ const microwaveOven: IItem = {
     },
     {
       item: electricalComponents,
-      quantity: 1
-    }
-  ]
-
-}
+      quantity: 1,
+    },
+  ],
+};
 
 const popCorn: IItem = {
   name: 'Pop Corn',
@@ -1258,14 +1233,14 @@ const popCorn: IItem = {
   depends: [
     {
       item: corn,
-      quantity: 2
+      quantity: 2,
     },
     {
       item: microwaveOven,
       quantity: 1,
-    }
-  ]
-}
+    },
+  ],
+};
 
 const burgers: IItem = {
   name: 'Burgers',
@@ -1278,16 +1253,17 @@ const burgers: IItem = {
     {
       item: beef,
       quantity: 1,
-    }, {
+    },
+    {
       item: breadRoll,
       quantity: 1,
-    }, {
+    },
+    {
       item: bbqGrill,
       quantity: 1,
-    }
-  ]
-
-}
+    },
+  ],
+};
 // const grass
 
 // const treeSaplings
@@ -1367,15 +1343,12 @@ export const itemsList: IItem[] = [
   refrigerator,
   lightingSystem,
   tv,
-  microwaveOven
-]
-
-
+  microwaveOven,
+];
 
 // const donuts
 
 // const greenSmoothie
-
 
 // const flourBag
 
@@ -1384,7 +1357,6 @@ export const itemsList: IItem[] = [
 // const chairs
 
 // const tables
-
 
 // const items: IItem[] = [
 //   metal,

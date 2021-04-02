@@ -3,18 +3,13 @@ import { IProfit } from '@pbr-simcity/types/types';
 const resolvers = {
   Query: {
     async profits(_: any, _args: any, context: any): Promise<IProfit[]> {
-
-
       const { dataSources } = context;
 
       const { profit } = dataSources;
 
-
-
       return await profit.getAll();
     },
     async profit(_: any, args: any, context: any): Promise<IProfit> {
-
       const { dataSources } = context;
       const { profit } = dataSources;
 
@@ -36,8 +31,8 @@ const resolvers = {
       const { dataSources } = context;
       const { profit } = dataSources;
       return await profit.delProfit(args._id);
-    }
-  }
+    },
+  },
 };
 
 export default resolvers;

@@ -1,11 +1,11 @@
-import React, { FC } from "react";
-import Link from "next/link";
-import { IItem } from "@pbr-simcity/types/types";
-import cx from "classnames";
+import React, { FC } from 'react';
+import Link from 'next/link';
+import { IItem } from '@pbr-simcity/types/types';
+import cx from 'classnames';
 import {
   calculateDependsCostByMaxValue,
   calculateDependsTime,
-} from "../../lib/items";
+} from '../../lib/items';
 
 export interface DependencyGraphProps {
   items: any[];
@@ -14,7 +14,7 @@ export interface DependencyGraphProps {
 
 const DependencyGraph: FC<DependencyGraphProps> = ({
   items,
-  parentSlug = "",
+  parentSlug = '',
 }) => {
   return (
     <table className="dependency-graph">
@@ -31,7 +31,7 @@ const DependencyGraph: FC<DependencyGraphProps> = ({
         {items.map((item) => {
           const billTime = calculateDependsTime(item.item.depends);
           const billCostMaxValue = calculateDependsCostByMaxValue(
-            item.item.depends
+            item.item.depends,
           );
 
           const dependencyQuantityTime =
@@ -57,8 +57,8 @@ const DependencyGraph: FC<DependencyGraphProps> = ({
                 <td
                   data-testid={`dependency-time-${parentSlug + item.item.slug}`}
                   className={cx(
-                    { ["parallel"]: item.item.building.parallel },
-                    { ["sequential"]: !item.item.building.parallel }
+                    { ['parallel']: item.item.building.parallel },
+                    { ['sequential']: !item.item.building.parallel },
                   )}
                 >
                   {item.item.productionTime}
@@ -97,7 +97,7 @@ const DependencyGraph: FC<DependencyGraphProps> = ({
                 {item?.item?.depends?.length > 0 && (
                   <td>
                     <DependencyGraph
-                      parentSlug={item.item.slug + "-"}
+                      parentSlug={item.item.slug + '-'}
                       items={item.item.depends}
                     />
                   </td>

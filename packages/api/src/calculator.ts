@@ -1,18 +1,23 @@
-import { IItem, IBuilding, IItemPrint, IItemDependency, IItemDependencyValues } from '@pbr-simcity/types/types';
+import {
+  IItem,
+  IBuilding,
+  IItemPrint,
+  IItemDependency,
+  IItemDependencyValues,
+} from '@pbr-simcity/types/types';
 
-function toFixedNumber(num: number, digits: number, base: number) : number {
-  var pow = Math.pow(base||10, digits);
-  return Math.round(num*pow) / pow;
+function toFixedNumber(num: number, digits: number, base: number): number {
+  var pow = Math.pow(base || 10, digits);
+  return Math.round(num * pow) / pow;
 }
 
 export function dependency(items: IItemDependency[]): IItemDependencyValues {
-
-  const cost = items.reduce(function(a: number, b: IItemDependency): number {
+  const cost = items.reduce(function (a: number, b: IItemDependency): number {
     const maxValue = b?.item?.maxValue || 0;
-      return a + (maxValue * b.quantity);
+    return a + maxValue * b.quantity;
   }, 0);
 
-  const time = items.reduce(function(a: number, b: IItemDependency): number {
+  const time = items.reduce(function (a: number, b: IItemDependency): number {
     const maxTime = b?.item?.productionTime || 0;
     return a + maxTime;
   }, 0);
@@ -20,14 +25,14 @@ export function dependency(items: IItemDependency[]): IItemDependencyValues {
   return {
     cost,
     time,
-  }
+  };
 }
 
-export function profit(buildings: IBuilding[], items: IItem[]) : IItemPrint[] {
-
-  const calculateItems: IItemPrint[] = items.map(function(item: IItem): IItemPrint {
-
-    const factory = buildings.find(p => p.name == item.building.name);
+export function profit(buildings: IBuilding[], items: IItem[]): IItemPrint[] {
+  const calculateItems: IItemPrint[] = items.map(function (
+    item: IItem,
+  ): IItemPrint {
+    const factory = buildings.find((p) => p.name == item.building.name);
 
     const maxValue = item.maxValue;
     const dependencyValues: IItemDependencyValues = dependency(item.depends);
@@ -37,10 +42,10 @@ export function profit(buildings: IBuilding[], items: IItem[]) : IItemPrint[] {
     const cost = dependencyValues.cost;
     const profit = maxValue - cost;
 
-    const profitByMinute = toFixedNumber(profit/productionTime, 2, 10);
-    const profitByHour = toFixedNumber((profit/productionTime)*60, 2, 10);
+    const profitByMinute = toFixedNumber(profit / productionTime, 2, 10);
+    const profitByHour = toFixedNumber((profit / productionTime) * 60, 2, 10);
 
-    return  {
+    return {
       name: item.name,
       time: productionTime,
       maxValue,
@@ -48,8 +53,7 @@ export function profit(buildings: IBuilding[], items: IItem[]) : IItemPrint[] {
       profit: profit,
       profitByMinute: profitByMinute,
       profitByHour: profitByHour,
-    }
-
-  })
+    };
+  });
   return calculateItems;
 }

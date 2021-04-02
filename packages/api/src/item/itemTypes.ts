@@ -1,10 +1,8 @@
 import gql from 'graphql-tag';
 
 const typeDefs = gql`
-
-
   type ItemDepends {
-    item : Item!
+    item: Item!
     quantity: PositiveInt!
   }
 
@@ -29,7 +27,7 @@ const typeDefs = gql`
     profit: ItemProfit!
     slug: String!
     usedIn: [Item]
-    depends: [ItemDepends],
+    depends: [ItemDepends]
   }
 
   input ItemFilter {

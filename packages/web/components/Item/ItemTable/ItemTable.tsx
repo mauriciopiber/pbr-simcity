@@ -1,6 +1,6 @@
-import React, { FC } from "react";
+import React, { FC } from 'react';
 import cx from 'classnames';
-import { IItemModel } from "@pbr-simcity/types/types";
+import { IItemModel } from '@pbr-simcity/types/types';
 import Link from 'next/link';
 
 export interface ItemTableProps {
@@ -14,16 +14,44 @@ const ItemTable: FC<ItemTableProps> = ({ items, setOrder }) => {
       <thead>
         <tr>
           <th></th>
-          <th className="header--order" onClick={() => setOrder('name')}>Name</th>
+          <th className="header--order" onClick={() => setOrder('name')}>
+            Name
+          </th>
           <th>Building</th>
-          <th className="header--order" onClick={() => setOrder('level')}>Level</th>
-          <th className="header--order" onClick={() => setOrder('productionTime')}>Pr. Time</th>
-          <th className="header--order" onClick={() => setOrder('maxValue')}>M. Value</th>
-          <th className="header--order" onClick={() => setOrder('billCost')}>B. Cost</th>
+          <th className="header--order" onClick={() => setOrder('level')}>
+            Level
+          </th>
+          <th
+            className="header--order"
+            onClick={() => setOrder('productionTime')}
+          >
+            Pr. Time
+          </th>
+          <th className="header--order" onClick={() => setOrder('maxValue')}>
+            M. Value
+          </th>
+          <th className="header--order" onClick={() => setOrder('billCost')}>
+            B. Cost
+          </th>
           {/* <th>B. Time</th> */}
-          <th className="header--order" onClick={() => setOrder('profitOwnProduction')}>P. Profit</th>
-          <th className="header--order" onClick={() => setOrder('profitOwnByMinute')}>OPPBM</th>
-          <th className="header--order" onClick={() => setOrder('profitOwnByHour')}>OPPBH</th>
+          <th
+            className="header--order"
+            onClick={() => setOrder('profitOwnProduction')}
+          >
+            P. Profit
+          </th>
+          <th
+            className="header--order"
+            onClick={() => setOrder('profitOwnByMinute')}
+          >
+            OPPBM
+          </th>
+          <th
+            className="header--order"
+            onClick={() => setOrder('profitOwnByHour')}
+          >
+            OPPBH
+          </th>
           <th>FP</th>
         </tr>
       </thead>
@@ -32,50 +60,32 @@ const ItemTable: FC<ItemTableProps> = ({ items, setOrder }) => {
           return (
             <tr>
               <td>
-                <img className="icon" src={`/img/${p.slug}.png`}/>
+                <img className="icon" src={`/img/${p.slug}.png`} />
               </td>
               <td>
                 <Link href={`/items/${p.slug}`}>
                   <a className="link">{p.name}</a>
                 </Link>
               </td>
-              {p.building && (<td>
-                {p.building.name}
-              </td>) || <td>-</td>}
-              <td>
-                {p.level}
-              </td>
-              <td>
-                {p.productionTime}
-              </td>
-              <td>
-                {p.maxValue}
-              </td>
-              <td>
-                {p.billCost}
-              </td>
+              {(p.building && <td>{p.building.name}</td>) || <td>-</td>}
+              <td>{p.level}</td>
+              <td>{p.productionTime}</td>
+              <td>{p.maxValue}</td>
+              <td>{p.billCost}</td>
               {/* <td>
                 {p.billTime}
               </td> */}
-              <td>
-                {p.profitOwnProduction}
-              </td>
-              <td>
-                {p.profitOwnByMinute}
-              </td>
-              <td>
-                {p.profitOwnByHour}
-              </td>
-              <td className={
-                cx(
-                  {['item--used-in']: p.usedIn?.length > 0},
-                  {['item--endline']: p.usedIn?.length <= 0},
-                )
-              }>
-
-              </td>
+              <td>{p.profitOwnProduction}</td>
+              <td>{p.profitOwnByMinute}</td>
+              <td>{p.profitOwnByHour}</td>
+              <td
+                className={cx(
+                  { ['item--used-in']: p.usedIn?.length > 0 },
+                  { ['item--endline']: p.usedIn?.length <= 0 },
+                )}
+              ></td>
             </tr>
-          )
+          );
         })}
       </tbody>
       <style jsx>
@@ -98,7 +108,9 @@ const ItemTable: FC<ItemTableProps> = ({ items, setOrder }) => {
             text-decoration: underline;
           }
 
-          tr, th, td {
+          tr,
+          th,
+          td {
             border: 1px solid black;
           }
 
@@ -112,7 +124,6 @@ const ItemTable: FC<ItemTableProps> = ({ items, setOrder }) => {
           }
         `}
       </style>
-
     </table>
   );
 };

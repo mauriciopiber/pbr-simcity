@@ -1,7 +1,6 @@
 import gql from 'graphql-tag';
 
 const typeDefs = gql`
-
   type Building {
     _id: ObjectID!
     name: String!

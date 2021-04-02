@@ -6,23 +6,21 @@ const mongoStr = 'mongodb://localhost:27017/simcity';
 import ItemRepository from './itemRepository';
 
 describe('Item Repository', () => {
-
   test('find one by id full data - Planks', async () => {
-
     const client = new MongoClient(mongoStr, { useUnifiedTopology: true });
     await client.connect();
 
     const itemRepository = new ItemRepository(client.db().collection('item'));
 
-
-    const findOne: IItemModel | null = await itemRepository.findOneBySlug('planks');
+    const findOne: IItemModel | null = await itemRepository.findOneBySlug(
+      'planks',
+    );
 
     if (!findOne) {
       throw new Error('Missing Planks by ID');
     }
 
     try {
-
       expect(findOne.name).toEqual('Planks');
       expect(findOne.slug).toEqual('planks');
       expect(findOne.productionTime).toEqual(30);
@@ -33,26 +31,23 @@ describe('Item Repository', () => {
       expect(findOne.billCost).toEqual(40);
       expect(findOne.profitOwnProduction).toEqual(80);
       return;
-
-
-    } catch(e) {
+    } catch (e) {
       throw e;
     } finally {
       await client.close();
     }
-  })
+  });
 
   test('find one by id full data - Cherry cheesecake', async () => {
-
     const client = new MongoClient(mongoStr, { useUnifiedTopology: true });
     await client.connect();
 
     const itemRepository = new ItemRepository(client.db().collection('item'));
 
-
-    const findOne: any = await itemRepository.findOneBySlug('cherry-cheesecake');
+    const findOne: any = await itemRepository.findOneBySlug(
+      'cherry-cheesecake',
+    );
     try {
-
       expect(findOne.name).toEqual('Cherry Cheesecake');
       expect(findOne.slug).toEqual('cherry-cheesecake');
       expect(findOne.productionTime).toEqual(90);
@@ -66,25 +61,21 @@ describe('Item Repository', () => {
       // to add
       //expect(findOne.totalProductionTime).toEqual(555);
       //expect(findOne.hourProfitOwnProduction).toEqual(280);
-
-    } catch(e) {
+    } catch (e) {
       throw e;
     } finally {
       await client.close();
     }
-  })
+  });
 
   test('find one by id full data - burgers', async () => {
-
     const client = new MongoClient(mongoStr, { useUnifiedTopology: true });
     await client.connect();
 
     const itemRepository = new ItemRepository(client.db().collection('item'));
 
-
     const findOne: any = await itemRepository.findOneBySlug('burgers');
     try {
-
       expect(findOne.name).toEqual('Burgers');
       expect(findOne.slug).toEqual('burgers');
       expect(findOne.productionTime).toEqual(35);
@@ -101,15 +92,14 @@ describe('Item Repository', () => {
       // to add
       //expect(findOne.totalProductionTime).toEqual(555);
       //expect(findOne.hourProfitOwnProduction).toEqual(280);
-
-    } catch(e) {
+    } catch (e) {
       throw e;
     } finally {
       await client.close();
     }
-  })
+  });
 
-  test('get wood by slug', async() => {
+  test('get wood by slug', async () => {
     const client = new MongoClient(mongoStr, { useUnifiedTopology: true });
     await client.connect();
 
@@ -118,17 +108,15 @@ describe('Item Repository', () => {
     try {
       const findOne: any = await itemRepository.findOneBySlug('wood');
 
-
       expect(findOne.maxValue).toEqual(20);
       expect(findOne.level).toEqual(2);
       expect(findOne.depends.length).toEqual(0);
-
-    } catch(e) {
+    } catch (e) {
       throw e;
     } finally {
       await client.close();
     }
-  })
+  });
 
   // test('validate legacy', async () => {
 
@@ -137,27 +125,22 @@ describe('Item Repository', () => {
 
   //   const itemRepository = new ItemRepository(client.db().collection('item'));
 
-
   //   const findv1: any = await itemRepository.findOneBySlug(new ObjectID('605fa6cfd9397142fe1793e2'));
   //   const findv2: any = await itemRepository.findOneBySlug(new ObjectID('605fa6cfd9397142fe1793e2'));
 
   //   expect(findv1).toEqual(findv2);
 
-
   // });
 
   test('find one by id full data - green smoothie', async () => {
-
     const client = new MongoClient(mongoStr, { useUnifiedTopology: true });
     await client.connect();
 
     const itemRepository = new ItemRepository(client.db().collection('item'));
 
-
     const findOne: any = await itemRepository.findOneBySlug('green-smoothie');
 
     try {
-
       expect(findOne.name).toEqual('Green Smoothie');
       expect(findOne.slug).toEqual('green-smoothie');
       expect(findOne.productionTime).toEqual(30);
@@ -173,25 +156,21 @@ describe('Item Repository', () => {
       // to add
       //expect(findOne.totalProductionTime).toEqual(555);
       //expect(findOne.hourProfitOwnProduction).toEqual(280);
-
-    } catch(e) {
+    } catch (e) {
       throw e;
     } finally {
       await client.close();
     }
-  })
+  });
 
   test('find one by id full data - pizza', async () => {
-
     const client = new MongoClient(mongoStr, { useUnifiedTopology: true });
     await client.connect();
 
     const itemRepository = new ItemRepository(client.db().collection('item'));
 
-
     const findOne: any = await itemRepository.findOneBySlug('pizza');
     try {
-
       expect(findOne.name).toEqual('Pizza');
       expect(findOne.slug).toEqual('pizza');
       expect(findOne.productionTime).toEqual(24);
@@ -207,25 +186,21 @@ describe('Item Repository', () => {
       // to add
       //expect(findOne.totalProductionTime).toEqual(555);
       //expect(findOne.hourProfitOwnProduction).toEqual(280);
-
-    } catch(e) {
+    } catch (e) {
       throw e;
     } finally {
       await client.close();
     }
-  })
+  });
 
   test('find one by id full data - lemonade', async () => {
-
     const client = new MongoClient(mongoStr, { useUnifiedTopology: true });
     await client.connect();
 
     const itemRepository = new ItemRepository(client.db().collection('item'));
 
-
     const findOne: any = await itemRepository.findOneBySlug('lemonade');
     try {
-
       expect(findOne.name).toEqual('Lemonade');
       expect(findOne.slug).toEqual('lemonade');
       expect(findOne.productionTime).toEqual(60);
@@ -239,26 +214,21 @@ describe('Item Repository', () => {
       // to add
       //expect(findOne.totalProductionTime).toEqual(555);
       //expect(findOne.hourProfitOwnProduction).toEqual(280);
-
-    } catch(e) {
+    } catch (e) {
       throw e;
     } finally {
       await client.close();
     }
-  })
-
+  });
 
   test('find one by id full data - Fire Pit', async () => {
-
     const client = new MongoClient(mongoStr, { useUnifiedTopology: true });
     await client.connect();
 
     const itemRepository = new ItemRepository(client.db().collection('item'));
 
-
     const findOne: any = await itemRepository.findOneBySlug('fire-pit');
     try {
-
       expect(findOne.name).toEqual('Fire Pit');
       expect(findOne.slug).toEqual('fire-pit');
       expect(findOne.productionTime).toEqual(240);
@@ -272,25 +242,21 @@ describe('Item Repository', () => {
       // to add
       //expect(findOne.totalProductionTime).toEqual(555);
       //expect(findOne.hourProfitOwnProduction).toEqual(280);
-
-    } catch(e) {
+    } catch (e) {
       throw e;
     } finally {
       await client.close();
     }
-  })
+  });
 
   test('find one by id full data - flour bag', async () => {
-
     const client = new MongoClient(mongoStr, { useUnifiedTopology: true });
     await client.connect();
 
     const itemRepository = new ItemRepository(client.db().collection('item'));
 
-
     const findOne: any = await itemRepository.findOneBySlug('flour-bag');
     try {
-
       expect(findOne.name).toEqual('Flour Bag');
       expect(findOne.slug).toEqual('flour-bag');
       expect(findOne.productionTime).toEqual(30);
@@ -304,31 +270,28 @@ describe('Item Repository', () => {
       return;
       //expect(findOne.totalProductionTime).toEqual(555);
       //expect(findOne.hourProfitOwnProduction).toEqual(280);
-
-    } catch(e) {
+    } catch (e) {
       throw e;
     } finally {
       await client.close();
     }
-  })
+  });
 
   test('find one by id full data - donuts', async () => {
-
     const client = new MongoClient(mongoStr, { useUnifiedTopology: true });
     await client.connect();
 
     const itemRepository = new ItemRepository(client.db().collection('item'));
 
-
-    const findOne: IItemModel | null = await itemRepository.findOneBySlug('donuts');
+    const findOne: IItemModel | null = await itemRepository.findOneBySlug(
+      'donuts',
+    );
 
     if (!findOne) {
       throw new Error('Donuts not found');
     }
 
     try {
-
-
       expect(findOne.name).toEqual('Donuts');
       expect(findOne.slug).toEqual('donuts');
       expect(findOne.productionTime).toEqual(45);
@@ -337,33 +300,27 @@ describe('Item Repository', () => {
       expect(findOne.depends.length).toEqual(2);
       expect(findOne.billTime).toEqual(240);
       expect(findOne.profitOwnProduction).toEqual(270);
-      expect(findOne.profitOwnByMinute).toEqual(6)
+      expect(findOne.profitOwnByMinute).toEqual(6);
       expect(findOne.profitOwnByHour).toEqual(360);
 
       // to add
       //expect(findOne.totalProductionTime).toEqual(555);
       //expect(findOne.hourProfitOwnProduction).toEqual(280);
-
-    } catch(e) {
+    } catch (e) {
       throw e;
     } finally {
       await client.close();
     }
-  })
-
-
+  });
 
   test('find one by id full data - bread roll', async () => {
-
     const client = new MongoClient(mongoStr, { useUnifiedTopology: true });
     await client.connect();
 
     const itemRepository = new ItemRepository(client.db().collection('item'));
 
-
     const findOne: any = await itemRepository.findOneBySlug('bread-roll');
     try {
-
       expect(findOne.name).toEqual('Bread Roll');
       expect(findOne.slug).toEqual('bread-roll');
       expect(findOne.productionTime).toEqual(60);
@@ -377,11 +334,10 @@ describe('Item Repository', () => {
       // to add
       //expect(findOne.totalProductionTime).toEqual(555);
       //expect(findOne.hourProfitOwnProduction).toEqual(280);
-
-    } catch(e) {
+    } catch (e) {
       throw e;
     } finally {
       await client.close();
     }
-  })
-})
+  });
+});

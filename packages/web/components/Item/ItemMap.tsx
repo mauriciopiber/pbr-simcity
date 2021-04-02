@@ -1,6 +1,6 @@
-import React, { FC } from "react";
-import DependsItem from "./DependsItem";
-import UsedInItem from "./UsedInItemCard";
+import React, { FC } from 'react';
+import DependsItem from './DependsItem';
+import UsedInItem from './UsedInItemCard';
 
 export interface ItemMapProps {
   name: string;
@@ -9,7 +9,7 @@ export interface ItemMapProps {
 }
 
 const ItemMap: FC<ItemMapProps> = ({
-  name = "My Title",
+  name = 'My Title',
   usedIn = [],
   depends = [],
 }) => {
