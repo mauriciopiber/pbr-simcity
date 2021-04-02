@@ -22,16 +22,22 @@ const typeDefs = gql`
     maxValue: PositiveInt!
     building: Building!
     level: PositiveInt!
+    billCost: Int!
+    profitOwnProduction: Int!
+    profitOwnByMinute: Float!
+    profitOwnByHour: Float!
     profit: ItemProfit!
-    costMongo: Int!
-    profitMongo: PositiveInt!
     slug: String!
     usedIn: [Item]
     depends: [ItemDepends],
   }
 
+  input ItemFilter {
+    level: Int!
+  }
+
   type Query {
-    items: [Item]
+    items(order: String!, orderBy: String!, filter: ItemFilter): [Item]
     endlineItems: [Item]
     item(_id: ObjectID, slug: String): Item!
   }

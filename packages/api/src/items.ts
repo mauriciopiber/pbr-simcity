@@ -1,6 +1,6 @@
 import { buildingsList, itemsList } from './itemList';
 import { profit } from './calculator';
-import { IItem, IBuilding, IItemPrint } from './types/types';
+import { IItem, IBuilding, IItemPrint } from '@pbr-simcity/types/types';
 import Table from 'cli-table';
 
 
@@ -19,7 +19,7 @@ function renderTable(items: IItemPrint[]) {
 
   table.push(...renderData);
 
-  console.log(table.toString());
+
 }
 
 

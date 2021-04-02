@@ -1,19 +1,20 @@
-import React from 'react';
+import React from "react";
 // also exported from '@storybook/react' if you can deal with breaking changes in 6.1
-import { Story, Meta } from '@storybook/react/types-6-0';
+import { Story, Meta } from "@storybook/react/types-6-0";
 
-import MaterialMap, { MaterialMapProps } from './MaterialMap';
+import ItemMap, { ItemMapProps } from "./ItemMap";
 
 export default {
-  title: 'Material/MaterialMap',
-  component: MaterialMap,
+  title: "Item/ItemMap",
+  component: ItemMap,
   argTypes: {
-    name: { name: 'name', type: { name: 'string', required: true } },
+    name: { name: "name", type: { name: "string", required: true } },
   },
-} as Meta<MaterialMapProps>;
+} as Meta<ItemMapProps>;
 
-
-const Template: Story<MaterialMapProps> = (args: MaterialMapProps) => <MaterialMap {...args} />;
+const Template: Story<ItemMapProps> = (args: ItemMapProps) => (
+  <ItemMap {...args} />
+);
 
 export const Primary = Template.bind({});
 Primary.args = {

@@ -1,5 +1,5 @@
-import React, { FC } from 'react';
-import Link from 'next/link';
+import React, { FC } from "react";
+import Link from "next/link";
 
 export interface UsedInItemProps {
   name: string;
@@ -8,26 +8,27 @@ export interface UsedInItemProps {
   _id: string;
 }
 
-
-const UsedInItem: FC<UsedInItemProps> = ({_id, name, slug, productionTime}) => {
-
+const UsedInItem: FC<UsedInItemProps> = ({
+  _id,
+  name,
+  slug,
+  productionTime,
+}) => {
   return (
     <div className="used__item">
       <div className="depedns__item__logo">
-        <img className="used__item__logo__image" src={`/img/${slug}.png`}/>
+        <img className="used__item__logo__image" src={`/img/${slug}.png`} />
       </div>
       <div className="used__item__title">
         <Link href={`/items/${slug}`}>
           <a>{name}</a>
         </Link>
       </div>
-      <div className="used__item__production-time">
-        {productionTime}
-      </div>
+      <div className="used__item__production-time">{productionTime}</div>
       <style jsx>
         {`
           .used__item {
-            background-color: #FAFAFA;
+            background-color: #fafafa;
             display: flex;
             width: 450px;
             padding: 10px;
@@ -65,8 +66,7 @@ const UsedInItem: FC<UsedInItemProps> = ({_id, name, slug, productionTime}) => {
         `}
       </style>
     </div>
-  )
-
-}
+  );
+};
 
 export default UsedInItem;

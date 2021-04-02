@@ -2,9 +2,9 @@ import { request, gql } from 'graphql-request'
 import Link from 'next/link';
 import { QUERY_ITEM } from '../../lib/items';
 import { useQuery } from "@apollo/react-hooks";
-import MaterialMap from '../../components/Material/MaterialMap';
-import BuildingFlow from '../../components/Material/BuildingFlow';
-import DependencyGraph from '../../components/Material/DependencyGraph';
+import ItemMap from '../../components/Item/ItemMap';
+import BuildingFlow from '../../components/Item/BuildingFlow';
+import DependencyGraph from '../../components/Item/DependencyGraph';
 import {
   calculateDependsCostByMaxValue,
   calculateDependsTime
@@ -180,7 +180,7 @@ function Page({ slug }: ItemProps) {
       </table>
       <div>
         <img src={`/img/${item.slug}.png`}/>
-        <MaterialMap name={item.name} depends={item.depends} usedIn={item.usedIn }/>
+        <ItemMap name={item.name} depends={item.depends} usedIn={item.usedIn }/>
       </div>
       <div>
         <Link href="/items">

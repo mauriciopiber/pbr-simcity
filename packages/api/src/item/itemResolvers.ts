@@ -1,33 +1,31 @@
-import { IBuilding, IItem, IItemDependencyValues } from '@pbr-simcity/types/types';
+import { IBuilding, IItem, IItemDependencyValues, IItemArgs } from '@pbr-simcity/types/types';
 
 function toFixedNumber(num: number, digits: number, base: number) : number {
   var pow = Math.pow(base||10, digits);
   return Math.round(num*pow) / pow;
 }
 
-
 const resolvers = {
   Query: {
-    async items(_: any, _args: any, context: any): Promise<IItem[]> {
-
+    async items(_: any, args: IItemArgs, context: any): Promise<IItem[]> {
 
       const { dataSources } = context;
-
       const { item } = dataSources;
 
+      console.log(args);
 
-
-      return await item.getAll();
+      return await item.findManyByFilter(args);
     },
     async item(_: any, args: any, context: any): Promise<IItem[]> {
 
       const { dataSources } = context;
       const { item } = dataSources;
 
-      const model = await item.findBySlug(args.slug);
+      const model = await item.findOneBySlug(args.slug);
+
       return {
         ...model,
-        profitMongo: 2,
+        //profitMongo: 2,
       }
       //return await item.findBySlug(args.slug);
     },
@@ -53,7 +51,7 @@ const resolvers = {
       const maxValue = parent.maxValue;
       const dependencyValues: IItemDependencyValues = await item.findItemDependencyCost(parent.depends);
 
-      console.log(dependencyValues);
+
 
       // const productionTime = item.productionTime + dependencyValues.time;
       const productionTime = parent.productionTime;
@@ -76,7 +74,7 @@ const resolvers = {
       const { dataSources } = context;
       const { item } = dataSources;
 
-      console.log(parent);
+
       return await item.findById(parent.item);
     }
   }

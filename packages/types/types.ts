@@ -1,3 +1,4 @@
+import { ObjectId } from 'mongodb';
 export interface IItem {
   name: string;
   productionTime: number;
@@ -45,4 +46,24 @@ export interface IItemPrint {
   profitByHour: number,
   // structuralProfitMinute: number,
   // structuralProfitHour: number,
+}
+
+export interface IItemModel extends IItem {
+  _id: string;
+  billCost: number;
+  billTime: number;
+  profitOwnProduction: number;
+  usedIn: IItemModel[]
+  profitOwnByMinute: number;
+  profitOwnByHour: number;
+}
+
+
+export interface IItemFilter {
+  level?: any;
+}
+export interface IItemArgs {
+  order: string;
+  orderBy: string;
+  filter: IItemFilter
 }

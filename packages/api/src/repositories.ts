@@ -37,7 +37,7 @@ function createRepository(client: any): any {
       }
     });
   });
-  // console.log(dataSources);
+
   return dataSources;
 }
 

@@ -57,6 +57,6 @@ describe('test profit calculator', () => {
     expect(nails?.profitByMinute).toEqual(12);
     expect(nails?.profitByHour).toEqual(720);
 
-    //console.log(calculateItems);
+
   })
 })

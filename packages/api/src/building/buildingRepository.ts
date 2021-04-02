@@ -11,7 +11,7 @@ class BuildingRepository extends Collection {
   }
 
   async findById(id: ObjectId) {
-    console.log(id);
+
     const docs = await this.collection.findOne({_id: {$eq: new ObjectId(id)}});
     return docs;
   }

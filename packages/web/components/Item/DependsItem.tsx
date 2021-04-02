@@ -1,5 +1,5 @@
-import React, { FC } from 'react';
-import Link from 'next/link';
+import React, { FC } from "react";
+import Link from "next/link";
 
 export interface DependsItemProps {
   name: string;
@@ -9,30 +9,29 @@ export interface DependsItemProps {
   _id: string;
 }
 
-
-const DependsItem: FC<DependsItemProps> = ({_id, name, slug, productionTime, quantity}) => {
-
+const DependsItem: FC<DependsItemProps> = ({
+  _id,
+  name,
+  slug,
+  productionTime,
+  quantity,
+}) => {
   return (
     <div className="depends__item">
       <div className="depedns__item__logo">
-        <img className="depends__item__logo__image" src={`/img/${slug}.png`}/>
+        <img className="depends__item__logo__image" src={`/img/${slug}.png`} />
       </div>
       <div className="depends__item__title">
         <Link href={`/items/${slug}`}>
           <a>{name}</a>
         </Link>
       </div>
-      <div className="depends__item__production-time">
-        {productionTime}
-      </div>
-      <div className="depends__item__quantity">
-        {quantity}
-      </div>
+      <div className="depends__item__production-time">{productionTime}</div>
+      <div className="depends__item__quantity">{quantity}</div>
       <style jsx>
-
         {`
           .depends__item {
-            background-color: #FAFAFA;
+            background-color: #fafafa;
             display: flex;
             padding: 15px;
             width: 450px;
@@ -71,8 +70,7 @@ const DependsItem: FC<DependsItemProps> = ({_id, name, slug, productionTime, qua
         `}
       </style>
     </div>
-  )
-
-}
+  );
+};
 
 export default DependsItem;

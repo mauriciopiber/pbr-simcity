@@ -11,7 +11,7 @@ async function persistModel(buildings: IBuilding[], items: IItem[]): Promise<voi
   try {
     client.connect();
 
-    //console.log(items);
+
 
     const buildingsCollection = client.db().collection('building');
     const { ops: buildingsDb } = await buildingsCollection.insertMany(buildings);
@@ -21,7 +21,7 @@ async function persistModel(buildings: IBuilding[], items: IItem[]): Promise<voi
     const itemsWithBuildings = items.map(p => {
 
       const building = buildingsDb.find(a => a.name === p.building.name);
-      //console.log(building._id);
+
       return {
         ...p,
         building: building._id,
@@ -30,7 +30,7 @@ async function persistModel(buildings: IBuilding[], items: IItem[]): Promise<voi
 
 
 
-    // console.log(itemsWithBuildings);
+
     const { ops: itemsDb }  = await itemsCollection.insertMany(itemsWithBuildings);
 
     const itemsWithDepends = itemsDb.map(a => {
@@ -44,7 +44,7 @@ async function persistModel(buildings: IBuilding[], items: IItem[]): Promise<voi
           item: itemId._id,
         }
       })
-      //console.log(dependsWithId);
+
 
       return {
         ...a,
@@ -68,7 +68,7 @@ async function persistModel(buildings: IBuilding[], items: IItem[]): Promise<voi
 
 
 
-    //console.log(buildingsDb);
+
     // const userCollection = client.db().collection('user');
     // await userCollection.insertMany(userList);
   } catch(e) {
@@ -79,7 +79,7 @@ async function persistModel(buildings: IBuilding[], items: IItem[]): Promise<voi
     await client.close();
   }
 
-  // console.log(buildings, items);
+
 
   // const calculateItems: IItemPrint[] = profit(buildings, items.filter(p => p.level <= 21));
   // renderTable(calculateItems)

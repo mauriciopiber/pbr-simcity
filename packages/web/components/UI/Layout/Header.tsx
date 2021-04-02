@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from "next/link";
 
 function Header() {
   return (
@@ -35,12 +35,10 @@ function Header() {
             cursor: pointer;
             color: #ffffff;
           }
-
         `}
       </style>
     </div>
-  )
+  );
 }
-
 
 export default Header;

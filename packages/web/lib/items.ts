@@ -40,14 +40,30 @@ export const calculateDependsCostByMaxValue = (depends: any[]): number => {
 
 
 export const QUERY_ITEMS = gql`
-  query {
-    items {
+  query(
+    $order: String!
+    $orderBy: String!
+    $filter: ItemFilter!
+  ) {
+    items(
+      order: $order
+      orderBy: $orderBy
+      filter: $filter
+    ) {
       _id
       name
       maxValue
       productionTime
       level
       slug
+      profitOwnProduction
+      profitOwnByMinute
+      profitOwnByHour
+      billCost
+      usedIn {
+        _id
+        name
+      }
       profit {
         cost
         profit

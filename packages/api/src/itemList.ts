@@ -384,7 +384,7 @@ const cookingUtensils: IItem = {
   name: 'Cooking Utensils',
   slug: 'cooking-utensils',
   productionTime: 45,
-  level: 9,
+  level: 17,
   building: hardware,
   maxValue: 250,
   depends: [
@@ -1279,7 +1279,7 @@ const burgers: IItem = {
       item: beef,
       quantity: 1,
     }, {
-      item: cheese,
+      item: breadRoll,
       quantity: 1,
     }, {
       item: bbqGrill,

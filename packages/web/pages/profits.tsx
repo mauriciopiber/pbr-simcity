@@ -9,6 +9,9 @@ function Page() {
 
   const [createMode, setCreateMode] = React.useState(false);
 
+
+
+
   const { loading, error, data } = useQuery(
     QUERY_PROFITS,
   );

@@ -17,5 +17,5 @@ const server = new ApolloServer({
 
 // The `listen` method launches a web server.
 server.listen().then(() => {
-  console.log('running');
+
 });
