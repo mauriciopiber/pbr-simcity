@@ -1,6 +1,5 @@
 import gql from 'graphql-tag';
 
-
 export const QUERY_PROFITS = gql`
   query {
     profits {
@@ -8,7 +7,7 @@ export const QUERY_PROFITS = gql`
       name
     }
   }
-`
+`;
 
 export const QUERY_PROFIT = gql`
   query Item(
@@ -20,4 +19,4 @@ export const QUERY_PROFIT = gql`
     }
   }
 
-`
+`;

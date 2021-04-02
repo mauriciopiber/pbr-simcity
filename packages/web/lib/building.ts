@@ -1,6 +1,5 @@
 import gql from 'graphql-tag';
 
-
 export const QUERY_BUILDINGS = gql`
 query {
   buildings {
@@ -19,7 +18,7 @@ query {
     }
   }
 }
-`
+`;
 
 export const QUERY_BUILDING = gql`
   query Building(
@@ -49,4 +48,4 @@ export const QUERY_BUILDING = gql`
       }
     }
   }
-`
+`;

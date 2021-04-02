@@ -8,50 +8,48 @@ export interface BuildingTableProps {
   setOrder: Function;
 }
 
-const BuildingTable: FC<BuildingTableProps> = ({ buildings, setOrder }) => {
-  return (
-    <table className="table">
-      <thead>
+const BuildingTable: FC<BuildingTableProps> = ({ buildings, setOrder }) => (
+  <table className="table">
+    <thead>
+      <tr>
+        <th className="header--order" onClick={() => setOrder('name')}>
+          Name
+        </th>
+        <th>Items</th>
+        <th className="header--order" onClick={() => setOrder('slots')}>
+          Slots
+        </th>
+        <th className="header--order" onClick={() => setOrder('nextSlot')}>
+          Next Slot
+        </th>
+        <th className="header--order" onClick={() => setOrder('parallel')}>
+          Parallel
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      {buildings.map((p: IBuildingModel) => (
         <tr>
-          <th className="header--order" onClick={() => setOrder('name')}>
-            Name
-          </th>
-          <th>Items</th>
-          <th className="header--order" onClick={() => setOrder('slots')}>
-            Slots
-          </th>
-          <th className="header--order" onClick={() => setOrder('nextSlot')}>
-            Next Slot
-          </th>
-          <th className="header--order" onClick={() => setOrder('parallel')}>
-            Parallel
-          </th>
+          <td>
+            <Link href={`/buildings/${p.slug}`}>
+              <a>{p.name}</a>
+            </Link>
+          </td>
+          <td>{p.items.length}</td>
+          <td>{p.slots}</td>
+          <td>{p.nextSlot}</td>
+          <td>{(p.parallel && 'Sim') || 'Não'}</td>
         </tr>
-      </thead>
-      <tbody>
-        {buildings.map((p: IBuildingModel) => {
-          return (
-            <tr>
-              <td>
-                <Link href={`/buildings/${p.slug}`}>
-                  <a>{p.name}</a>
-                </Link>
-              </td>
-              <td>{p.items.length}</td>
-              <td>{p.slots}</td>
-              <td>{p.nextSlot}</td>
-              <td>{(p.parallel && 'Sim') || 'Não'}</td>
-            </tr>
-          );
-        })}
-      </tbody>
-      <style jsx>{`
+      ))}
+    </tbody>
+    <style jsx>
+      {`
         .table {
           width: 100%;
         }
-      `}</style>
-    </table>
-  );
-};
+      `}
+    </style>
+  </table>
+);
 
 export default BuildingTable;

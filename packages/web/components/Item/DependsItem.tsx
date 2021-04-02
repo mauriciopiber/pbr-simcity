@@ -15,21 +15,20 @@ const DependsItem: FC<DependsItemProps> = ({
   slug,
   productionTime,
   quantity,
-}) => {
-  return (
-    <div className="depends__item">
-      <div className="depedns__item__logo">
-        <img className="depends__item__logo__image" src={`/img/${slug}.png`} />
-      </div>
-      <div className="depends__item__title">
-        <Link href={`/items/${slug}`}>
-          <a>{name}</a>
-        </Link>
-      </div>
-      <div className="depends__item__production-time">{productionTime}</div>
-      <div className="depends__item__quantity">{quantity}</div>
-      <style jsx>
-        {`
+}) => (
+  <div className="depends__item">
+    <div className="depedns__item__logo">
+      <img className="depends__item__logo__image" src={`/img/${slug}.png`} />
+    </div>
+    <div className="depends__item__title">
+      <Link href={`/items/${slug}`}>
+        <a>{name}</a>
+      </Link>
+    </div>
+    <div className="depends__item__production-time">{productionTime}</div>
+    <div className="depends__item__quantity">{quantity}</div>
+    <style jsx>
+      {`
           .depends__item {
             background-color: #fafafa;
             display: flex;
@@ -68,9 +67,8 @@ const DependsItem: FC<DependsItemProps> = ({
             flex: 0 1 40px;
           }
         `}
-      </style>
-    </div>
-  );
-};
+    </style>
+  </div>
+);
 
 export default DependsItem;

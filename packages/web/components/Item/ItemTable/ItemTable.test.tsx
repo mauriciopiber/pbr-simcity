@@ -1,5 +1,7 @@
+import {
+  render, fireEvent, waitFor, screen,
+} from '@testing-library/react';
 import ItemTable, { ItemTableProps } from './ItemTable';
-import { render, fireEvent, waitFor, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 
 describe('Item Map', () => {
@@ -13,6 +15,6 @@ describe('Item Map', () => {
 
     render(<ItemTable {...args} setOrder={setOrder} />);
 
-    //expect(screen.getByTestId('material-title').textContent).toEqual(args.name);
+    // expect(screen.getByTestId('material-title').textContent).toEqual(args.name);
   });
 });

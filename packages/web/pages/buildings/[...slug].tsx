@@ -1,8 +1,8 @@
 import React from 'react';
-import { request, gql } from 'graphql-request'
-import { QUERY_BUILDING } from '../../lib/building';
-import { useQuery } from "@apollo/react-hooks";
-import ItemTable from '../../components/Item/ItemTable/ItemTable';
+import { request, gql } from 'graphql-request';
+import { useQuery } from '@apollo/react-hooks';
+import { QUERY_BUILDING } from '@pbr-simcity/web/lib/building';
+import ItemTable from '@pbr-simcity/web/components/Item/ItemTable/ItemTable';
 
 const QUERY_PATHS = gql`
   query {
@@ -10,8 +10,7 @@ const QUERY_PATHS = gql`
       slug
     }
   }
-`
-
+`;
 
 interface BuildingProps {
   slug: string;
@@ -23,64 +22,61 @@ function Page({ slug }: BuildingProps) {
 
   const setColumnOrder = React.useCallback((column) => {
     setOrderBy(column);
-    setOrder(order === 'asc' && 'desc' || 'asc');
+    setOrder((order === 'asc' && 'desc') || 'asc');
   }, [order, orderBy]);
 
   const { loading, error, data } = useQuery(
     QUERY_BUILDING,
-    {variables:
-      { slug: slug }
-    }
+    {
+      variables:
+      { slug },
+    },
   );
-
 
   if (loading) {
     return (
       <div>Loading</div>
-    )
+    );
   }
 
   if (error) {
     return (
-      <div>Error {JSON.stringify(error)}</div>
-    )
+      <div>
+        Error
+        {JSON.stringify(error)}
+      </div>
+    );
   }
 
   const {
-    building
+    building,
   } = data;
 
   const {
-    name,
-    items
+    items,
   } = building;
 
   return (
-    <ItemTable setOrder={setColumnOrder} items={items}/>
-  )
+    <ItemTable setOrder={setColumnOrder} items={items} />
+  );
 }
 
 export async function getStaticPaths() {
-
   const data = await request('http://localhost:4000', QUERY_PATHS);
 
   const { buildings } = data;
 
-  const paths = buildings.map((b: any) => {
-    return {
-      params: { slug: [b.slug]}
-    }
-  })
-
+  const paths = buildings.map((b: any) => ({
+    params: { slug: [b.slug] },
+  }));
 
   return {
     paths,
     fallback: false,
-  }
+  };
 }
 
 export async function getStaticProps(ctx: any) {
-
   const { params } = ctx;
 
   const { slug } = params;
@@ -89,8 +85,8 @@ export async function getStaticProps(ctx: any) {
     props: {
       slug: slug[0],
 
-    }
-  }
+    },
+  };
 }
 
 export default Page;

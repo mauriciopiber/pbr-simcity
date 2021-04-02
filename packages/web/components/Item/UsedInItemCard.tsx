@@ -13,20 +13,19 @@ const UsedInItem: FC<UsedInItemProps> = ({
   name,
   slug,
   productionTime,
-}) => {
-  return (
-    <div className="used__item">
-      <div className="depedns__item__logo">
-        <img className="used__item__logo__image" src={`/img/${slug}.png`} />
-      </div>
-      <div className="used__item__title">
-        <Link href={`/items/${slug}`}>
-          <a>{name}</a>
-        </Link>
-      </div>
-      <div className="used__item__production-time">{productionTime}</div>
-      <style jsx>
-        {`
+}) => (
+  <div className="used__item">
+    <div className="depedns__item__logo">
+      <img className="used__item__logo__image" src={`/img/${slug}.png`} />
+    </div>
+    <div className="used__item__title">
+      <Link href={`/items/${slug}`}>
+        <a>{name}</a>
+      </Link>
+    </div>
+    <div className="used__item__production-time">{productionTime}</div>
+    <style jsx>
+      {`
           .used__item {
             background-color: #fafafa;
             display: flex;
@@ -64,9 +63,8 @@ const UsedInItem: FC<UsedInItemProps> = ({
             flex: 0 1 40px;
           }
         `}
-      </style>
-    </div>
-  );
-};
+    </style>
+  </div>
+);
 
 export default UsedInItem;

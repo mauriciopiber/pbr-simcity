@@ -1,7 +1,8 @@
-import { request, gql } from 'graphql-request'
+import React from 'react';
+import { request, gql } from 'graphql-request';
 import Link from 'next/link';
-import { QUERY_PROFIT } from '../../lib/profits';
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery } from '@apollo/react-hooks';
+import { QUERY_PROFIT } from '@pbr-simcity/web/lib/profits';
 
 const QUERY_PATHS = gql`
   query {
@@ -9,40 +10,39 @@ const QUERY_PATHS = gql`
       _id
     }
   }
-`
-
+`;
 
 interface BuildingProps {
   id: string;
 }
 
 function Page({ id }: BuildingProps) {
-
   const { loading, error, data } = useQuery(
     QUERY_PROFIT,
-    {variables:
-      { _id: id }
-    }
+    {
+      variables:
+      { _id: id },
+    },
   );
 
   if (loading) {
     return (
       <div>Loading</div>
-    )
+    );
   }
 
   if (error) {
     return (
-      <div>Error {JSON.stringify(error)}</div>
-    )
+      <div>
+        Error
+        {JSON.stringify(error)}
+      </div>
+    );
   }
 
   const {
-    profit
+    profit,
   } = data;
-
-
-
 
   return (
     <div className="panel">
@@ -73,30 +73,25 @@ function Page({ id }: BuildingProps) {
         `}
       </style>
     </div>
-  )
+  );
 }
 
 export async function getStaticPaths() {
-
   const data = await request('http://localhost:4000', QUERY_PATHS);
 
   const { profits } = data;
 
-  const paths = profits.map((b: any) => {
-    return {
-      params: { id: [b._id]}
-    }
-  })
-
+  const paths = profits.map((b: any) => ({
+    params: { id: [b._id] },
+  }));
 
   return {
     paths,
     fallback: false,
-  }
+  };
 }
 
 export async function getStaticProps(ctx: any) {
-
   const { params } = ctx;
 
   const { id } = params;
@@ -105,8 +100,8 @@ export async function getStaticProps(ctx: any) {
     props: {
       id: id[0],
 
-    }
-  }
+    },
+  };
 }
 
 export default Page;

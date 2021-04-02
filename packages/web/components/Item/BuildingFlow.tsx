@@ -9,7 +9,12 @@ const BuildingFlow: FC<BuildingFlowProps> = ({ item }) => {
   const flow = [];
 
   item.depends.map((p: any) => {});
-  return <div>Building Flow {item._id}</div>;
+  return (
+    <div>
+      Building Flow
+      {item._id}
+    </div>
+  );
 };
 
 export default BuildingFlow;

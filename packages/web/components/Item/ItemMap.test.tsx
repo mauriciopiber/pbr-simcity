@@ -1,5 +1,7 @@
+import {
+  render, fireEvent, waitFor, screen,
+} from '@testing-library/react';
 import ItemMap, { ItemMapProps } from './ItemMap';
-import { render, fireEvent, waitFor, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 
 describe('Item Map', () => {

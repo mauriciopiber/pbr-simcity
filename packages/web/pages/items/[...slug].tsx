@@ -1,15 +1,15 @@
-import { request, gql } from 'graphql-request'
+import React from 'react';
+import { request, gql } from 'graphql-request';
 import Link from 'next/link';
-import { QUERY_ITEM } from '../../lib/items';
-import { useQuery } from "@apollo/react-hooks";
-import ItemMap from '../../components/Item/ItemMap';
-import BuildingFlow from '../../components/Item/BuildingFlow';
-import DependencyGraph from '../../components/Item/DependencyGraph';
+import { useQuery } from '@apollo/react-hooks';
 import {
+  QUERY_ITEM,
   calculateDependsCostByMaxValue,
-  calculateDependsTime
-} from '../../lib/items';
-
+  calculateDependsTime,
+} from '@pbr-simcity/web/lib/items';
+import ItemMap from '@pbr-simcity/web/components/Item/ItemMap';
+import BuildingFlow from '@pbr-simcity/web/components/Item/BuildingFlow';
+import DependencyGraph from '@pbr-simcity/web/components/Item/DependencyGraph';
 
 const QUERY_PATHS = gql`
   query {
@@ -17,45 +17,42 @@ const QUERY_PATHS = gql`
       slug
     }
   }
-`
-
+`;
 
 interface ItemProps {
   slug: string;
 }
 
 function Page({ slug }: ItemProps) {
-
   const { loading, error, data } = useQuery(
     QUERY_ITEM,
-    {variables:
-      { slug: slug }
-    }
+    {
+      variables:
+      { slug },
+    },
   );
-
-  console.log(data, loading, error);
 
   if (loading) {
     return (
       <div>Loading</div>
-    )
+    );
   }
 
   if (error) {
     return (
-      <div>Error {JSON.stringify(error)}</div>
-    )
+      <div>
+        Error
+        {JSON.stringify(error)}
+      </div>
+    );
   }
 
   const {
-    item
+    item,
   } = data;
 
   const dependsTime = calculateDependsTime(item.depends);
   const dependsCost = calculateDependsCostByMaxValue(item.depends);
-
-
-  console.log(item);
 
   return (
     <div className="panel">
@@ -64,7 +61,13 @@ function Page({ slug }: ItemProps) {
       </div>
       <div className="panel__building">
         <Link href={`/buildings/${item.building._id}`}>
-          <a className="link">{item.building.name} - {item.building.parallel && 'Parallel' || 'Sequential'}</a>
+          <a className="link">
+            {item.building.name}
+            {' '}
+            -
+            {' '}
+            {(item.building.parallel && 'Parallel') || 'Sequential'}
+          </a>
         </Link>
       </div>
       <table>
@@ -73,7 +76,7 @@ function Page({ slug }: ItemProps) {
             Dependency Graph
           </th>
           <td>
-            <DependencyGraph items={item.depends}/>
+            <DependencyGraph items={item.depends} />
           </td>
         </tr>
         <tr>
@@ -81,14 +84,17 @@ function Page({ slug }: ItemProps) {
             Buildings Flow
           </th>
           <td>
-            <BuildingFlow item={item}/>
+            <BuildingFlow item={item} />
           </td>
         </tr>
         <tr>
           <th>
             Production Time Min
           </th>
-          <td>{item.productionTime}m</td>
+          <td>
+            {item.productionTime}
+            m
+          </td>
         </tr>
         <tr>
           <th>
@@ -103,7 +109,11 @@ function Page({ slug }: ItemProps) {
             Bill Time
           </th>
           <td>
-            {dependsTime} ({dependsTime/60}h)
+            {dependsTime}
+            {' '}
+            (
+            {dependsTime / 60}
+            h)
           </td>
         </tr>
         <tr>
@@ -111,7 +121,10 @@ function Page({ slug }: ItemProps) {
             Total Production
           </th>
           <td>
-            {dependsTime+item.productionTime}m ({(dependsTime+item.productionTime)/60}h)
+            {dependsTime + item.productionTime}
+            m (
+            {(dependsTime + item.productionTime) / 60}
+            h)
           </td>
         </tr>
         <tr>
@@ -127,7 +140,13 @@ function Page({ slug }: ItemProps) {
             Profit From Own Production
           </th>
           <td>
-            {item.maxValue - dependsCost} = ({item.maxValue}) - ({dependsCost})
+            {item.maxValue - dependsCost}
+            {' '}
+            = (
+            {item.maxValue}
+            ) - (
+            {dependsCost}
+            )
           </td>
         </tr>
         <tr>
@@ -135,15 +154,14 @@ function Page({ slug }: ItemProps) {
             Profit/H From Own Production
           </th>
           <td>
-            {(item.maxValue - dependsCost)/item.productionTime}
+            {(item.maxValue - dependsCost) / item.productionTime}
           </td>
         </tr>
 
-
       </table>
       <div>
-        <img src={`/img/${item.slug}.png`}/>
-        <ItemMap name={item.name} depends={item.depends} usedIn={item.usedIn }/>
+        <img alt={item.name} src={`/img/${item.slug}.png`} />
+        <ItemMap name={item.name} depends={item.depends} usedIn={item.usedIn} />
       </div>
       <div>
         <Link href="/items">
@@ -168,30 +186,25 @@ function Page({ slug }: ItemProps) {
         `}
       </style>
     </div>
-  )
+  );
 }
 
 export async function getStaticPaths() {
-
   const data = await request('http://localhost:4000', QUERY_PATHS);
 
   const { items } = data;
 
-  const paths = items.map((b: any) => {
-    return {
-      params: { slug: [b.slug]}
-    }
-  })
-
+  const paths = items.map((b: any) => ({
+    params: { slug: [b.slug] },
+  }));
 
   return {
     paths,
     fallback: false,
-  }
+  };
 }
 
 export async function getStaticProps(ctx: any) {
-
   const { params } = ctx;
 
   const { slug } = params;
@@ -200,8 +213,8 @@ export async function getStaticProps(ctx: any) {
     props: {
       slug: slug[0],
 
-    }
-  }
+    },
+  };
 }
 
 export default Page;

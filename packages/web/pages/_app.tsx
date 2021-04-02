@@ -1,15 +1,14 @@
-import React from "react";
-import PropTypes from "prop-types";
-import Head from "next/head";
-import type { AppProps /*, AppContext */ } from 'next/app'
-import withApollo from '../lib/withApollo';
-import Layout from '../components/UI/Layout/Layout';
-
+import React from 'react';
+import PropTypes from 'prop-types';
+import Head from 'next/head';
+import type { AppProps /* , AppContext */ } from 'next/app';
+import withApollo from '@pbr-simcity/web/lib/withApollo';
+import Layout from '@pbr-simcity/web/components/UI/Layout/Layout';
 
 function MyApp(props: AppProps) {
   const { Component, pageProps } = props;
   return (
-    <React.Fragment>
+    <>
       <Head>
         <title>Sim City</title>
         <meta
@@ -20,7 +19,7 @@ function MyApp(props: AppProps) {
       <Layout>
         <Component {...pageProps} />
       </Layout>
-    </React.Fragment>
+    </>
   );
 }
 

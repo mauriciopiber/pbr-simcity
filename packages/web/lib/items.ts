@@ -1,8 +1,6 @@
 import gql from 'graphql-tag';
 
-
 export const calculateDependsTime = (depends: any[]) => {
-
   if (depends.length <= 0) {
     return 0;
   }
@@ -15,7 +13,7 @@ export const calculateDependsTime = (depends: any[]) => {
 
   const billTime = dependsBuildTime.length > 0 && Math.max(...dependsBuildTime) || 0;
   return billTime;
-}
+};
 
 export const calculateDependsCostByMaxValue = (depends: any[]): number => {
   if (depends.length <= 0) {
@@ -24,20 +22,17 @@ export const calculateDependsCostByMaxValue = (depends: any[]): number => {
 
   const dependsBuildCost: number = depends.map((b: any) => {
     const cost = b.item.maxValue * b.quantity;
-    //const costDepends = calculateDependsCostByMaxValue(b.item.depends);
+    // const costDepends = calculateDependsCostByMaxValue(b.item.depends);
     return cost;// + costDepends;
   }).reduce((a: number, b: any) => {
     console.log('reduce', a, b);
-    return a+b;
+    return a + b;
   }, 0);
 
   console.log('reduce final', dependsBuildCost);
 
   return dependsBuildCost;
-}
-
-
-
+};
 
 export const QUERY_ITEMS = gql`
   query(
@@ -82,7 +77,7 @@ export const QUERY_ITEMS = gql`
 
     }
   }
-`
+`;
 
 export const QUERY_ITEM = gql`
 fragment itemDepends on Item {
@@ -175,4 +170,4 @@ fragment itemDepends on Item {
     }
   }
 
-`
+`;
