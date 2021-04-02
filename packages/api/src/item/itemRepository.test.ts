@@ -68,6 +68,46 @@ describe('Item Repository', () => {
     }
   })
 
+  // test('lab 1 - find one by id full data - Fire Pit', async () => {
+
+  //   const client = new MongoClient(mongoStr, { useUnifiedTopology: true });
+  //   await client.connect();
+
+  //   const itemRepository = new ItemRepository(client.db().collection('item'));
+
+
+  //   const findOne: any[] = await itemRepository.findByIdV2(new ObjectID('605fa6cfd9397142fe1793d2'));
+
+  //   console.log(JSON.stringify(findOne));
+  //   try {
+  //     //console.log(JSON.stringify(findOne, null, 2));
+  //     const item = findOne[0];
+  //     console.log(item);
+
+  //     expect(findOne.length).toEqual(1);
+
+
+
+  //     expect(item.name).toEqual('Fire Pit');
+  //     expect(item.slug).toEqual('fire-pit');
+  //     expect(item.productionTime).toEqual(240);
+  //     expect(item.maxValue).toEqual(1740);
+
+  //     expect(item.depends.length).toEqual(3);
+  //     // // to add
+  //     // expect(findOne.billCost).toEqual(1410);
+  //     // //expect(findOne.totalProductionTime).toEqual(555);
+  //     // expect(findOne.profitOwnProduction).toEqual(330);
+  //     // expect(findOne.billTime).toEqual(220);
+  //     // //expect(findOne.hourProfitOwnProduction).toEqual(280);
+
+  //   } catch(e) {
+  //     throw e;
+  //   } finally {
+  //     await client.close();
+  //   }
+  // })
+
   test('find one by id full data - Fire Pit', async () => {
 
     const client = new MongoClient(mongoStr, { useUnifiedTopology: true });
@@ -78,7 +118,7 @@ describe('Item Repository', () => {
 
     const findOne: any = await itemRepository.findByIdV2(new ObjectID('605fa6cfd9397142fe1793d2'));
     try {
-      //console.log(JSON.stringify(findOne, null, 2));
+      console.log(JSON.stringify(findOne, null, 2));
       expect(findOne.name).toEqual('Fire Pit');
       expect(findOne.slug).toEqual('fire-pit');
       expect(findOne.productionTime).toEqual(240);

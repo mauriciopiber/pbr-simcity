@@ -29,46 +29,185 @@ class ItemRepository extends Collection {
         }},
         { $unwind: '$depends'},
         { $lookup: {
+          from: 'building',
+          localField: 'building',
+          foreignField: '_id',
+          as: "building"
+        }},
+        { $unwind: '$building'},
+        { $lookup: {
           from: 'item',
           localField: 'depends.item',
           foreignField: '_id',
-          as:"depends.dependsItemLvl2"
+          as:"depends.item"
         }},
-        { $unwind: '$depends.dependsItemLvl2'},
+        { $unwind: '$depends.item'},
+        { $unwind: '$depends.item.depends'},
+        { $lookup: {
+          from: 'building',
+          localField: 'depends.item.building',
+          foreignField: '_id',
+          as: "depends.item.building"
+        }},
+        { $unwind: '$depends.item.building'},
         { $lookup: {
           from: 'item',
-          localField: 'depends.dependsItemLvl2.depends.item',
+          localField: 'depends.item.depends.item',
           foreignField: '_id',
-          as:"depends.dependsItemLvl3"
+          as:"depends.item.depends.item"
         }},
-        { $addFields: {
-          ['depends.dependsItemLvl2.billTime']: {$max: ['$depends.dependsItemLvl3.productionTime']}
+        { $unwind: '$depends.item.depends.item'},
+        { $lookup: {
+          from: 'building',
+          localField: 'depends.item.depends.item.building',
+          foreignField: '_id',
+          as: "depends.item.depends.item.building"
         }},
+        { $unwind: '$depends.item.depends.item.building'},
         { $group: {
           _id: "$_id",
           name: {$first: "$name"},
           slug: {$first: "$slug"},
           productionTime: {$first: "$productionTime"},
           maxValue: {$first: "$maxValue"},
-          billCost: {$sum: {$multiply: ["$depends.dependsItemLvl2.maxValue", "$depends.quantity"]}},
-          billTimeLvl2: {$max: {$sum: ["$depends.dependsItemLvl2.productionTime", "$depends.dependsItemLvl2.billTime"]}},
-          billTimeLvl3: {$max: {$sum: ["$depends.dependsItemLvl3.productionTime", "$depends.dependsItemLvl3.billTime"]}},
-          depends: {$push: "$depends"},
+          depends: {$addToSet: {
+            item: "$depends.item._id",
+            quantity: "$depends.quantity"
+          }},
+          //billCost: {$sum: {$multiply: ["$depends.item.maxValue", "$depends.quantity"]}},
+          billTimeLvl2: {
+            $max: {
+              $cond:
+                {
+                  if: '$depends.item.building.parallel',
+                  then: "$depends.item.productionTime",
+                  else:  { $multiply: ["$depends.item.productionTime", "$depends.quantity"]}
+                }
+            }
+          },
+          billTimeLvl3: {
+            $max: {
+              $cond:
+                {
+                  if: '$depends.item.depends.item.building.parallel',
+                  then: "$depends.item.depends.item.productionTime",
+                  else:  { $multiply: ["$depends.item.depends.item.productionTime", "$depends.item.depends.quantity"]}
+                }
+            }
+          },
+        }},
+        { $unwind: '$depends'},
+        { $lookup: {
+          from: 'item',
+          localField: 'depends.item',
+          foreignField: '_id',
+          as:"depends.item"
+        }},
+        { $unwind: '$depends.item'},
+        { $group: {
+          _id: "$_id",
+          name: {$first: "$name"},
+          slug: {$first: "$slug"},
+          productionTime:  {$first: "$productionTime"},
+          maxValue: {$first: "$maxValue"},
+          depends: {$addToSet: {
+            item: "$depends.item._id",
+            quantity: "$depends.quantity"
+          }},
+          billTimeLvl2: {$first: "$billTimeLvl2"},
+          billTimeLvl3: {$first: "$billTimeLvl3"},
+          billCost: {$sum: {$multiply: ["$depends.item.maxValue", "$depends.quantity"]}},
+        //   depends: {$push: "$depends"},
         }},
         { $project: {
-          //dependsLvl2: "$dependsItem.depends",
-          name: 1,
-          slug: 1,
-          productionTime: 1,
-          maxValue: 1,
-          billCost: 1,
-          profitOwnProduction: { $subtract: [ "$maxValue", "$billCost"  ] },
-          //billTime: 1,
-          billTime: {$max: {$sum: ['$billTimeLvl2', "$billTimeLvl3"]}},
-          //billTimeLvl2: 1,
-          //billTimeLvl3: 1,
-          depends: 1,
-        } },
+            //dependsLvl2: "$dependsItem.depends",
+            name: 1,
+            slug: 1,
+            productionTime: 1,
+            maxValue: 1,
+            billCost: 1,
+            profitOwnProduction: { $subtract: [ "$maxValue", "$billCost"  ] },
+            billTime: {$max: {$sum: ['$billTimeLvl2', "$billTimeLvl3"]}},
+            depends: 1,
+          } },
+
+        // { $unwind: '$depends.dependsItemLvl2.buildingList'},
+        // { $lookup: {
+        //   from: 'item',
+        //   localField: 'depends.dependsItemLvl2.depends.item',
+        //   foreignField: '_id',
+        //   as:"depends.dependsItemLvl3"
+        // }},
+        // { $unwind: '$depends.dependsItemLvl3'},
+        // { $lookup: {
+        //   from: 'building',
+        //   localField: 'depends.dependsItemLvl3.building',
+        //   foreignField: '_id',
+        //   as: "depends.dependsItemLvl3.buildingList"
+        // }},
+        // { $unwind: '$depends.dependsItemLvl3.buildingList'},
+        // { $unwind: '$depends.dependsItemLvl2.depends'},
+        // { $group: {
+        //   _id: "$_id",
+        // //   name: {$first: "$name"},
+        // //   slug: {$first: "$slug"},
+        // //   productionTime: {$first: "$productionTime"},
+        // //   maxValue: {$first: "$maxValue"},
+        // //   // billCost: {$sum: {$multiply: ["$depends.dependsItemLvl2.maxValue", "$depends.quantity"]}},
+        // //   billTimeLvl2: {
+        // //     $max: {
+        // //       $cond:
+        // //         {
+        // //           if: '$depends.billTimeLvl2.buildingList.parallel',
+        // //           then: "$depends.dependsItemLvl2.productionTime",
+        // //           else:  { $multiply: ["$depends.dependsItemLvl2.productionTime", "$depends.quantity"]}
+        // //         }
+        // //     }
+        // //   },
+        //   billTimeLvl3: {
+        //     $max: {
+        //       $cond:
+        //         {
+        //           if: '$depends.billTimeLvl3.buildingList.parallel',
+        //           then: "$depends.dependsItemLvl3.productionTime",
+        //           else:  { $multiply: ["$depends.dependsItemLvl3.productionTime", "$depends.dependsItemLvl2.depends.quantity"]}
+        //         }
+        //     }
+        //   },
+        // //   depends: {$push: "$depends"},
+        // }},
+        //{ $unwind: '$depends.dependsItemLvl3.buildingList'},
+
+
+        // { $addFields: {
+        //   ['depends.dependsItemLvl2.billTime']: {
+            //$max: }
+        // }},
+        // { $group: {
+        //   _id: "$_id",
+        //   name: {$first: "$name"},
+        //   slug: {$first: "$slug"},
+        //   productionTime: {$first: "$productionTime"},
+        //   maxValue: {$first: "$maxValue"},
+        //   billCost: {$sum: {$multiply: ["$depends.dependsItemLvl2.maxValue", "$depends.quantity"]}},
+        //   billTimeLvl2: {$max: {$sum: ["$depends.dependsItemLvl2.productionTime", "$depends.dependsItemLvl2.billTime"]}},
+        //   billTimeLvl3: {$max: {$sum: ["$depends.dependsItemLvl3.productionTime", "$depends.dependsItemLvl3.billTime"]}},
+        //   depends: {$push: "$depends"},
+        // }},
+        // { $project: {
+        //   //dependsLvl2: "$dependsItem.depends",
+        //   name: 1,
+        //   slug: 1,
+        //   productionTime: 1,
+        //   maxValue: 1,
+        //   billCost: 1,
+        //   profitOwnProduction: { $subtract: [ "$maxValue", "$billCost"  ] },
+        //   //billTime: 1,
+        //   billTime: {$max: {$sum: ['$billTimeLvl2', "$billTimeLvl3"]}},
+        //   //billTimeLvl2: 1,
+        //   //billTimeLvl3: 1,
+        //   depends: 1,
+        // } },
         // { $project: {
         //   profitOwnProduction: { $subtract: [ "$maxValue", "$billCost"  ] },
         //   name: 1,

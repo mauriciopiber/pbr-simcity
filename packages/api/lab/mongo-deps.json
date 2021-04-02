@@ -1,0 +1,81 @@
+[
+  {
+    "_id": "605fa6cfd9397142fe1793d2",
+    "name": "Fire Pit",
+    "slug": "fire-pit",
+    "productionTime": 240,
+    "maxValue": 1740,
+    "depends": {
+      "item": [
+        {
+          "_id": "605fa6cfd9397142fe1793c5",
+          "name": "Bricks",
+          "slug": "bricks",
+          "productionTime": 20,
+          "level": 13,
+          "building": "605fa6cfd9397142fe1793af",
+          "maxValue": 190,
+          "depends": [{ "item": "605fa6cfd9397142fe1793bc", "quantity": 2 }]
+        }
+      ],
+      "quantity": 2
+    },
+    "billTimeLvl2": 100,
+    "billTimeLvl3": 120
+  },
+  {
+    "_id": "605fa6cfd9397142fe1793d2",
+    "name": "Fire Pit",
+    "slug": "fire-pit",
+    "productionTime": 240,
+    "maxValue": 1740,
+    "depends": {
+      "item": [
+        {
+          "_id": "605fa6cfd9397142fe1793c6",
+          "name": "Cement",
+          "slug": "cement",
+          "productionTime": 50,
+          "level": 14,
+          "building": "605fa6cfd9397142fe1793af",
+          "maxValue": 440,
+          "depends": [
+            { "item": "605fa6cfd9397142fe1793bc", "quantity": 2 },
+            { "item": "605fa6cfd9397142fe1793bd", "quantity": 1 }
+          ]
+        }
+      ],
+      "quantity": 2
+    },
+    "billTimeLvl2": 100,
+    "billTimeLvl3": 120
+  },
+  {
+    "_id": "605fa6cfd9397142fe1793d2",
+    "name": "Fire Pit",
+    "slug": "fire-pit",
+    "productionTime": 240,
+    "maxValue": 1740,
+    "depends": {
+      "item": [
+        {
+          "_id": "605fa6cfd9397142fe1793cb",
+          "name": "Shovel",
+          "slug": "shovel",
+          "productionTime": 30,
+          "level": 9,
+          "building": "605fa6cfd9397142fe1793b0",
+          "maxValue": 150,
+          "depends": [
+            { "item": "605fa6cfd9397142fe1793b8", "quantity": 1 },
+            { "item": "605fa6cfd9397142fe1793b9", "quantity": 1 },
+            { "item": "605fa6cfd9397142fe1793ba", "quantity": 1 }
+          ]
+        }
+      ],
+      "quantity": 1
+    },
+    "billTimeLvl2": 100,
+    "billTimeLvl3": 120
+  }
+]
