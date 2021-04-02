@@ -2,5 +2,8 @@
   "name": "@pbr-simcity/types",
   "version": "1.0.0",
   "main": "index.js",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "prettier": "^2.2.1"
+  }
 }
