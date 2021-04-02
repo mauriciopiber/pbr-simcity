@@ -7,13 +7,14 @@ query {
     _id
     name
     slots
+    slug
     nextSlot
     parallel
     items {
       _id
       name
       slug
-      maxValue,
+      maxValue
       productionTime
     }
   }
@@ -22,9 +23,9 @@ query {
 
 export const QUERY_BUILDING = gql`
   query Building(
-    $_id: ObjectID!
+    $slug: String!
   ) {
-    building(_id: $_id) {
+    building(slug: $slug) {
       _id,
       name
       slots
@@ -36,6 +37,15 @@ export const QUERY_BUILDING = gql`
         maxValue,
         slug,
         productionTime
+        level
+        billCost
+        profitOwnProduction
+        profitOwnByMinute
+        profitOwnByHour
+        usedIn {
+          _id
+          name
+        }
       }
     }
   }

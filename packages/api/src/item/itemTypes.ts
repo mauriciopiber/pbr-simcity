@@ -37,8 +37,7 @@ const typeDefs = gql`
   }
 
   type Query {
-    items(order: String!, orderBy: String!, filter: ItemFilter): [Item]
-    endlineItems: [Item]
+    items(order: String, orderBy: String, filter: ItemFilter): [Item]
     item(_id: ObjectID, slug: String): Item!
   }
 `;

@@ -103,8 +103,6 @@ fragment itemDepends on Item {
     profitByHour
   }
 }
-
-
   query Item(
     $slug: String
   ) {

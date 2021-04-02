@@ -6,9 +6,12 @@ describe("Item Map", () => {
   test("render material from primitive", async () => {
     const args: ItemTableProps = {
       items: [],
+      setOrder: Function,
     };
 
-    render(<ItemTable {...args} />);
+    const setOrder = jest.fn();
+
+    render(<ItemTable {...args} setOrder={setOrder}/>);
 
     //expect(screen.getByTestId('material-title').textContent).toEqual(args.name);
   });

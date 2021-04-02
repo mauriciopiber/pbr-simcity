@@ -50,12 +50,19 @@ class ItemRepository extends Collection {
   }
 
 
-  async findByBuilding(building: ObjectId) {
+  async findManyByBuilding(building: ObjectId) {
 
+    const docs = await this.collection.aggregate(
+      [
+        { $match: { building: {$eq: new ObjectId(building)}} },
+        // { $match: {
+        //   _id: new ObjectId(id)
+        // }},
+        ...this.pipeline,
+      ]
+    ).toArray();
 
-    const docs = this.collection.find({ building: {$eq: new ObjectId(building)}} );
-    return await docs.toArray();
-
+    return await docs;
   }
 
 

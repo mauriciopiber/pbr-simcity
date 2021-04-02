@@ -7,13 +7,14 @@ const typeDefs = gql`
     name: String!
     slots: Int!
     parallel: Boolean!
+    slug: String!
     nextSlot: Int
     items: [Item]!
   }
 
   type Query {
     buildings: [Building]
-    building(_id: ObjectID!): Building!
+    building(_id: ObjectID, slug: String): Building!
   }
 `;
 

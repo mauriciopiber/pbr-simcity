@@ -58,6 +58,10 @@ export interface IItemModel extends IItem {
   profitOwnByHour: number;
 }
 
+export interface IBuildingModel extends IBuilding {
+  items: IItemModel[],
+}
+
 
 export interface IItemFilter {
   level?: any;

@@ -39,9 +39,9 @@ const ItemTable: FC<ItemTableProps> = ({ items, setOrder }) => {
                   <a className="link">{p.name}</a>
                 </Link>
               </td>
-              <td>
+              {p.building && (<td>
                 {p.building.name}
-              </td>
+              </td>) || <td>-</td>}
               <td>
                 {p.level}
               </td>
@@ -68,8 +68,8 @@ const ItemTable: FC<ItemTableProps> = ({ items, setOrder }) => {
               </td>
               <td className={
                 cx(
-                  {['item--used-in']: p.usedIn.length > 0},
-                  {['item--endline']: p.usedIn.length <= 0},
+                  {['item--used-in']: p.usedIn?.length > 0},
+                  {['item--endline']: p.usedIn?.length <= 0},
                 )
               }>
 

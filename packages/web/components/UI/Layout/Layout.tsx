@@ -1,6 +1,11 @@
+import React, { FC, ReactNode } from 'react';
 import Header from "./Header";
 
-function Layout({ children }) {
+interface ILayoutProps {
+  children: ReactNode;
+}
+
+const Layout: FC<ILayoutProps> = ({ children }) => {
   return (
     <div className="layout">
       <Header />

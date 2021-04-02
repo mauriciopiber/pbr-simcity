@@ -6,6 +6,8 @@ describe("Item Map", () => {
   test("render material from primitive", async () => {
     const args: ItemMapProps = {
       name: "MyTitle",
+      usedIn: [],
+      depends: []
     };
 
     render(<ItemMap {...args} />);

@@ -15,6 +15,13 @@ class BuildingRepository extends Collection {
     const docs = await this.collection.findOne({_id: {$eq: new ObjectId(id)}});
     return docs;
   }
+
+
+  async findOneBySlug(slug: string) {
+
+    const docs = await this.collection.findOne({slug: {$eq: slug}});
+    return docs;
+  }
 }
 
 export default BuildingRepository;

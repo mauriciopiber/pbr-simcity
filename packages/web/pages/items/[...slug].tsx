@@ -33,6 +33,8 @@ function Page({ slug }: ItemProps) {
     }
   );
 
+  console.log(data, loading, error);
+
   if (loading) {
     return (
       <div>Loading</div>
@@ -88,21 +90,6 @@ function Page({ slug }: ItemProps) {
           </th>
           <td>{item.productionTime}m</td>
         </tr>
-{/*
-        <tr>
-          <th>
-            Production Time Hour.
-          </th>
-          <td>{item.productionTime / 60}</td>
-        </tr> */}
-        {/* <tr>
-          <th>
-            Cost
-          </th>
-          <td>
-            {item.profit.cost} - {item.costMongo}
-          </td>
-        </tr> */}
         <tr>
           <th>
             Bill Cost
@@ -151,31 +138,7 @@ function Page({ slug }: ItemProps) {
             {(item.maxValue - dependsCost)/item.productionTime}
           </td>
         </tr>
-        {/* <tr>
-          <th>
-            Total Production Time
-          </th>
-          <td>
-            {item.productionTime + dependsTime} = ({item.productionTime}) + ({dependsTime})
-          </td>
-        </tr> */}
 
-        {/* <tr>
-          <th>
-            Max Production / H
-          </th>
-          <td>
-            {60 / (item.productionTime + dependsTime)}
-          </td>
-        </tr>
-        <tr>
-          <th>
-            Max Production / D
-          </th>
-          <td>
-            {(60*24) / (item.productionTime + dependsTime)}
-          </td>
-        </tr> */}
 
       </table>
       <div>

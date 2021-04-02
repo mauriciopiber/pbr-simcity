@@ -14,7 +14,7 @@ const resolvers = {
       const { dataSources } = context;
       const { building } = dataSources;
 
-      return await building.findById(args._id);
+      return await building.findOneBySlug(args.slug);
     },
   },
   Building: {
@@ -25,7 +25,7 @@ const resolvers = {
         item
       } = dataSources;
 
-      const items = await item.findByBuilding(parent._id);
+      const items = await item.findManyByBuilding(parent._id);
 
       return items;
     }

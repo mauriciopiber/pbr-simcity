@@ -10,7 +10,7 @@ function Page() {
   const [orderBy, setOrderBy] = React.useState('level');
 
   const defaultFilter = {
-    level: 29,
+    level: 43,
   };
 
   const [filter, setFilter] = React.useState(defaultFilter)
