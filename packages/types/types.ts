@@ -1,4 +1,17 @@
-import { ObjectId } from 'mongodb';
+export interface IItemDependency {
+  item?: any;
+  quantity: number;
+}
+
+export interface IBuilding {
+  name: string;
+  // items: IItem[],
+  slots: number;
+  parallel: boolean;
+  slug: string;
+  nextSlot: number | null;
+}
+
 export interface IItem {
   name: string;
   productionTime: number;
@@ -9,11 +22,6 @@ export interface IItem {
   depends: IItemDependency[];
 }
 
-export interface IItemDependency {
-  item?: any;
-  quantity: number;
-}
-
 export interface IItemDependencyValues {
   cost: number;
   time: number;
@@ -21,15 +29,6 @@ export interface IItemDependencyValues {
 
 export interface ItemBuilding extends IItem {
   productionPlace?: IBuilding;
-}
-
-export interface IBuilding {
-  name: string;
-  //items: IItem[],
-  slots: number;
-  parallel: boolean;
-  slug: string;
-  nextSlot: number | null;
 }
 
 export interface IProfit {
