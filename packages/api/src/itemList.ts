@@ -3,7 +3,7 @@ import { IItem, IBuilding } from '@pbr-simcity/types/types';
 
 const industry: IBuilding = {
   name: 'Industry',
-  slots: 6 * 5 + 2 * 4,
+  slots: (6 * 5) + (2 * 4),
   parallel: true,
   nextSlot: null,
   slug: 'industry',
@@ -27,9 +27,9 @@ const hardware: IBuilding = {
 
 const farmer: IBuilding = {
   name: "Farmer's Market",
-  slots: 5,
+  slots: 6,
   parallel: false,
-  nextSlot: 26,
+  nextSlot: 32,
   slug: 'farmers',
 };
 
@@ -42,42 +42,42 @@ const furniture: IBuilding = {
 };
 
 const gardening: IBuilding = {
-  name: 'Bardening Supplies',
-  slots: 3,
+  name: 'Gardening Supplies',
+  slots: 5,
   parallel: false,
-  nextSlot: 14,
-  slug: 'bardening',
+  nextSlot: 26,
+  slug: 'gardening',
 };
 
 const donut: IBuilding = {
   name: 'Donut Shop',
-  slots: 3,
+  slots: 6,
   parallel: false,
-  nextSlot: 14,
+  nextSlot: 32,
   slug: 'donut',
 };
 
 const fashion: IBuilding = {
   name: 'Fashion Store',
-  slots: 2,
+  slots: 4,
   parallel: false,
-  nextSlot: 8,
+  nextSlot: 20,
   slug: 'fashion',
 };
 
 const fastFood: IBuilding = {
   name: 'Fast Food Restaurant',
-  slots: 0,
+  slots: 3,
   parallel: false,
-  nextSlot: null,
+  nextSlot: 14,
   slug: 'fast-food',
 };
 
 const home: IBuilding = {
   name: 'Home Appliances',
-  slots: 0,
+  slots: 3,
   parallel: false,
-  nextSlot: null,
+  nextSlot: 14,
   slug: 'home-appliances',
 };
 

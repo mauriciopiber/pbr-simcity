@@ -2,15 +2,11 @@ import React, { FC } from 'react';
 import { request, gql } from 'graphql-request';
 import Link from 'next/link';
 import { useQuery } from '@apollo/react-hooks';
-import { QUERY_PROFIT } from '@pbr-simcity/web/lib/profits';
+import { QUERY_PROFIT, QUERY_PROFITS_PATHS } from '@pbr-simcity/web/lib/profits';
+import BuildingsProfit from '@pbr-simcity/web/components/Profit/BuildingsProfit';
+import ItemsProfit from '@pbr-simcity/web/components/Profit/ItemsProfit';
+import FlowProfit from '@pbr-simcity/web/components/Profit/FlowProfit'
 
-const QUERY_PATHS = gql`
-  query {
-    profits {
-      _id
-    }
-  }
-`;
 
 interface BuildingProps {
   id: string;
@@ -66,7 +62,11 @@ const Page: FC<BuildingProps> = ({ id }) => {
   return (
     <div className="panel">
       <div className="panel__title">{profit.name}</div>
-
+      <ItemsProfit/>
+      <div className="row">
+        <BuildingsProfit/>
+        <FlowProfit/>
+      </div>
       <div>
         <Link href="/items">
           <a>Items</a>
@@ -74,21 +74,12 @@ const Page: FC<BuildingProps> = ({ id }) => {
       </div>
       <style jsx>
         {`
-          .panel {
-            padding: 25px;
-          }
-
-          .panel__title {
-            padding: 5px;
-            font-size: 20px;
-            line-height: 20px;
-            color: #ffffff;
-          }
-          .link {
-            color: #ffffff;
+          .row {
+            display: flex;
           }
         `}
       </style>
+
     </div>
   );
 }
@@ -98,7 +89,7 @@ const Page: FC<BuildingProps> = ({ id }) => {
 // }
 
 export async function getStaticPaths(): Promise<IStaticPaths> {
-  const data = await request('http://localhost:4000', QUERY_PATHS);
+  const data = await request('http://localhost:4000', QUERY_PROFITS_PATHS);
 
   const { profits } = data;
 

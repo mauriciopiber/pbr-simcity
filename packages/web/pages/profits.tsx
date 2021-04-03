@@ -3,6 +3,8 @@ import { useQuery } from '@apollo/react-hooks';
 import Link from 'next/link';
 import { QUERY_PROFITS } from '@pbr-simcity/web/lib/profits';
 import AddProfit from '@pbr-simcity/web/components/Profit/AddProfit';
+import DelProfit from '@pbr-simcity/web/components/Profit/DelProfit';
+import Modal from '@pbr-simcity/web/components/UI/Modal/Modal';
 
 function Page() {
   const [createMode, setCreateMode] = React.useState(false);
@@ -32,12 +34,12 @@ function Page() {
         </button>
       </div>
       {createMode && (
-        <div className="modal">
+        <Modal>
           <AddProfit />
           <button type="button" onClick={() => setCreateMode(false)}>
             Cancel
           </button>
-        </div>
+        </Modal>
       )}
       <div className="row">
         <div className="header">
@@ -50,6 +52,9 @@ function Page() {
             <Link href={`/profits/${p._id}`}>
               <a className="link">{p.name}</a>
             </Link>
+          </div>
+          <div className="column">
+            <DelProfit _id={p._id}/>
           </div>
         </div>
       ))}

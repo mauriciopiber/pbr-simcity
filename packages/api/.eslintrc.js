@@ -19,5 +19,6 @@ module.exports = {
     'jest',
   ],
   rules: {
+    "prefer-arrow-functions": "off",
   },
 };
