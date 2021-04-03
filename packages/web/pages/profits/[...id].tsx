@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { request, gql } from 'graphql-request';
 import Link from 'next/link';
 import { useQuery } from '@apollo/react-hooks';
@@ -16,7 +16,34 @@ interface BuildingProps {
   id: string;
 }
 
-function Page({ id }: BuildingProps) {
+
+interface ProfitsProps {
+  props: BuildingProps;
+}
+
+interface ProfitsCtx {
+  params: {
+    id: string
+  }
+}
+
+
+interface ProfitItem {
+  _id: string;
+}
+
+interface PathParams {
+  params: {
+    id: string[]
+  }
+}
+
+interface IStaticPaths {
+  fallback: boolean;
+  paths: PathParams[]
+}
+
+const Page: FC<BuildingProps> = ({ id }) => {
   const { loading, error, data } = useQuery(QUERY_PROFIT, {
     variables: { _id: id },
   });
@@ -66,12 +93,16 @@ function Page({ id }: BuildingProps) {
   );
 }
 
-export async function getStaticPaths() {
+// interface ProfitsStaticPaths {
+//   paths: PathParams
+// }
+
+export async function getStaticPaths(): Promise<IStaticPaths> {
   const data = await request('http://localhost:4000', QUERY_PATHS);
 
   const { profits } = data;
 
-  const paths = profits.map((b: any) => ({
+  const paths: PathParams[] = profits.map((b: ProfitItem): PathParams => ({
     params: { id: [b._id] },
   }));
 
@@ -81,7 +112,8 @@ export async function getStaticPaths() {
   };
 }
 
-export async function getStaticProps(ctx: any) {
+
+export async function getStaticProps(ctx: ProfitsCtx) : Promise<ProfitsProps> {
   const { params } = ctx;
 
   const { id } = params;
