@@ -1,7 +1,7 @@
-import { MongoClient, ObjectID } from 'mongodb';
+import { MongoClient /* ObjectID */ } from 'mongodb';
 import { IItemModel } from '@pbr-simcity/types/types';
 
-import ItemRepository from './itemRepository';
+import ItemRepository from '@pbr-simcity/api/src/item/itemRepository';
 
 const mongoStr = 'mongodb://localhost:27017/simcity';
 

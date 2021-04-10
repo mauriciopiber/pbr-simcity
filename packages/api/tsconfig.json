@@ -2,6 +2,7 @@
   "compilerOptions": {
     "outDir": "lib",
     "rootDir": "./src",
+    "baseUrl": "src",
     "target": "ES2017",
     "module": "commonjs",
     "lib": ["es2017", "dom"],
@@ -21,17 +22,16 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "paths": {
+      "@pbr-simcity/api/*" : ["./src/*"],
+      "@pbr-simcity/types/*" : ["./../types/*"],
+      "src/*" : ["./src/*"]
+    }
   },
   "include": ["./src/**/*"],
   "exclude": [
     "./node_modules",
-    "./src/**/*.spec.ts",
-    "./src/**/*.test.ts"
   ],
-  "paths": {
-    "@pbr-simcity/api/*" : ["./src/*"],
-    "@pbr-simcity/types/*" : ["./../types/*"],
-    "src/*" : ["./src/*"]
-  }
+
 }

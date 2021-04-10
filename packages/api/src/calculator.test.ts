@@ -1,27 +1,27 @@
 import {
-  /*IItem, IBuilding,*/ IItemDependency,
+  // /*IItem, IBuilding,*/ IItemDependency,
   IItemPrint,
-  IItemDependencyValues,
-} from './types/types';
+  // IItemDependencyValues,
+} from '@pbr-simcity/types/types';
 import { itemsList } from './itemList';
-import { profit, dependency } from './calculator';
+import { profit } from './calculator';
 
-describe('test dependency', () => {
-  test('calculate depenedncy', () => {
-    const [metal] = itemsList;
+// describe('test dependency', () => {
+//   test('calculate depenedncy', () => {
+//     const [metal] = itemsList;
 
-    //const metal = itemsList.find(a => a.name == 'Metal');
+//     //const metal = itemsList.find(a => a.name == 'Metal');
 
-    const depends: IItemDependency[] = [
-      {
-        item: metal,
-        quantity: 2,
-      },
-    ];
+//     const depends: IItemDependency[] = [
+//       {
+//         item: metal,
+//         quantity: 2,
+//       },
+//     ];
 
-    const values: IItemDependencyValues = dependency(depends);
-  });
-});
+//     const values: IItemDependencyValues = dependency(depends);
+//   });
+// });
 
 describe('test profit calculator', () => {
   test('calculate profit', () => {
