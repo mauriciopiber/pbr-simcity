@@ -1,11 +1,11 @@
 // import { MongoDataSource } from 'apollo-datasource-mongodb'
 import { ObjectId } from 'mongodb';
-import Collection from '../collection';
+import Collection from '@pbr-simcity/api/src/collection';
 
 class BuildingRepository extends Collection {
   async getAll() {
     const docs = this.collection.find();
-    return await docs.toArray();
+    return docs.toArray();
   }
 
   async findById(id: ObjectId) {

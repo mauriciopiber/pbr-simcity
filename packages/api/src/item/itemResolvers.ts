@@ -18,7 +18,7 @@ const resolvers = {
 
       console.log(args);
 
-      return await item.findManyByFilter(args);
+      return item.findManyByFilter(args);
     },
     async item(_: any, args: any, context: any): Promise<IItem[]> {
       const { dataSources } = context;
@@ -30,7 +30,7 @@ const resolvers = {
         ...model,
         // profitMongo: 2,
       };
-      // return await item.findBySlug(args.slug);
+      // return item.findBySlug(args.slug);
     },
   },
   Item: {
@@ -41,7 +41,7 @@ const resolvers = {
     ): Promise<IBuilding[]> {
       const { dataSources } = context;
       const { building } = dataSources;
-      return await building.findById(parent.building);
+      return building.findById(parent.building);
     },
     async usedIn(parent: any, _args: any, context: any): Promise<IBuilding[]> {
       const { dataSources } = context;
@@ -49,7 +49,7 @@ const resolvers = {
 
       const { _id } = parent;
 
-      return await item.findItemDependsById(_id);
+      return item.findItemDependsById(_id);
     },
     async profit(parent: any, _args: any, context: any): Promise<any> {
       const { dataSources } = context;
@@ -81,7 +81,7 @@ const resolvers = {
       const { dataSources } = context;
       const { item } = dataSources;
 
-      return await item.findById(parent.item);
+      return item.findById(parent.item);
     },
   },
 };

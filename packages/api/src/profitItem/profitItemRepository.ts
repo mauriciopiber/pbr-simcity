@@ -1,6 +1,6 @@
 // import { MongoDataSource } from 'apollo-datasource-mongodb'
 import { ObjectId } from 'mongodb';
-import Collection from '../collection';
+import Collection from '@pbr-simcity/api/src/collection';
 
 class ProfitItemRepository extends Collection {
   async getAll() {

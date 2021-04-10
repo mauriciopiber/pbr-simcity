@@ -7,12 +7,12 @@ import {
   IItemModel,
   IItemFilter,
 } from '@pbr-simcity/types/types';
-import Collection from '../collection';
+import Collection from '@pbr-simcity/api/src/collection';
 
 class ItemRepository extends Collection {
   async getAll() {
     const docs = this.collection.find();
-    return await docs.toArray();
+    return docs.toArray();
   }
 
   async findManyByFilter(args: IItemArgs): Promise<IItemModel[]> {
@@ -63,7 +63,7 @@ class ItemRepository extends Collection {
       ])
       .toArray();
 
-    return await docs;
+    return docs;
   }
 
   pipeline = [

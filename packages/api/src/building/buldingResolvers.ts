@@ -7,13 +7,13 @@ const resolvers = {
 
       const { building } = dataSources;
 
-      return await building.getAll();
+      return building.getAll();
     },
     async building(_: any, args: any, context: any): Promise<IItem[]> {
       const { dataSources } = context;
       const { building } = dataSources;
 
-      return await building.findOneBySlug(args.slug);
+      return building.findOneBySlug(args.slug);
     },
   },
   Building: {
