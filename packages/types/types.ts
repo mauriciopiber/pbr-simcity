@@ -31,10 +31,6 @@ export interface ItemBuilding extends IItem {
   productionPlace?: IBuilding;
 }
 
-export interface IProfit {
-  name: string;
-}
-
 export interface IItemPrint {
   name: string;
   time: number;
@@ -68,4 +64,13 @@ export interface IItemArgs {
   order: string;
   orderBy: string;
   filter: IItemFilter;
+}
+
+export interface IProfit {
+  name: string;
+}
+
+export interface IProfitItem {
+  _id: string;
+  item: IItemModel;
 }

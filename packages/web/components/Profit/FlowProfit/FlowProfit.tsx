@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
 
 interface FlowProfitProps {
-  dummy?: boolean;
+  profit: string;
 }
 
-const FlowProfit: FC<FlowProfitProps> = () => {
+const FlowProfit: FC<FlowProfitProps> = ({ profit }) => {
   return (
     <div className="flow__profit">
       <h2>Flow Profit</h2>

@@ -3,10 +3,10 @@ import { useQuery } from '@apollo/react-hooks';
 import { QUERY_PROFIT_ITEMS } from '@pbr-simcity/web/lib/profits';
 
 interface ItemsProfitProps {
-  dummy?: boolean;
+  profit: string;
 }
 
-const ItemsProfit: FC<ItemsProfitProps> = () => {
+const ItemsProfit: FC<ItemsProfitProps> = ({ profit }) => {
   const { loading, error, data } = useQuery(QUERY_PROFIT_ITEMS);
 
   if (loading) {

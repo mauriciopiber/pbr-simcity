@@ -3,9 +3,9 @@ import { request, gql } from 'graphql-request';
 import Link from 'next/link';
 import { useQuery } from '@apollo/react-hooks';
 import { QUERY_PROFIT, QUERY_PROFITS_PATHS } from '@pbr-simcity/web/lib/profits';
-import BuildingsProfit from '@pbr-simcity/web/components/Profit/BuildingsProfit';
-import ItemsProfit from '@pbr-simcity/web/components/Profit/ItemsProfit';
-import FlowProfit from '@pbr-simcity/web/components/Profit/FlowProfit'
+import BuildingsProfit from '@pbr-simcity/web/components/Profit/BuildingsProfit/BuildingsProfit';
+import ItemsProfit from '@pbr-simcity/web/components/Profit/ItemsProfit/ItemsProfit';
+import FlowProfit from '@pbr-simcity/web/components/Profit/FlowProfit/FlowProfit'
 
 
 interface BuildingProps {
@@ -59,13 +59,20 @@ const Page: FC<BuildingProps> = ({ id }) => {
 
   const { profit } = data;
 
+  console.log(profit);
+
   return (
     <div className="panel">
       <div className="panel__title">{profit.name}</div>
-      <ItemsProfit/>
+      <ItemsProfit profit={id} />
+      {/* {profit.items.map((p: any) => {
+        return (
+          <div key={p._id}>{p.item.name}</div>
+        )
+      })} */}
       <div className="row">
-        <BuildingsProfit/>
-        <FlowProfit/>
+        <BuildingsProfit profit={id} />
+        <FlowProfit profit={id}/>
       </div>
       <div>
         <Link href="/items">

@@ -1,8 +1,8 @@
 import { ApolloServer } from 'apollo-server';
 import { MongoClient } from 'mongodb';
-import resolvers from './resolvers';
-import typeDefs from './typeDefs';
-import repository from './repositories';
+import resolvers from '@pbr-simcity/api/src/resolvers';
+import typeDefs from '@pbr-simcity/api/src/typeDefs';
+import repositories from '@pbr-simcity/api/src/repositories';
 
 const mongoStr = 'mongodb://localhost:27017/simcity';
 
@@ -12,8 +12,10 @@ client.connect();
 const server = new ApolloServer({
   resolvers,
   typeDefs,
-  dataSources: () => repository(client),
+  dataSources: () => repositories(client),
 });
 
 // The `listen` method launches a web server.
-server.listen().then(() => {});
+server.listen().then(() => {
+  console.log('running');
+});

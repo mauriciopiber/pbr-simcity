@@ -3,7 +3,7 @@ import {
   IItemPrint,
   IItemDependencyValues,
 } from './types/types';
-import { buildingsList, itemsList } from './itemList';
+import { itemsList } from './itemList';
 import { profit, dependency } from './calculator';
 
 describe('test dependency', () => {
@@ -25,7 +25,7 @@ describe('test dependency', () => {
 
 describe('test profit calculator', () => {
   test('calculate profit', () => {
-    const calculateItems: IItemPrint[] = profit(buildingsList, itemsList);
+    const calculateItems: IItemPrint[] = profit(itemsList);
 
     /* Validate Metal */
     const metal = calculateItems.find((a) => a.name == 'Metal');

@@ -6,16 +6,17 @@ function createRepository(client: any): any {
 
   // Load `*.js` under current directory as properties
   //  i.e., `User.js` will become `exports['User']` or `exports.User`
-  fs.readdirSync(path.join(__dirname)).forEach(function (dir) {
+  fs.readdirSync(path.join(__dirname)).forEach((dir) => {
     if (dir.match(/\.(ts|js)$/)) {
       return;
     }
 
-    fs.readdirSync(path.join(__dirname, dir)).forEach(function (file): void {
+    fs.readdirSync(path.join(__dirname, dir)).forEach((file): void => {
+      // console.log(file);
       if (
-        file.match(/Repository.(ts|js)$/) !== null &&
-        file !== 'index.ts' &&
-        file !== 'index.js'
+        file.match(/Repository.(ts|js)$/) !== null
+        && file !== 'index.ts'
+        && file !== 'index.js'
       ) {
         // eslint-disable-next-line @typescript-eslint/no-var-requires
         const classRepository = require(path.resolve(__dirname, dir, file));
@@ -38,6 +39,7 @@ function createRepository(client: any): any {
     });
   });
 
+  // console.log(dataSources);
   return dataSources;
 }
 

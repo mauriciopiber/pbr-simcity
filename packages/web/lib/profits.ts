@@ -16,6 +16,15 @@ export const QUERY_PROFIT = gql`
     profit(_id: $_id) {
       _id
       name
+      items {
+        _id
+        item {
+           _id
+          slug
+          name
+        }
+
+      }
     }
   }
 

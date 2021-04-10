@@ -215,7 +215,7 @@ describe('Item Repository', () => {
       // expect(findOne.totalProductionTime).toEqual(555);
       // expect(findOne.hourProfitOwnProduction).toEqual(280);
     } catch (e) {
-      throw e;
+      throw new Error(e);
     } finally {
       await client.close();
     }

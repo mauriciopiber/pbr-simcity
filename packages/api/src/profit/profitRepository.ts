@@ -3,16 +3,63 @@ import { ObjectId } from 'mongodb';
 import Collection from '../collection';
 
 class ProfitRepository extends Collection {
+  aggregate = [
+    {
+      $lookup: {
+        from: 'profitItem',
+        localField: '_id',
+        foreignField: 'profit',
+        as: 'items',
+      },
+    },
+    { $unwind: { path: '$items', preserveNullAndEmptyArrays: true } },
+    {
+      $lookup: {
+        from: 'item',
+        localField: 'items.item',
+        foreignField: '_id',
+        as: 'items.itemObj',
+      },
+    },
+    { $unwind: { path: '$items.itemObj', preserveNullAndEmptyArrays: true } },
+    {
+      $project: {
+        name: 1,
+        items: {
+          _id: '$items._id',
+          item: '$items.itemObj',
+        },
+      },
+    },
+    {
+      $group: {
+        _id: '$_id',
+        name: { $first: '$name' },
+        items: { $push: '$items' },
+      },
+    },
+  ];
+
   async getAll() {
-    const docs = this.collection.find();
-    return await docs.toArray();
+    const docs = this.collection.aggregate(
+      [...this.aggregate],
+    );
+
+    const data = await docs.toArray();
+
+    return data;
   }
 
   async findById(id: ObjectId) {
-    const docs = await this.collection.findOne({
-      _id: { $eq: new ObjectId(id) },
-    });
-    return docs;
+    const docs = await this.collection.aggregate(
+      [
+        ...this.aggregate,
+        { $match: { _id: new ObjectId(id) } },
+      ],
+    ).toArray();
+
+    console.log(docs, id);
+    return docs[0];
   }
 
   async addProfit(args: any) {

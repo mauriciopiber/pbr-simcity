@@ -1,6 +1,6 @@
-import { buildingsList, itemsList } from './itemList';
+import { itemsList } from './itemList';
 import { profit } from './calculator';
-import { IItem, IBuilding, IItemPrint } from '@pbr-simcity/types/types';
+import { IItem, IItemPrint } from '@pbr-simcity/types/types';
 import Table from 'cli-table';
 
 function renderTable(items: IItemPrint[]) {
@@ -23,12 +23,11 @@ function renderTable(items: IItemPrint[]) {
   table.push(...renderData);
 }
 
-function calculateProfit(buildings: IBuilding[], items: IItem[]) {
+function calculateProfit(items: IItem[]) {
   const calculateItems: IItemPrint[] = profit(
-    buildings,
     items.filter((p) => p.level <= 21),
   );
   renderTable(calculateItems);
 }
 
-calculateProfit(buildingsList, itemsList);
+calculateProfit(itemsList);

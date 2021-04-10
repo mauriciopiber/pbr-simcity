@@ -1,13 +1,13 @@
 import {
   IItem,
-  IBuilding,
+  // IBuilding,
   IItemPrint,
   IItemDependency,
   IItemDependencyValues,
 } from '@pbr-simcity/types/types';
 
 function toFixedNumber(num: number, digits: number, base: number): number {
-  var pow = Math.pow(base || 10, digits);
+  const pow = Math.pow(base || 10, digits);
   return Math.round(num * pow) / pow;
 }
 
@@ -28,11 +28,11 @@ export function dependency(items: IItemDependency[]): IItemDependencyValues {
   };
 }
 
-export function profit(buildings: IBuilding[], items: IItem[]): IItemPrint[] {
-  const calculateItems: IItemPrint[] = items.map(function (
+export function profit(items: IItem[]): IItemPrint[] {
+  const calculateItems: IItemPrint[] = items.map((
     item: IItem,
-  ): IItemPrint {
-    const factory = buildings.find((p) => p.name == item.building.name);
+  ): IItemPrint => {
+
 
     const maxValue = item.maxValue;
     const dependencyValues: IItemDependencyValues = dependency(item.depends);

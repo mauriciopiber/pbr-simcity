@@ -1,6 +1,10 @@
-import gql from 'graphql-tag';
-
-const typeDefs = gql`
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const graphql_tag_1 = __importDefault(require("graphql-tag"));
+const typeDefs = graphql_tag_1.default `
   type Profit {
     _id: ObjectID!
     name: String!
@@ -26,5 +30,4 @@ const typeDefs = gql`
     delProfit(_id: ObjectID!): ObjectID!
   }
 `;
-
-export default typeDefs;
+exports.default = typeDefs;
