@@ -33,7 +33,9 @@
     "test": "jest",
     "build": "tsc",
     "prod": "node dist/server.js",
-    "drop": "ps aux | grep server.ts | awk '{print $2}' | xargs kill -9 || true"
+    "drop": "ps aux | grep server.ts | awk '{print $2}' | xargs kill -9 || true",
+    "lint": "eslint . --ext ts,tsx",
+    "lint:fix": "eslint . --ext ts,tsx --fix"
   },
   "devDependencies": {
     "@babel/core": "^7.13.10",

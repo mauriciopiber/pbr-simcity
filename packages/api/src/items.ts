@@ -1,11 +1,11 @@
-import { itemsList } from './itemList';
-import { profit } from './calculator';
 import { IItem, IItemPrint } from '@pbr-simcity/types/types';
 import Table from 'cli-table';
+import { itemsList } from '@pbr-simcity/api/src/itemList';
+import { profit } from '@pbr-simcity/api/src/calculator';
 
 function renderTable(items: IItemPrint[]) {
   // instantiate
-  var table = new Table({
+  const table = new Table({
     head: [
       'Item',
       'Time',

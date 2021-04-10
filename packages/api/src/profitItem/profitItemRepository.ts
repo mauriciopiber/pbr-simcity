@@ -16,8 +16,7 @@ class ProfitItemRepository extends Collection {
   }
 
   async addProfitItem(profit: string, item: string) {
-
-//    console.log(args);
+    //    console.log(args);
     const docs = await this.collection.insertOne({
       profit: new ObjectId(profit),
       item: new ObjectId(item),

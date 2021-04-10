@@ -1,6 +1,6 @@
-import { buildingsList, itemsList } from './itemList';
 import { IItem, IBuilding } from '@pbr-simcity/types/types';
 import { MongoClient } from 'mongodb';
+import { buildingsList, itemsList } from '@pbr-simcity/api/src/itemList';
 
 async function persistModel(
   buildings: IBuilding[],
@@ -52,7 +52,7 @@ async function persistModel(
     const itemPromises = itemsWithDepends.map(async (a: any) => {
       const { _id, ...rest } = a;
 
-      return await itemsCollection.updateOne(
+      return itemsCollection.updateOne(
         { _id: { $eq: _id } },
         { $set: rest },
       );
