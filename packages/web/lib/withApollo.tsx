@@ -1,13 +1,18 @@
 // lib/withApollo.js
-import React from 'react';
+import React, { FC } from 'react';
 import withApollo from 'next-with-apollo';
 import ApolloClient, { InMemoryCache } from 'apollo-boost';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { parseCookies } from 'nookies';
 
+
+interface PageProps {
+  Page: any;
+  props: any;
+}
 // import fetch from 'node-fetch'
 
-const InitComponentWithApollo = ({ Page, props }) => (
+const InitComponentWithApollo: FC<PageProps> = ({ Page, props }) => (
   <ApolloProvider client={props.apollo}>
     <Page {...props} />
   </ApolloProvider>
