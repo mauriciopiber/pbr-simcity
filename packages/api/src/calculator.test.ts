@@ -3,8 +3,8 @@ import {
   IItemPrint,
   // IItemDependencyValues,
 } from '@pbr-simcity/types/types';
-import { itemsList } from './itemList';
-import { profit } from './calculator';
+import { itemsList } from '@pbr-simcity/api/src/itemList';
+import { profit } from '@pbr-simcity/api/src/calculator';
 
 // describe('test dependency', () => {
 //   test('calculate depenedncy', () => {

@@ -19,7 +19,9 @@ module.exports = {
         "extensions": [".js", ".jsx", ".ts", ".tsx"]
       },
       alias: {
-        map: [['@pbr-simcity/api/src', './src']],
+        map: [
+          ['@pbr-simcity/api/src', './src']
+        ],
         "extensions": [".js", ".jsx", ".ts", ".tsx"]
       },
     },
