@@ -35,7 +35,8 @@
     "prod": "node dist/server.js",
     "drop": "ps aux | grep server.ts | awk '{print $2}' | xargs kill -9 || true",
     "lint": "eslint . --ext ts,tsx",
-    "lint:fix": "eslint . --ext ts,tsx --fix"
+    "lint:fix": "eslint . --ext ts,tsx --fix",
+    "start": "node lib/server.js"
   },
   "devDependencies": {
     "@babel/core": "^7.13.10",
