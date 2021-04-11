@@ -6,7 +6,6 @@ fixture`Piber Network`.page`http://localhost:3000`;
 
 
 async function enterItemPage(t: any, name: string) {
-  await t.expect(screen.getByTestId('title').exists).ok();
   await t.click(screen.getByTestId('menu-items'));
   await t.click(screen.getByText(name));
 }

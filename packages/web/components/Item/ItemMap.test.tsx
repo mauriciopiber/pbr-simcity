@@ -6,7 +6,7 @@ import '@testing-library/jest-dom/extend-expect';
 describe('Item Map', () => {
   test('render material from primitive', async () => {
     const args: ItemMapProps = {
-      name: 'MyTitle',
+      name: 'Item Map',
       usedIn: [],
       depends: [],
     };

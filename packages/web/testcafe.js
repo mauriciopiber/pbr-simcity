@@ -18,7 +18,7 @@ async function runTest() {
     const runner = testcafe.createRunner();
 
     const failedCount = await runner
-        .src(['pages/**/*.spec.ts'])
+        .src(['tests/**/*.spec.ts'])
         .browsers(['chrome:headless'])
         .run();
 
