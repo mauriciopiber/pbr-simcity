@@ -15,6 +15,54 @@ class ItemRepository extends Collection {
     return docs.toArray();
   }
 
+  async findDependsByBuilding(_ids: string[], args: IItemArgs): Promise<IItemModel[]> {
+    const {
+      match,
+      sort,
+    }: any = await ItemRepository.createMatchFilter(args);
+
+    const docs = this.collection.aggregate([
+      {
+        $lookup: {
+          from: 'building',
+          localField: 'building',
+          foreignField: '_id',
+          as: 'building',
+        },
+      },
+      { $unwind: '$building' },
+      { $match: { 'building.slug': { $in: _ids } } },
+      { $unwind: { path: '$depends', preserveNullAndEmptyArrays: true } },
+      {
+        $lookup: {
+          from: 'item',
+          localField: 'depends.item',
+          foreignField: '_id',
+          as: 'items.item',
+        },
+      },
+      { $unwind: { path: '$items.item', preserveNullAndEmptyArrays: true } },
+      {
+        $group: {
+          _id: '$items.item._id',
+          slug: { $first: '$items.item.slug' },
+          name: { $first: '$items.item.name' },
+          maxValue: { $first: '$items.item.maxValue' },
+          productionTime: { $first: '$items.item.productionTime' },
+          depends: { $first: '$items.item.depends' },
+          building: { $first: '$items.item.building' },
+        },
+      },
+      ...this.pipeline,
+      { $match: match },
+      {
+        $sort: sort,
+      },
+      // { $match: { 'items.item.slug': { $in: _ids } } },
+    ]);
+    return docs.toArray();
+  }
+
   async findDepends(_ids: string[]): Promise<IItemModel[]> {
     const docs = this.collection.aggregate([
       { $match: { slug: { $in: _ids } } },
@@ -46,6 +94,85 @@ class ItemRepository extends Collection {
     return docs.toArray();
   }
 
+  async findUsedByBuilding(_ids: string[], args: IItemArgs): Promise<IItemModel[]> {
+    const {
+      match,
+      sort,
+    }: any = await ItemRepository.createMatchFilter(args);
+
+    const docs = this.collection.aggregate([
+      { $unwind: { path: '$depends', preserveNullAndEmptyArrays: true } },
+      {
+        $lookup: {
+          from: 'item',
+          localField: 'depends.item',
+          foreignField: '_id',
+          as: 'items.item',
+        },
+      },
+      { $unwind: { path: '$items.item', preserveNullAndEmptyArrays: true } },
+      {
+        $lookup: {
+          from: 'building',
+          localField: 'items.item.building',
+          foreignField: '_id',
+          as: 'building',
+        },
+      },
+      { $unwind: '$building' },
+      { $match: { 'building.slug': { $in: _ids } } },
+      // { $match: { 'items.item.slug': { $in: _ids } } },
+      {
+        $replaceRoot: {
+          newRoot: {
+            $mergeObjects: [
+              { refName: '$items.item.name' },
+              { refSlug: '$items.item.slug' },
+              { refMaxValue: '$items.item.maxValue' },
+              { refBuilding: '$items.item.building' },
+              { depends: '$depends' },
+              { _id: '$_id' },
+              { name: '$name' },
+              { slug: '$slug' },
+            ],
+          },
+        },
+      },
+      {
+        $lookup: {
+          localField: '_id',
+          as: 'itemTemp',
+          from: 'item',
+          foreignField: '_id',
+        },
+      },
+      { $unwind: { path: '$itemTemp', preserveNullAndEmptyArrays: true } },
+      {
+        $replaceRoot: {
+          newRoot: {
+            $mergeObjects: [
+              { _id: '$itemTemp._id' },
+              { name: '$itemTemp.name' },
+              { slug: '$itemTemp.slug' },
+              { level: '$itemTemp.level' },
+              { building: '$itemTemp.building' },
+              { maxValue: '$itemTemp.maxValue' },
+              { productionTime: '$itemTemp.productionTime' },
+              { depends: '$itemTemp.depends' },
+            ],
+          },
+        },
+      },
+      ...this.pipeline,
+      { $match: match },
+      {
+        $sort: sort,
+      },
+    ]);
+
+    return docs.toArray();
+  }
+
   async findUsedBy(_ids: string[]): Promise<IItemModel[]> {
     const docs = this.collection.aggregate([
       { $unwind: { path: '$depends', preserveNullAndEmptyArrays: true } },
@@ -58,43 +185,53 @@ class ItemRepository extends Collection {
         },
       },
       { $unwind: { path: '$items.item', preserveNullAndEmptyArrays: true } },
-
+      { $match: { 'items.item.slug': { $in: _ids } } },
       {
-        $group: {
-          // _id: '$items.item._id',
-          // ref: { $first: '$slug' },
-          // name: { $first: '$items.item.name' },
-          // slug: { $first: '$items.item.slug' },
-          // level: { $first: '$items.item.level' },
-          // maxValue: { $first: '$items.item.maxValue' },
-          // productionTime: { $first: '$items.item.productionTime' },
-          // building: { $first: 'items.item.$building' },
-          // depends: { $first: '$items.item.depends' },
-          // itemRef: { $first: '$items.item' },
-
-          _id: '$items.item._id',
-          ref: { $first: '$items.item.slug' },
-          name: { $first: '$name' },
-          slug: { $first: '$slug' },
-          // depends: { $push: '$depends' },
-          // level: { $first: '$items.item.level' },
-          // maxValue: { $first: '$items.item.maxValue' },
-          // productionTime: { $first: '$items.item.productionTime' },
-          // building: { $first: 'items.item.$building' },
-          // depends: { $first: '$items.item.depends' },
-          // itemRef: { $first: '$items.item' },
+        $replaceRoot: {
+          newRoot: {
+            $mergeObjects: [
+              { refName: '$items.item.name' },
+              { refSlug: '$items.item.slug' },
+              { refMaxValue: '$items.item.maxValue' },
+              { depends: '$depends' },
+              { _id: '$_id' },
+              { name: '$name' },
+              { slug: '$slug' },
+            ],
+          },
         },
       },
-      // { $match: { ref: { $in: _ids } } },
+      {
+        $lookup: {
+          localField: '_id',
+          as: 'itemTemp',
+          from: 'item',
+          foreignField: '_id',
+        },
+      },
+      { $unwind: { path: '$itemTemp', preserveNullAndEmptyArrays: true } },
+      {
+        $replaceRoot: {
+          newRoot: {
+            $mergeObjects: [
+              { _id: '$itemTemp._id' },
+              { name: '$itemTemp.name' },
+              { slug: '$itemTemp.slug' },
+              { level: '$itemTemp.level' },
+              { building: '$itemTemp.building' },
+              { maxValue: '$itemTemp.maxValue' },
+              { productionTime: '$itemTemp.productionTime' },
+              { depends: '$itemTemp.depends' },
+            ],
+          },
+        },
+      },
+      ...this.pipeline,
     ]);
-
-    console.log(JSON.stringify(await docs.explain()));
-
     return docs.toArray();
   }
 
-  async findManyByFilter(args: IItemArgs): Promise<IItemModel[]> {
-    // console.log(args);
+  static async createMatchFilter(args: IItemArgs) {
     const order = (args.order === 'desc' && 1) || -1;
 
     const sort = { [args.orderBy]: order };
@@ -104,7 +241,18 @@ class ItemRepository extends Collection {
     if (args.filter?.level) {
       match.level = { $lte: args.filter.level };
     }
-    // console.log(sort);
+
+    return {
+      match,
+      sort,
+    };
+  }
+
+  async findManyByFilter(args: IItemArgs): Promise<IItemModel[]> {
+    const {
+      match,
+      sort,
+    }: any = await ItemRepository.createMatchFilter(args);
 
     const docs = await this.collection
       .aggregate([
@@ -351,7 +499,8 @@ class ItemRepository extends Collection {
             input: '$depends',
             as: 'itemDepends',
             cond: { $gt: ['$$itemDepends.quantity', 0] },
-          }}
+          },
+        },
       },
     },
     {

@@ -1,5 +1,5 @@
 import { MongoClient /* ObjectID */ } from 'mongodb';
-import { IItem, IItemModel } from '@pbr-simcity/types/types';
+import { IItemModel } from '@pbr-simcity/types/types';
 
 import ItemRepository from '@pbr-simcity/api/src/item/itemRepository';
 
@@ -21,7 +21,6 @@ describe('Item Repository', () => {
     }
     try {
       expect(findAll.length).toEqual(1);
-;
       const findOne = findAll.find((a: IItemModel) => a.slug === 'wood');
 
       if (!findOne) {
@@ -80,7 +79,55 @@ describe('Item Repository', () => {
     }
   });
 
-  test('find all items used by list of ids - planks', async () => {
+  test('find all items depends by list of slugs of furniture', async () => {
+    const client = new MongoClient(mongoStr, { useUnifiedTopology: true });
+    await client.connect();
+
+    const itemRepository = new ItemRepository(client.db().collection('item'));
+
+    const findAll: IItemModel[] | null = await itemRepository.findDepends([
+      'chairs',
+      'cupboard',
+      'couch',
+      'home-textiles',
+      'tablets',
+    ]);
+
+    if (!findAll || findAll.length < 1) {
+      throw new Error('Missing Planks by ID');
+    }
+
+    try {
+      expect(findAll.length).toEqual(10);
+    } finally {
+      await client.close();
+    }
+  });
+
+  test('find all items depends by furniture', async () => {
+    const client = new MongoClient(mongoStr, { useUnifiedTopology: true });
+    await client.connect();
+
+    const itemRepository = new ItemRepository(client.db().collection('item'));
+
+    const findAll: IItemModel[] | null = await itemRepository.findDependsByBuilding(['furniture'], {
+      order: 'asc',
+      orderBy: 'maxValue',
+      filter: {},
+    });
+
+    if (!findAll || findAll.length < 1) {
+      throw new Error('Missing Planks by ID');
+    }
+
+    try {
+      expect(findAll.length).toEqual(10);
+    } finally {
+      await client.close();
+    }
+  });
+
+  test('find all items used by list of ids - planks only', async () => {
     const client = new MongoClient(mongoStr, { useUnifiedTopology: true });
     await client.connect();
 
@@ -95,9 +142,26 @@ describe('Item Repository', () => {
         throw new Error('Missing Planks by ID');
       }
 
+      // console.log(findAll);
+      // console.log(findAll[4].depends);
+
       expect(findAll.length).toEqual(4);
-    } catch (e) {
-      throw new Error(e);
+
+      const findOne = findAll.find((a: IItemModel) => a.slug === 'cupboard');
+
+      if (!findOne) {
+        throw new Error('Missing Used In');
+      }
+
+      expect(findOne.name).toEqual('Cupboard');
+      expect(findOne.slug).toEqual('cupboard');
+      expect(findOne.productionTime).toEqual(45);
+      expect(findOne.maxValue).toEqual(900);
+
+      expect(findOne.depends.length).toEqual(3);
+      expect(findOne.billTime).toEqual(300);
+      expect(findOne.billCost).toEqual(800);
+      expect(findOne.profitOwnProduction).toEqual(100);
     } finally {
       await client.close();
     }
@@ -136,6 +200,83 @@ describe('Item Repository', () => {
       expect(findOne.billTime).toEqual(300);
       expect(findOne.billCost).toEqual(800);
       expect(findOne.profitOwnProduction).toEqual(100);
+    } finally {
+      await client.close();
+    }
+  });
+
+  test('find all items used by list of slugs of farmer', async () => {
+    const client = new MongoClient(mongoStr, { useUnifiedTopology: true });
+    await client.connect();
+
+    try {
+      const itemRepository = new ItemRepository(client.db().collection('item'));
+
+      const findAll: IItemModel[] | null = await itemRepository.findUsedBy([
+        'beef',
+        'corn',
+        'vegetables',
+        'fruit-and-berries',
+        'flour-bag',
+        'cream',
+        'cheese',
+      ]);
+
+      if (!findAll || findAll.length < 1) {
+        throw new Error('Missing Planks by ID');
+      }
+
+      expect(findAll.length).toEqual(12);
+    } finally {
+      await client.close();
+    }
+  });
+
+  test('find all items used by farmer', async () => {
+    const client = new MongoClient(mongoStr, { useUnifiedTopology: true });
+    await client.connect();
+
+    try {
+      const itemRepository = new ItemRepository(client.db().collection('item'));
+
+      const findAll: IItemModel[] | null = await itemRepository.findUsedByBuilding([
+        'farmers',
+
+      ] , {
+        order: 'asc',
+        orderBy: 'maxValue',
+        filter: {},
+      });
+
+
+      if (!findAll || findAll.length < 1) {
+        throw new Error('Missing Planks by ID');
+      }
+
+      expect(findAll.length).toEqual(12);
+    } finally {
+      await client.close();
+    }
+  });
+
+  test('find many by filter', async() => {
+    const client = new MongoClient(mongoStr, { useUnifiedTopology: true });
+    await client.connect();
+
+    const itemRepository = new ItemRepository(client.db().collection('item'));
+
+    const findAll: IItemModel[] = await itemRepository.findManyByFilter(
+      { filter: { level: 5 }, order: 'asc', orderBy: 'maxValue'},
+    );
+
+    if (!findAll || findAll.length < 1) {
+      throw new Error('Missing Planks by ID');
+    }
+    try {
+      expect(findAll.length).toEqual(6);
+      return;
+    } catch (e) {
+      throw new Error(e);
     } finally {
       await client.close();
     }
