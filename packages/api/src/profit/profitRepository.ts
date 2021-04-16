@@ -41,9 +41,7 @@ class ProfitRepository extends Collection {
   ];
 
   async getAll() {
-    const docs = this.collection.aggregate(
-      [...this.aggregate],
-    );
+    const docs = this.collection.aggregate([...this.aggregate]);
 
     const data = await docs.toArray();
 
@@ -51,12 +49,9 @@ class ProfitRepository extends Collection {
   }
 
   async findById(id: ObjectId) {
-    const docs = await this.collection.aggregate(
-      [
-        ...this.aggregate,
-        { $match: { _id: new ObjectId(id) } },
-      ],
-    ).toArray();
+    const docs = await this.collection
+      .aggregate([...this.aggregate, { $match: { _id: new ObjectId(id) } }])
+      .toArray();
 
     console.log(docs, id);
     return docs[0];

@@ -3,7 +3,7 @@ import { IItem, IBuilding } from '@pbr-simcity/types/types';
 
 const industry: IBuilding = {
   name: 'Industry',
-  slots: (6 * 5) + (2 * 4),
+  slots: 6 * 5 + 2 * 4,
   parallel: true,
   nextSlot: null,
   slug: 'industry',

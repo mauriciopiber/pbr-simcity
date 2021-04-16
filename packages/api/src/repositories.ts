@@ -14,9 +14,9 @@ function createRepository(client: any): any {
     fs.readdirSync(path.join(__dirname, dir)).forEach((file): void => {
       // console.log(file);
       if (
-        file.match(/Repository.(ts|js)$/) !== null
-        && file !== 'index.ts'
-        && file !== 'index.js'
+        file.match(/Repository.(ts|js)$/) !== null &&
+        file !== 'index.ts' &&
+        file !== 'index.js'
       ) {
         // eslint-disable-next-line @typescript-eslint/no-var-requires
         const classRepository = require(path.resolve(__dirname, dir, file));

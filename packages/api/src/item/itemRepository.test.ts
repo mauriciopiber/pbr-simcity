@@ -1,11 +1,146 @@
 import { MongoClient /* ObjectID */ } from 'mongodb';
-import { IItemModel } from '@pbr-simcity/types/types';
+import { IItem, IItemModel } from '@pbr-simcity/types/types';
 
 import ItemRepository from '@pbr-simcity/api/src/item/itemRepository';
 
 const mongoStr = 'mongodb://localhost:27017/simcity';
 
 describe('Item Repository', () => {
+  test('find all items depends by list of ids - planks', async () => {
+    const client = new MongoClient(mongoStr, { useUnifiedTopology: true });
+    await client.connect();
+
+    const itemRepository = new ItemRepository(client.db().collection('item'));
+
+    const findAll: IItemModel[] | null = await itemRepository.findDepends([
+      'planks',
+    ]);
+
+    if (!findAll || findAll.length < 1) {
+      throw new Error('Missing Planks by ID');
+    }
+    try {
+      expect(findAll.length).toEqual(1);
+;
+      const findOne = findAll.find((a: IItemModel) => a.slug === 'wood');
+
+      if (!findOne) {
+        throw new Error('Missing Depends Item');
+      }
+
+      expect(findOne.name).toEqual('Wood');
+      expect(findOne.slug).toEqual('wood');
+      expect(findOne.productionTime).toEqual(3);
+      expect(findOne.maxValue).toEqual(20);
+
+      expect(findOne.depends.length).toEqual(0);
+      expect(findOne.billTime).toEqual(0);
+      expect(findOne.billCost).toEqual(0);
+      expect(findOne.profitOwnProduction).toEqual(20);
+    } finally {
+      await client.close();
+    }
+  });
+
+  test('find all items depends by list of ids - cherry', async () => {
+    const client = new MongoClient(mongoStr, { useUnifiedTopology: true });
+    await client.connect();
+
+    const itemRepository = new ItemRepository(client.db().collection('item'));
+
+    const findAll: IItemModel[] | null = await itemRepository.findDepends([
+      'planks',
+      'cherry-cheesecake',
+    ]);
+
+    if (!findAll || findAll.length < 1) {
+      throw new Error('Missing Planks by ID');
+    }
+
+    try {
+      expect(findAll.length).toEqual(4);
+
+      const findOne = findAll.find((a: IItemModel) => a.slug === 'flour-bag');
+
+      if (!findOne) {
+        throw new Error('Missing Depends');
+      }
+
+      expect(findOne.name).toEqual('Flour Bag');
+      expect(findOne.slug).toEqual('flour-bag');
+      expect(findOne.productionTime).toEqual(30);
+      expect(findOne.maxValue).toEqual(570);
+
+      expect(findOne.depends.length).toEqual(2);
+      expect(findOne.billTime).toEqual(180);
+      expect(findOne.billCost).toEqual(240);
+      expect(findOne.profitOwnProduction).toEqual(330);
+    } finally {
+      await client.close();
+    }
+  });
+
+  test('find all items used by list of ids - planks', async () => {
+    const client = new MongoClient(mongoStr, { useUnifiedTopology: true });
+    await client.connect();
+
+    try {
+      const itemRepository = new ItemRepository(client.db().collection('item'));
+
+      const findAll: IItemModel[] | null = await itemRepository.findUsedBy([
+        'planks',
+      ]);
+
+      if (!findAll || findAll.length < 1) {
+        throw new Error('Missing Planks by ID');
+      }
+
+      expect(findAll.length).toEqual(4);
+    } catch (e) {
+      throw new Error(e);
+    } finally {
+      await client.close();
+    }
+  });
+
+  test('find all items used by list of ids - planks and cheese', async () => {
+    const client = new MongoClient(mongoStr, { useUnifiedTopology: true });
+    await client.connect();
+
+    try {
+      const itemRepository = new ItemRepository(client.db().collection('item'));
+
+      const findAll: IItemModel[] | null = await itemRepository.findUsedBy([
+        'cheese',
+        'planks',
+      ]);
+
+      if (!findAll || findAll.length < 1) {
+        throw new Error('Missing Planks by ID');
+      }
+
+      expect(findAll.length).toEqual(7);
+
+      const findOne = findAll.find((a: IItemModel) => a.slug === 'cupboard');
+
+      if (!findOne) {
+        throw new Error('Missing Used In');
+      }
+
+      expect(findOne.name).toEqual('Cupboard');
+      expect(findOne.slug).toEqual('cupboard');
+      expect(findOne.productionTime).toEqual(45);
+      expect(findOne.maxValue).toEqual(900);
+
+      expect(findOne.depends.length).toEqual(3);
+      expect(findOne.billTime).toEqual(300);
+      expect(findOne.billCost).toEqual(800);
+      expect(findOne.profitOwnProduction).toEqual(100);
+    } finally {
+      await client.close();
+    }
+  });
+
   test('find one by id full data - Planks', async () => {
     const client = new MongoClient(mongoStr, { useUnifiedTopology: true });
     await client.connect();
@@ -32,7 +167,7 @@ describe('Item Repository', () => {
       expect(findOne.profitOwnProduction).toEqual(80);
       return;
     } catch (e) {
-      throw e;
+      throw new Error(e);
     } finally {
       await client.close();
     }
@@ -44,9 +179,13 @@ describe('Item Repository', () => {
 
     const itemRepository = new ItemRepository(client.db().collection('item'));
 
-    const findOne: any = await itemRepository.findOneBySlug(
+    const findOne: IItemModel | null = await itemRepository.findOneBySlug(
       'cherry-cheesecake',
     );
+    if (!findOne) {
+      throw new Error('Cherry Cheesecake not found');
+    }
+
     try {
       expect(findOne.name).toEqual('Cherry Cheesecake');
       expect(findOne.slug).toEqual('cherry-cheesecake');
@@ -62,7 +201,7 @@ describe('Item Repository', () => {
       // expect(findOne.totalProductionTime).toEqual(555);
       // expect(findOne.hourProfitOwnProduction).toEqual(280);
     } catch (e) {
-      throw e;
+      throw new Error(e);
     } finally {
       await client.close();
     }
@@ -74,7 +213,13 @@ describe('Item Repository', () => {
 
     const itemRepository = new ItemRepository(client.db().collection('item'));
 
-    const findOne: any = await itemRepository.findOneBySlug('burgers');
+    const findOne: IItemModel | null = await itemRepository.findOneBySlug(
+      'burgers',
+    );
+
+    if (!findOne) {
+      throw new Error('Burgers not found');
+    }
     try {
       expect(findOne.name).toEqual('Burgers');
       expect(findOne.slug).toEqual('burgers');
@@ -93,7 +238,7 @@ describe('Item Repository', () => {
       // expect(findOne.totalProductionTime).toEqual(555);
       // expect(findOne.hourProfitOwnProduction).toEqual(280);
     } catch (e) {
-      throw e;
+      throw new Error(e);
     } finally {
       await client.close();
     }
@@ -104,33 +249,23 @@ describe('Item Repository', () => {
     await client.connect();
 
     const itemRepository = new ItemRepository(client.db().collection('item'));
+    const findOne: IItemModel | null = await itemRepository.findOneBySlug(
+      'wood',
+    );
+    if (!findOne) {
+      throw new Error('Wood not found');
+    }
 
     try {
-      const findOne: any = await itemRepository.findOneBySlug('wood');
-
       expect(findOne.maxValue).toEqual(20);
       expect(findOne.level).toEqual(2);
       expect(findOne.depends.length).toEqual(0);
     } catch (e) {
-      throw e;
+      throw new Error(e);
     } finally {
       await client.close();
     }
   });
-
-  // test('validate legacy', async () => {
-
-  //   const client = new MongoClient(mongoStr, { useUnifiedTopology: true });
-  //   await client.connect();
-
-  //   const itemRepository = new ItemRepository(client.db().collection('item'));
-
-  //   const findv1: any = await itemRepository.findOneBySlug(new ObjectID('605fa6cfd9397142fe1793e2'));
-  //   const findv2: any = await itemRepository.findOneBySlug(new ObjectID('605fa6cfd9397142fe1793e2'));
-
-  //   expect(findv1).toEqual(findv2);
-
-  // });
 
   test('find one by id full data - green smoothie', async () => {
     const client = new MongoClient(mongoStr, { useUnifiedTopology: true });
@@ -138,7 +273,13 @@ describe('Item Repository', () => {
 
     const itemRepository = new ItemRepository(client.db().collection('item'));
 
-    const findOne: any = await itemRepository.findOneBySlug('green-smoothie');
+    const findOne: IItemModel | null = await itemRepository.findOneBySlug(
+      'green-smoothie',
+    );
+
+    if (!findOne) {
+      throw new Error('Green Smoothie not found');
+    }
 
     try {
       expect(findOne.name).toEqual('Green Smoothie');
@@ -157,7 +298,7 @@ describe('Item Repository', () => {
       // expect(findOne.totalProductionTime).toEqual(555);
       // expect(findOne.hourProfitOwnProduction).toEqual(280);
     } catch (e) {
-      throw e;
+      throw new Error(e);
     } finally {
       await client.close();
     }
@@ -169,7 +310,12 @@ describe('Item Repository', () => {
 
     const itemRepository = new ItemRepository(client.db().collection('item'));
 
-    const findOne: any = await itemRepository.findOneBySlug('pizza');
+    const findOne: IItemModel | null = await itemRepository.findOneBySlug(
+      'pizza',
+    );
+    if (!findOne) {
+      throw new Error('Pizza not found');
+    }
     try {
       expect(findOne.name).toEqual('Pizza');
       expect(findOne.slug).toEqual('pizza');
@@ -187,7 +333,7 @@ describe('Item Repository', () => {
       // expect(findOne.totalProductionTime).toEqual(555);
       // expect(findOne.hourProfitOwnProduction).toEqual(280);
     } catch (e) {
-      throw e;
+      throw new Error(e);
     } finally {
       await client.close();
     }
@@ -199,7 +345,12 @@ describe('Item Repository', () => {
 
     const itemRepository = new ItemRepository(client.db().collection('item'));
 
-    const findOne: any = await itemRepository.findOneBySlug('lemonade');
+    const findOne: IItemModel | null = await itemRepository.findOneBySlug(
+      'lemonade',
+    );
+    if (!findOne) {
+      throw new Error('Lemonade not found');
+    }
     try {
       expect(findOne.name).toEqual('Lemonade');
       expect(findOne.slug).toEqual('lemonade');
@@ -227,7 +378,12 @@ describe('Item Repository', () => {
 
     const itemRepository = new ItemRepository(client.db().collection('item'));
 
-    const findOne: any = await itemRepository.findOneBySlug('fire-pit');
+    const findOne: IItemModel | null = await itemRepository.findOneBySlug(
+      'fire-pit',
+    );
+    if (!findOne) {
+      throw new Error('Fire Pit not found');
+    }
     try {
       expect(findOne.name).toEqual('Fire Pit');
       expect(findOne.slug).toEqual('fire-pit');
@@ -243,7 +399,7 @@ describe('Item Repository', () => {
       // expect(findOne.totalProductionTime).toEqual(555);
       // expect(findOne.hourProfitOwnProduction).toEqual(280);
     } catch (e) {
-      throw e;
+      throw new Error(e);
     } finally {
       await client.close();
     }
@@ -255,7 +411,14 @@ describe('Item Repository', () => {
 
     const itemRepository = new ItemRepository(client.db().collection('item'));
 
-    const findOne: any = await itemRepository.findOneBySlug('flour-bag');
+    const findOne: IItemModel | null = await itemRepository.findOneBySlug(
+      'flour-bag',
+    );
+
+    if (!findOne) {
+      throw new Error('Flour Bag not found');
+    }
+
     try {
       expect(findOne.name).toEqual('Flour Bag');
       expect(findOne.slug).toEqual('flour-bag');
@@ -271,7 +434,7 @@ describe('Item Repository', () => {
       // expect(findOne.totalProductionTime).toEqual(555);
       // expect(findOne.hourProfitOwnProduction).toEqual(280);
     } catch (e) {
-      throw e;
+      throw new Error(e);
     } finally {
       await client.close();
     }
@@ -307,7 +470,7 @@ describe('Item Repository', () => {
       // expect(findOne.totalProductionTime).toEqual(555);
       // expect(findOne.hourProfitOwnProduction).toEqual(280);
     } catch (e) {
-      throw e;
+      throw new Error(e);
     } finally {
       await client.close();
     }
@@ -319,7 +482,14 @@ describe('Item Repository', () => {
 
     const itemRepository = new ItemRepository(client.db().collection('item'));
 
-    const findOne: any = await itemRepository.findOneBySlug('bread-roll');
+    const findOne: IItemModel | null = await itemRepository.findOneBySlug(
+      'bread-roll',
+    );
+
+    if (!findOne) {
+      throw new Error('Bread Roll not found');
+    }
+
     try {
       expect(findOne.name).toEqual('Bread Roll');
       expect(findOne.slug).toEqual('bread-roll');
@@ -335,7 +505,7 @@ describe('Item Repository', () => {
       // expect(findOne.totalProductionTime).toEqual(555);
       // expect(findOne.hourProfitOwnProduction).toEqual(280);
     } catch (e) {
-      throw e;
+      throw new Error(e);
     } finally {
       await client.close();
     }

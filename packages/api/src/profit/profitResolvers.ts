@@ -22,7 +22,11 @@ const resolvers = {
       const { profit } = dataSources;
       return profit.addProfit(args);
     },
-    async addItemToProfit(_: any, args: any, context: any): Promise<IProfitItem> {
+    async addItemToProfit(
+      _: any,
+      args: any,
+      context: any,
+    ): Promise<IProfitItem> {
       const { dataSources } = context;
       const { profitItem, item } = dataSources;
 

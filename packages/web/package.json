@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test:unit": "jest",
+    "test:unit": "jest components",
     "test:e2e": "node testcafe.js",
     "test": "yarn test:unit; yarn test:e2e",
     "ts-check": "tsc --noEmit",

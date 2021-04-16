@@ -17,10 +17,9 @@ const typeDefs = gql`
     profit(_id: ObjectID!): Profit!
   }
 
-
   type Mutation {
     addProfit(name: String!): Profit!
-    addItemToProfit(profit: ObjectID! item: ObjectID): ProfitItem!
+    addItemToProfit(profit: ObjectID!, item: ObjectID): ProfitItem!
     delItemFromProfit(_id: ObjectID!): ObjectID!
     editProfit(_id: ObjectID!, name: String!): Profit!
     delProfit(_id: ObjectID!): ObjectID!

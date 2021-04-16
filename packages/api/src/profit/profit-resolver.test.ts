@@ -38,9 +38,7 @@ const itemApi = {
 };
 
 describe('Test Brand resolvers', () => {
-
   let query: any;
-
 
   beforeEach(() => {
     const server = new ApolloServer({

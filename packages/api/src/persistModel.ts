@@ -52,10 +52,7 @@ async function persistModel(
     const itemPromises = itemsWithDepends.map(async (a: any) => {
       const { _id, ...rest } = a;
 
-      return itemsCollection.updateOne(
-        { _id: { $eq: _id } },
-        { $set: rest },
-      );
+      return itemsCollection.updateOne({ _id: { $eq: _id } }, { $set: rest });
     });
 
     await Promise.all(itemPromises);

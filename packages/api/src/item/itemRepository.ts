@@ -15,9 +15,87 @@ class ItemRepository extends Collection {
     return docs.toArray();
   }
 
+  async findDepends(_ids: string[]): Promise<IItemModel[]> {
+    const docs = this.collection.aggregate([
+      { $match: { slug: { $in: _ids } } },
+      { $unwind: { path: '$depends', preserveNullAndEmptyArrays: true } },
+      {
+        $lookup: {
+          from: 'item',
+          localField: 'depends.item',
+          foreignField: '_id',
+          as: 'items.item',
+        },
+      },
+      { $unwind: { path: '$items.item', preserveNullAndEmptyArrays: true } },
+      {
+        $group: {
+          _id: '$items.item._id',
+          slug: { $first: '$items.item.slug' },
+          name: { $first: '$items.item.name' },
+          maxValue: { $first: '$items.item.maxValue' },
+          productionTime: { $first: '$items.item.productionTime' },
+          depends: { $first: '$items.item.depends' },
+          building: { $first: '$items.item.building' },
+        },
+      },
+      ...this.pipeline,
+
+      // { $match: { 'items.item.slug': { $in: _ids } } },
+    ]);
+    return docs.toArray();
+  }
+
+  async findUsedBy(_ids: string[]): Promise<IItemModel[]> {
+    const docs = this.collection.aggregate([
+      { $unwind: { path: '$depends', preserveNullAndEmptyArrays: true } },
+      {
+        $lookup: {
+          from: 'item',
+          localField: 'depends.item',
+          foreignField: '_id',
+          as: 'items.item',
+        },
+      },
+      { $unwind: { path: '$items.item', preserveNullAndEmptyArrays: true } },
+
+      {
+        $group: {
+          // _id: '$items.item._id',
+          // ref: { $first: '$slug' },
+          // name: { $first: '$items.item.name' },
+          // slug: { $first: '$items.item.slug' },
+          // level: { $first: '$items.item.level' },
+          // maxValue: { $first: '$items.item.maxValue' },
+          // productionTime: { $first: '$items.item.productionTime' },
+          // building: { $first: 'items.item.$building' },
+          // depends: { $first: '$items.item.depends' },
+          // itemRef: { $first: '$items.item' },
+
+          _id: '$items.item._id',
+          ref: { $first: '$items.item.slug' },
+          name: { $first: '$name' },
+          slug: { $first: '$slug' },
+          // depends: { $push: '$depends' },
+          // level: { $first: '$items.item.level' },
+          // maxValue: { $first: '$items.item.maxValue' },
+          // productionTime: { $first: '$items.item.productionTime' },
+          // building: { $first: 'items.item.$building' },
+          // depends: { $first: '$items.item.depends' },
+          // itemRef: { $first: '$items.item' },
+        },
+      },
+      // { $match: { ref: { $in: _ids } } },
+    ]);
+
+    console.log(JSON.stringify(await docs.explain()));
+
+    return docs.toArray();
+  }
+
   async findManyByFilter(args: IItemArgs): Promise<IItemModel[]> {
     // console.log(args);
-    const order = (args.order == 'desc' && 1) || -1;
+    const order = (args.order === 'desc' && 1) || -1;
 
     const sort = { [args.orderBy]: order };
 
@@ -52,7 +130,7 @@ class ItemRepository extends Collection {
     );
   }
 
-  async findManyByBuilding(building: ObjectId) {
+  async findManyByBuilding(building: ObjectId): Promise<IItemModel[]> {
     const docs = await this.collection
       .aggregate([
         { $match: { building: { $eq: new ObjectId(building) } } },
@@ -177,7 +255,7 @@ class ItemRepository extends Collection {
             },
           },
         },
-        // billCost: {$sum: {$multiply: ["$depends.item.maxValue", "$depends.quantity"]}},
+        // billCost: {$sum: {$multiply: ['$depends.item.maxValue', '$depends.quantity']}},
       },
     },
     { $unwind: '$depends' },
@@ -268,7 +346,12 @@ class ItemRepository extends Collection {
         billCost: 1,
         billTime: 1,
         // billTime: {$max: {$sum: ['$billTimeLvl2', "$billTimeLvl3"]}},
-        depends: 1,
+        depends: {
+          $filter: {
+            input: '$depends',
+            as: 'itemDepends',
+            cond: { $gt: ['$$itemDepends.quantity', 0] },
+          }}
       },
     },
     {
@@ -369,23 +452,15 @@ class ItemRepository extends Collection {
 
     const itemsDeps = await Promise.all(itemsPromise);
 
-    const cost = itemsDeps.reduce((
-      a: number,
-      b: IItemDependency,
-    ): number => {
+    const cost = itemsDeps.reduce((a: number, b: IItemDependency): number => {
       const maxValue = b?.item?.maxValue || 0;
       return a + maxValue * b.quantity;
-    },
-    0);
+    }, 0);
 
-    const time = itemsDeps.reduce((
-      a: number,
-      b: IItemDependency,
-    ): number => {
+    const time = itemsDeps.reduce((a: number, b: IItemDependency): number => {
       const maxTime = b?.item?.productionTime || 0;
       return a + maxTime;
-    },
-    0);
+    }, 0);
 
     return {
       cost,

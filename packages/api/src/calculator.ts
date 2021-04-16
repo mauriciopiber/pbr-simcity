@@ -29,29 +29,29 @@ export function dependency(items: IItemDependency[]): IItemDependencyValues {
 }
 
 export function profit(items: IItem[]): IItemPrint[] {
-  const calculateItems: IItemPrint[] = items.map((
-    item: IItem,
-  ): IItemPrint => {
-    const { maxValue } = item;
-    const dependencyValues: IItemDependencyValues = dependency(item.depends);
+  const calculateItems: IItemPrint[] = items.map(
+    (item: IItem): IItemPrint => {
+      const { maxValue } = item;
+      const dependencyValues: IItemDependencyValues = dependency(item.depends);
 
-    // const productionTime = item.productionTime + dependencyValues.time;
-    const { productionTime } = item;
-    const { cost } = dependencyValues;
-    const profit = maxValue - cost;
+      // const productionTime = item.productionTime + dependencyValues.time;
+      const { productionTime } = item;
+      const { cost } = dependencyValues;
+      const profit = maxValue - cost;
 
-    const profitByMinute = toFixedNumber(profit / productionTime, 2, 10);
-    const profitByHour = toFixedNumber((profit / productionTime) * 60, 2, 10);
+      const profitByMinute = toFixedNumber(profit / productionTime, 2, 10);
+      const profitByHour = toFixedNumber((profit / productionTime) * 60, 2, 10);
 
-    return {
-      name: item.name,
-      time: productionTime,
-      maxValue,
-      cost,
-      profit,
-      profitByMinute,
-      profitByHour,
-    };
-  });
+      return {
+        name: item.name,
+        time: productionTime,
+        maxValue,
+        cost,
+        profit,
+        profitByMinute,
+        profitByHour,
+      };
+    },
+  );
   return calculateItems;
 }
