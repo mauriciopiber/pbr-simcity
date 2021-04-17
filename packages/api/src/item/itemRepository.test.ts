@@ -110,7 +110,7 @@ describe('Item Repository', () => {
 
     const itemRepository = new ItemRepository(client.db().collection('item'));
 
-    const findAll: IItemModel[] | null = await itemRepository.findDependsByBuilding(['furniture'], {
+    const findAll: IItemModel[] | null = await itemRepository.findDependsByBuilding({building: 'furniture',
       order: 'asc',
       orderBy: 'maxValue',
       filter: {},
@@ -239,15 +239,12 @@ describe('Item Repository', () => {
     try {
       const itemRepository = new ItemRepository(client.db().collection('item'));
 
-      const findAll: IItemModel[] | null = await itemRepository.findUsedByBuilding([
-        'farmers',
-
-      ] , {
+      const findAll: IItemModel[] | null = await itemRepository.findUsedByBuilding({
+        building: 'farmers',
         order: 'asc',
         orderBy: 'maxValue',
         filter: {},
       });
-
 
       if (!findAll || findAll.length < 1) {
         throw new Error('Missing Planks by ID');
@@ -259,14 +256,14 @@ describe('Item Repository', () => {
     }
   });
 
-  test('find many by filter', async() => {
+  test('find many by filter', async () => {
     const client = new MongoClient(mongoStr, { useUnifiedTopology: true });
     await client.connect();
 
     const itemRepository = new ItemRepository(client.db().collection('item'));
 
     const findAll: IItemModel[] = await itemRepository.findManyByFilter(
-      { filter: { level: 5 }, order: 'asc', orderBy: 'maxValue'},
+      { filter: { level: 5 }, order: 'asc', orderBy: 'maxValue' },
     );
 
     if (!findAll || findAll.length < 1) {

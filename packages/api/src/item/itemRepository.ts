@@ -15,7 +15,11 @@ class ItemRepository extends Collection {
     return docs.toArray();
   }
 
-  async findDependsByBuilding(_ids: string[], args: IItemArgs): Promise<IItemModel[]> {
+  async findDependsByBuilding(args: any): Promise<IItemModel[]> {
+    const {
+      building,
+    } = args;
+
     const {
       match,
       sort,
@@ -31,7 +35,7 @@ class ItemRepository extends Collection {
         },
       },
       { $unwind: '$building' },
-      { $match: { 'building.slug': { $in: _ids } } },
+      { $match: { 'building.slug': { $eq: building } } },
       { $unwind: { path: '$depends', preserveNullAndEmptyArrays: true } },
       {
         $lookup: {
@@ -48,6 +52,7 @@ class ItemRepository extends Collection {
           slug: { $first: '$items.item.slug' },
           name: { $first: '$items.item.name' },
           maxValue: { $first: '$items.item.maxValue' },
+          level: { $first: '$items.item.level' },
           productionTime: { $first: '$items.item.productionTime' },
           depends: { $first: '$items.item.depends' },
           building: { $first: '$items.item.building' },
@@ -55,10 +60,9 @@ class ItemRepository extends Collection {
       },
       ...this.pipeline,
       { $match: match },
-      {
+      sort && {
         $sort: sort,
       },
-      // { $match: { 'items.item.slug': { $in: _ids } } },
     ]);
     return docs.toArray();
   }
@@ -94,11 +98,15 @@ class ItemRepository extends Collection {
     return docs.toArray();
   }
 
-  async findUsedByBuilding(_ids: string[], args: IItemArgs): Promise<IItemModel[]> {
+  async findUsedByBuilding(args: any): Promise<IItemModel[]> {
     const {
       match,
       sort,
     }: any = await ItemRepository.createMatchFilter(args);
+
+    const {
+      building,
+    } = args;
 
     const docs = this.collection.aggregate([
       { $unwind: { path: '$depends', preserveNullAndEmptyArrays: true } },
@@ -120,7 +128,7 @@ class ItemRepository extends Collection {
         },
       },
       { $unwind: '$building' },
-      { $match: { 'building.slug': { $in: _ids } } },
+      { $match: { 'building.slug': { $eq: building } } },
       // { $match: { 'items.item.slug': { $in: _ids } } },
       {
         $replaceRoot: {
@@ -232,6 +240,10 @@ class ItemRepository extends Collection {
   }
 
   static async createMatchFilter(args: IItemArgs) {
+    if (!args) {
+      return {};
+    }
+
     const order = (args.order === 'desc' && 1) || -1;
 
     const sort = { [args.orderBy]: order };
@@ -276,6 +288,35 @@ class ItemRepository extends Collection {
         depends: p.depends.filter((p: any) => p.item),
       }),
     );
+  }
+
+  async findManyByBuildingSlug(args: any): Promise<IItemModel[]> {
+    const { building } = args;
+    const docs = await this.collection
+      .aggregate([
+        {
+          $lookup: {
+            from: 'building',
+            localField: 'building',
+            foreignField: '_id',
+            as: 'building',
+          },
+        },
+        { $unwind: '$building' },
+        { $match: { 'building.slug': { $eq: building } } },
+        {
+          $addFields: {
+            building: '$building._id',
+          },
+        },
+        // { $match: {
+        //   _id: new ObjectId(id)
+        // }},
+        ...this.pipeline,
+      ])
+      .toArray();
+
+    return docs;
   }
 
   async findManyByBuilding(building: ObjectId): Promise<IItemModel[]> {
