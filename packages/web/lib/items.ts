@@ -34,6 +34,176 @@ export const calculateDependsCostByMaxValue = (depends: any[]): number => {
   return dependsBuildCost;
 };
 
+export const QUERY_ITEMS_BY_BUILDING = gql`
+  query(
+    $building: String!
+    $order: String!
+    $orderBy: String!
+    $filter: ItemFilter!
+  ) {
+    itemsByBuilding(
+    building: $building
+    order: $order
+    orderBy: $orderBy
+    filter: $filter
+  ) {
+    _id
+    name
+    maxValue
+    productionTime
+    level
+    slug
+    profitOwnProduction
+    profitOwnByMinute
+    profitOwnByHour
+    billCost
+    depends {
+      item {
+        _id
+        name
+        slug
+      }
+      quantity
+    }
+    usedIn {
+      _id
+      name
+      slug
+    }
+    profit {
+      cost
+      profit
+      profitByMinute
+      profitByHour
+    }
+    building {
+      _id
+      name
+      slug
+      items {
+        _id
+        name
+        maxValue
+      }
+    }
+
+  }}
+`
+
+
+export const QUERY_ITEMS_DEPEND_BY_BUILDING = gql`
+  query(
+    $building: String!
+    $order: String!
+    $orderBy: String!
+    $filter: ItemFilter!
+  ) {
+    itemsDependsByBuilding(
+    building: $building
+    order: $order
+    orderBy: $orderBy
+    filter: $filter
+  ) {
+    _id
+    name
+    maxValue
+    productionTime
+    level
+    slug
+    profitOwnProduction
+    profitOwnByMinute
+    profitOwnByHour
+    billCost
+    depends {
+      item {
+        _id
+        name
+        slug
+      }
+      quantity
+    }
+    usedIn {
+      _id
+      name
+      slug
+    }
+    profit {
+      cost
+      profit
+      profitByMinute
+      profitByHour
+    }
+    building {
+      _id
+      name
+      slug
+      items {
+        _id
+        name
+        maxValue
+      }
+    }
+
+  }}
+`
+
+
+export const QUERY_ITEMS_USED_BY_BUILDING = gql`
+  query(
+    $building: String!
+    $order: String!
+    $orderBy: String!
+    $filter: ItemFilter!
+  ) {
+    itemsUsedByBuilding(
+    building: $building
+    order: $order
+    orderBy: $orderBy
+    filter: $filter
+  ) {
+    _id
+    name
+    maxValue
+    productionTime
+    level
+    slug
+    profitOwnProduction
+    profitOwnByMinute
+    profitOwnByHour
+    billCost
+    usedIn {
+      _id
+      name
+      slug
+    }
+    profit {
+      cost
+      profit
+      profitByMinute
+      profitByHour
+    }
+    depends {
+      item {
+        _id
+        name
+        slug
+      }
+      quantity
+    }
+    building {
+      _id
+      name
+      slug
+      items {
+        _id
+        name
+        maxValue
+      }
+    }
+
+  }}
+`
+
 export const QUERY_ITEMS = gql`
   query(
     $order: String!
@@ -58,6 +228,15 @@ export const QUERY_ITEMS = gql`
       usedIn {
         _id
         name
+        slug
+      }
+      depends {
+        item {
+          _id
+          name
+          slug
+        }
+        quantity
       }
       profit {
         cost
@@ -68,6 +247,7 @@ export const QUERY_ITEMS = gql`
       building {
         _id
         name
+        slug
         items {
           _id
           name
@@ -160,6 +340,7 @@ fragment itemDepends on Item {
       building {
         _id
         name
+        slug
         parallel
         items {
           _id

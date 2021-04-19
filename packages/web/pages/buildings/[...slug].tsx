@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { request, gql } from 'graphql-request';
-import { useQuery } from '@apollo/react-hooks';
-import { QUERY_BUILDING } from '@pbr-simcity/web/lib/building';
-import ItemTable from '@pbr-simcity/web/components/Item/ItemTable/ItemTable';
+import BuildingItems from '@pbr-simcity/web/components/Building/BuildingItems/BuildingItems';
+import BuildingUsedInItems from '@pbr-simcity/web/components/Building/BuildingUsedInItems/BuildingUsedInItems';
+import BuildingUsedByItems from '@pbr-simcity/web/components/Building/BuildingUsedByItems/BuildingUsedByItems';
+
 
 const QUERY_PATHS = gql`
   query {
@@ -16,40 +17,18 @@ interface BuildingProps {
   slug: string;
 }
 
-function Page({ slug }: BuildingProps) {
-  const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('level');
+const Page: FC<BuildingProps> = ({ slug }) => {
 
-  const setColumnOrder = React.useCallback(
-    (column) => {
-      setOrderBy(column);
-      setOrder((order === 'asc' && 'desc') || 'asc');
-    },
-    [order, orderBy],
+
+  return (
+    <>
+    <h1>Buildings</h1>
+    <h2>{slug}</h2>
+      <BuildingItems slug={slug} />
+      <BuildingUsedInItems slug={slug}/>
+      <BuildingUsedByItems slug={slug}/>
+    </>
   );
-
-  const { loading, error, data } = useQuery(QUERY_BUILDING, {
-    variables: { slug },
-  });
-
-  if (loading) {
-    return <div>Loading</div>;
-  }
-
-  if (error) {
-    return (
-      <div>
-        Error
-        {JSON.stringify(error)}
-      </div>
-    );
-  }
-
-  const { building } = data;
-
-  const { items } = building;
-
-  return <ItemTable setOrder={setColumnOrder} items={items} />;
 }
 
 export async function getStaticPaths() {
