@@ -293,6 +293,12 @@ describe('Item Repository', () => {
       expect(industry?.slots.length).toEqual(1);
       expect(farmers?.slots.length).toEqual(0);
 
+      expect(industry?.slots[0]?.slot).toEqual(1);
+      expect(industry?.slots[0]?.schedule).toEqual(0);
+      expect(industry?.slots[0]?.start).toEqual(0);
+      expect(industry?.slots[0]?.complete).toEqual(180);
+      expect(industry?.slots[0]?.item.slug).toEqual('textiles');
+
       // expect(findAll.cycles.length).toEqual(2);
     } finally {
       await client.close();
@@ -353,21 +359,35 @@ describe('Item Repository', () => {
 
       expect(hardware?.slots[0]?.slot).toEqual(1);
       expect(hardware?.slots[0]?.item.slug).toEqual('cooking-utensils');
+      expect(hardware?.slots[0]?.schedule).toEqual(14);
+      expect(hardware?.slots[0]?.start).toEqual(14);
+      expect(hardware?.slots[0]?.complete).toEqual(59);
 
       expect(farmers?.slots.length).toEqual(4);
 
       expect(farmers?.slots[0]?.slot).toEqual(1);
       expect(farmers?.slots[0]?.item.slug).toEqual('flour-bag');
-
+      expect(farmers?.slots[0]?.schedule).toEqual(185);
+      expect(farmers?.slots[0]?.start).toEqual(185);
+      expect(farmers?.slots[0]?.complete).toEqual(215);
 
       expect(farmers?.slots[1]?.slot).toEqual(2);
       expect(farmers?.slots[1]?.item.slug).toEqual('flour-bag');
+      expect(farmers?.slots[1]?.schedule).toEqual(185);
+      expect(farmers?.slots[1]?.start).toEqual(215);
+      expect(farmers?.slots[1]?.complete).toEqual(245);
 
       expect(farmers?.slots[2]?.slot).toEqual(3);
       expect(farmers?.slots[2]?.item.slug).toEqual('cream');
+      expect(farmers?.slots[2]?.schedule).toEqual(365);
+      expect(farmers?.slots[2]?.start).toEqual(365);
+      expect(farmers?.slots[2]?.complete).toEqual(420);
 
       expect(farmers?.slots[3]?.slot).toEqual(4);
       expect(farmers?.slots[3]?.item.slug).toEqual('beef');
+      expect(farmers?.slots[3]?.schedule).toEqual(365);
+      expect(farmers?.slots[3]?.start).toEqual(420);
+      expect(farmers?.slots[3]?.complete).toEqual(570);
 
       expect(donuts?.slots.length).toEqual(1);
       expect(donuts?.slots[0]?.slot).toEqual(1);
