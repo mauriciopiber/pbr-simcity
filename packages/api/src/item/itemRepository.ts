@@ -173,12 +173,23 @@ class ItemRepository extends Collection {
       return [...Array(quantity).keys()].map(() => rest);
     }).flat();
 
-    // let lastComplete = 0;
-    // let start = 0;
+    let lastComplete = 0;
 
     const industrySlots: IItemProfitBuildingSlots[] = itemsExpand.map(
       (a : any, index: number) => {
         const criticalPath = ItemRepository.getItemCriticalPath(a, items);
+
+        const complete = (
+          ((criticalPath + a.productionTime) === lastComplete)
+            ? lastComplete + a.productionTime
+            : criticalPath + a.productionTime
+        );
+
+        const start = (
+          ((criticalPath + a.productionTime) === lastComplete)
+            ? (lastComplete)
+            : criticalPath
+        );
 
         // console.log(a.slug, criticalPath, lastComplete, start);
 
@@ -193,10 +204,13 @@ class ItemRepository extends Collection {
         const slot: IItemProfitBuildingSlots = {
           slot: (index + 1),
           schedule: criticalPath,
-          start: criticalPath,
-          complete: criticalPath + a.productionTime,
+          start,
+          complete,
           item: a,
         };
+
+        lastComplete = complete;
+        console.log(a.slug, start, lastComplete);
         return slot;
       },
     );

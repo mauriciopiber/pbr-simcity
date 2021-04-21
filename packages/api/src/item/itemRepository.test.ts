@@ -381,13 +381,13 @@ describe('Item Repository', () => {
       expect(farmers?.slots[2]?.item.slug).toEqual('cream');
       expect(farmers?.slots[2]?.schedule).toEqual(365);
       expect(farmers?.slots[2]?.start).toEqual(365);
-      expect(farmers?.slots[2]?.complete).toEqual(420);
+      expect(farmers?.slots[2]?.complete).toEqual(440);
 
       expect(farmers?.slots[3]?.slot).toEqual(4);
       expect(farmers?.slots[3]?.item.slug).toEqual('beef');
       expect(farmers?.slots[3]?.schedule).toEqual(365);
-      expect(farmers?.slots[3]?.start).toEqual(420);
-      expect(farmers?.slots[3]?.complete).toEqual(570);
+      expect(farmers?.slots[3]?.start).toEqual(440);
+      expect(farmers?.slots[3]?.complete).toEqual(590);
 
       expect(donuts?.slots.length).toEqual(1);
       expect(donuts?.slots[0]?.slot).toEqual(1);
