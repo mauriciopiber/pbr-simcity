@@ -6,9 +6,13 @@ import {
   IItemArgs,
   IItemProfit,
   IItemModel,
+  IItemProfitDependency,
   IItemFilter,
+  IItemProfitBuldingList,
   // IProfitCycle,
   IBuildingModel,
+  IItemProfitBuildingSlots,
+  IItemProfitBuilding,
 } from '@pbr-simcity/types/types';
 import Collection from '@pbr-simcity/api/src/collection';
 
@@ -16,6 +20,176 @@ class ItemRepository extends Collection {
   async getAll() {
     const docs = this.collection.find();
     return docs.toArray();
+  }
+
+  async findDependsItems(depends: IItemDependency[]): Promise<IItemProfitDependency[]> {
+    const getDependsItems = depends.map(
+      async (a: IItemDependency): Promise<IItemProfitDependency> => {
+        const itemDepends = await this.findById(a.item);
+
+        if (!itemDepends) {
+          throw new Error('Missing Item from depends');
+        }
+        return {
+          ...itemDepends,
+          quantity: a.quantity,
+        };
+      },
+    );
+
+    const dependsItems: IItemProfitDependency[] = await Promise.all(getDependsItems);
+    return dependsItems;
+  }
+
+  async recursiveDependency(depends: IItemDependency[]): Promise<IItemProfitDependency[]> {
+    const dependsItems: IItemProfitDependency[] = await this.findDependsItems(depends);
+
+    const dependsInner: IItemDependency[] = dependsItems.map(
+      (a: IItemModel) => a.depends,
+    ).flat();
+
+    if (dependsInner.length <= 0) {
+      return dependsItems;
+    }
+
+    const moreItems = await this.recursiveDependency(dependsInner);
+
+    return [
+      ...dependsItems,
+      ...moreItems,
+    ];
+  }
+
+  async flatItemsFromDependency(rootItem: string): Promise<IItemProfitDependency[]> {
+    const itemModel: IItemModel | null = await this.findOneBySlug(rootItem);
+
+    if (!itemModel) {
+      throw new Error('Missing Item Model');
+    }
+
+    const { depends } = itemModel;
+
+    const dependsItems: IItemProfitDependency[] = await this.recursiveDependency(depends);
+
+    const groupItems = dependsItems.reduce((res: any, value: IItemProfitDependency) => {
+      if (res[value.slug]) {
+        res[value.slug].quantity += value.quantity;
+        return res;
+      }
+
+      res[value.slug] = {
+        ...value,
+      };
+      return res;
+    }, {});
+
+    const groupItemsValues: IItemProfitDependency[] = Object.values(groupItems);
+
+    const allItems = [
+      {
+        ...itemModel,
+        quantity: 1,
+      },
+      ...groupItemsValues,
+    ];
+
+    allItems.sort((a: IItemProfitDependency, b: IItemProfitDependency): number => {
+      if (a.level > b.level) {
+        return 1;
+      }
+      return -1;
+    });
+
+    return allItems;
+  }
+
+  static createParallelBuildingProfitSlots(
+    items: IItemProfitDependency[],
+    buildingId: string,
+  ): IItemProfitBuilding {
+    const itemsDependsIndustry: IItemProfitDependency[] = items.filter(
+      (a: IItemProfitDependency) => `${a.building}` === `${buildingId}`,
+    );
+
+    const itemsExpandIndustry = itemsDependsIndustry.map((a: IItemDependency) => {
+      const {
+        quantity,
+        ...rest
+      } = a;
+
+      if (quantity === 1) {
+        return a;
+      }
+
+      return [...Array(quantity).keys()].map(() => rest);
+    }).flat();
+
+    const industrySlots: IItemProfitBuildingSlots[] = itemsExpandIndustry.map(
+      (a : any, index: number) => {
+        const slot: IItemProfitBuildingSlots = {
+          slot: (index + 1),
+          schedule: 0,
+          start: 0,
+          complete: a.productionTime,
+          item: a,
+        };
+        return slot;
+      },
+    );
+    const industryBuilding: IItemProfitBuilding = {
+      slots: industrySlots,
+    };
+    return industryBuilding;
+  }
+
+  static getItemCriticalPath(item: IItemModel, items: IItemProfitDependency[]): number {
+    const rootDepends = item.depends;
+
+    const depends = rootDepends.map((a: IItemDependency) => {
+      const itemDepends = items.filter((b: IItemModel) => `${b._id}` === `${a.item}`);
+      return itemDepends;
+    }).flat().map((a: IItemModel) => a.productionTime);
+    return 5 + Math.max(...depends);
+  }
+
+  static createSequentialBuildingProfitSlots(
+    items: IItemProfitDependency[],
+    buildingId: string,
+  ): IItemProfitBuilding {
+    const itemsDepends: IItemProfitDependency[] = items.filter(
+      (a: IItemProfitDependency) => `${a.building}` === `${buildingId}`,
+    );
+
+    const itemsExpand = itemsDepends.map((a: IItemDependency) => {
+      const {
+        quantity,
+        ...rest
+      } = a;
+
+      if (quantity === 1) {
+        return a;
+      }
+
+      return [...Array(quantity).keys()].map(() => rest);
+    }).flat();
+    const industrySlots: IItemProfitBuildingSlots[] = itemsExpand.map(
+      (a : any, index: number) => {
+        const criticalPath = ItemRepository.getItemCriticalPath(a, items);
+
+        const slot: IItemProfitBuildingSlots = {
+          slot: (index + 1),
+          schedule: criticalPath,
+          start: criticalPath,
+          complete: criticalPath + a.productionTime,
+          item: a,
+        };
+        return slot;
+      },
+    );
+    const building: IItemProfitBuilding = {
+      slots: industrySlots,
+    };
+    return building;
   }
 
   async createItemProfit(item: string): Promise<IItemProfit> {
@@ -28,47 +202,106 @@ class ItemRepository extends Collection {
     const buildingsProfit = buildings.reduce((a: any, b: IBuildingModel) => ({
       ...a,
       [b.slug]: {
+        _id: b._id,
         name: b.name,
       },
     }), {});
 
-    console.log(buildingsProfit);
+    const items: IItemProfitDependency[] = await this.flatItemsFromDependency(item);
 
-    // const itemModel: IItemModel | null = await this.findOneBySlug(item);
+    // prepare buildings - industry
 
-    // if (!item) {
-    //   throw new Error('Missing Item');
-    // }
-    // find item.
+    const industryBuilding: IItemProfitBuilding = ItemRepository
+      .createParallelBuildingProfitSlots(
+        items,
+        buildingsProfit.industry._id,
+      );
 
-    // const depends = this.findDepends(itemModel);
+    // prepare buildings - supplies
 
+    const suppliesBuilding: IItemProfitBuilding = ItemRepository
+      .createSequentialBuildingProfitSlots(
+        items,
+        buildingsProfit.supplies._id,
+      );
 
+    // prepare buildings - hardware
 
-    // const { depends } = item;
+    const hardwareBuilding: IItemProfitBuilding = ItemRepository
+      .createSequentialBuildingProfitSlots(
+        items,
+        buildingsProfit.hardware._id,
+      );
 
-    // const getDependsItems = depends.map(async (a: any) => {
-    //   const itemDepends = await this.findById(a.item);
-    //   return {
-    //     item: {
-    //       ...itemDepends,
-    //     },
-    //     quantity: a.quantity,
-    //   };
-    // });
+    // prepare buildings - fashion
 
+    const fashionBuilding: IItemProfitBuilding = ItemRepository
+      .createSequentialBuildingProfitSlots(
+        items,
+        buildingsProfit.fashion._id,
+      );
 
-    // const dependsItems = await Promise.all(getDependsItems);
+    // prepare buildings - furniture
 
-    // const cycles: IProfitCycle[] = [];
+    const furnitureBuilding: IItemProfitBuilding = ItemRepository
+      .createSequentialBuildingProfitSlots(
+        items,
+        buildingsProfit.furniture._id,
+      );
 
+    // prepare buildings - gardening
 
+    const gardeningBuilding: IItemProfitBuilding = ItemRepository
+      .createSequentialBuildingProfitSlots(
+        items,
+        buildingsProfit.gardening._id,
+      );
 
-    // console.log(depends);
+    // prepare buildings - farmers market
+
+    const farmersBuilding: IItemProfitBuilding = ItemRepository
+      .createSequentialBuildingProfitSlots(
+        items,
+        buildingsProfit.farmers._id,
+      );
+
+    // prepare buildings - donut shop
+
+    const donutBuilding: IItemProfitBuilding = ItemRepository
+      .createSequentialBuildingProfitSlots(
+        items,
+        buildingsProfit.donut._id,
+      );
+
+    // prepare buildings - fast food restaurante
+    const fastFoodBuilding: IItemProfitBuilding = ItemRepository
+      .createSequentialBuildingProfitSlots(
+        items,
+        buildingsProfit['fast-food']._id,
+      );
+
+    const homeAppliancesBuilding: IItemProfitBuilding = ItemRepository
+      .createParallelBuildingProfitSlots(
+        items,
+        buildingsProfit['home-appliances']._id,
+      );
+
+    const profitBuildings: IItemProfitBuldingList = {
+      industry: industryBuilding,
+      'fast-food': fastFoodBuilding,
+      'home-appliances': homeAppliancesBuilding,
+      donuts: donutBuilding,
+      farmers: farmersBuilding,
+      furniture: furnitureBuilding,
+      gardening: gardeningBuilding,
+      fashion: fashionBuilding,
+      hardware: hardwareBuilding,
+      supplies: suppliesBuilding,
+    };
 
     const itemProfit : IItemProfit = {
       cycles: [],
-      buildings: buildingsProfit,
+      buildings: profitBuildings,
     };
 
     // find depends.

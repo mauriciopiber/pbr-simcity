@@ -54,6 +54,7 @@ export interface IItemModel extends IItem {
 }
 
 export interface IBuildingModel extends IBuilding {
+  _id: string;
   items: IItemModel[];
 }
 
@@ -92,6 +93,10 @@ export interface IProfitCycle {
   // building: IBuildingModel;
 }
 
+export interface IItemProfitDependency extends IItemModel {
+  quantity: number;
+}
+
 /**
  * Profit - Building Slots
  *
@@ -100,9 +105,9 @@ export interface IProfitCycle {
 export interface IItemProfitBuildingSlots {
   slot: number;
   item: IItemModel;
-  schedule: string;
-  start: string;
-  complete: string;
+  schedule: number;
+  start: number;
+  complete: number;
 }
 
 /**
