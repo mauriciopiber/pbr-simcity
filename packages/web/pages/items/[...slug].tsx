@@ -48,15 +48,8 @@ function Page({ slug }: ItemProps) {
 
   return (
     <div className="panel">
-      <div className="panel__title">{item.name}</div>
-      <div className="panel__building">
-        <Link href={`/buildings/${item.building._id}`}>
-          <a className="link">
-            {item.building.name} -{' '}
-            {(item.building.parallel && 'Parallel') || 'Sequential'}
-          </a>
-        </Link>
-      </div>
+      <div className="panel__title"><h1>{item.name}</h1></div>
+
       <table>
         <tr>
           <th>Dependency Graph</th>
@@ -69,6 +62,9 @@ function Page({ slug }: ItemProps) {
           <td>
             <BuildingFlow item={item} />
           </td>
+        </tr>
+        <tr>
+          <th><Link href={`/buildings/${item.building.slug}`}><a>{item.building.name}</a></Link></th>
         </tr>
         <tr>
           <th>Production Time Min</th>
@@ -127,7 +123,6 @@ function Page({ slug }: ItemProps) {
             padding: 5px;
             font-size: 20px;
             line-height: 20px;
-            color: #ffffff;
           }
           .link {
             color: #ffffff;

@@ -4,8 +4,11 @@ import {
   IItemDependency,
   IItemDependencyValues,
   IItemArgs,
+  IItemProfit,
   IItemModel,
   IItemFilter,
+  // IProfitCycle,
+  IBuildingModel,
 } from '@pbr-simcity/types/types';
 import Collection from '@pbr-simcity/api/src/collection';
 
@@ -13,6 +16,98 @@ class ItemRepository extends Collection {
   async getAll() {
     const docs = this.collection.find();
     return docs.toArray();
+  }
+
+  async createItemProfit(item: string): Promise<IItemProfit> {
+    if (!item || item === '') {
+      throw new Error('Missing item to analyse');
+    }
+
+    const buildings = await this.findBuildings();
+
+    const buildingsProfit = buildings.reduce((a: any, b: IBuildingModel) => ({
+      ...a,
+      [b.slug]: {
+        name: b.name,
+      },
+    }), {});
+
+    console.log(buildingsProfit);
+
+    // const itemModel: IItemModel | null = await this.findOneBySlug(item);
+
+    // if (!item) {
+    //   throw new Error('Missing Item');
+    // }
+    // find item.
+
+    // const depends = this.findDepends(itemModel);
+
+
+
+    // const { depends } = item;
+
+    // const getDependsItems = depends.map(async (a: any) => {
+    //   const itemDepends = await this.findById(a.item);
+    //   return {
+    //     item: {
+    //       ...itemDepends,
+    //     },
+    //     quantity: a.quantity,
+    //   };
+    // });
+
+
+    // const dependsItems = await Promise.all(getDependsItems);
+
+    // const cycles: IProfitCycle[] = [];
+
+
+
+    // console.log(depends);
+
+    const itemProfit : IItemProfit = {
+      cycles: [],
+      buildings: buildingsProfit,
+    };
+
+    // find depends.
+    return itemProfit;
+  }
+
+  async findBuildings(): Promise<IBuildingModel[]> {
+    const docs = this.collection.aggregate([
+      {
+        $lookup: {
+          from: 'building',
+          localField: 'building',
+          foreignField: '_id',
+          as: 'building',
+        },
+      },
+      { $unwind: '$building' },
+      {
+        $replaceRoot: {
+          newRoot: {
+            $mergeObjects: [
+              { _id: '$building._id' },
+              { name: '$building.name' },
+              { slug: '$building.slug' },
+            ],
+          },
+        },
+      },
+      {
+        $group: {
+          _id: '$_id',
+          name: { $first: '$name' },
+          slug: { $first: '$slug' },
+        },
+      },
+    ]);
+
+    const buildings: IBuildingModel[] = await docs.toArray();
+    return buildings;
   }
 
   async findDependsByBuilding(args: any): Promise<IItemModel[]> {

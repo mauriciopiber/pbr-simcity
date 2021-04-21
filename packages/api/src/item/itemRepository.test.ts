@@ -1,11 +1,386 @@
 import { MongoClient /* ObjectID */ } from 'mongodb';
-import { IItemModel } from '@pbr-simcity/types/types';
+import { IItemModel, IItemProfit } from '@pbr-simcity/types/types';
 
 import ItemRepository from '@pbr-simcity/api/src/item/itemRepository';
 
 const mongoStr = 'mongodb://localhost:27017/simcity';
 
 describe('Item Repository', () => {
+
+
+  test('workflow - planks', async () => {
+    const client = new MongoClient(mongoStr, { useUnifiedTopology: true });
+    await client.connect();
+
+    try {
+      const itemRepository = new ItemRepository(client.db().collection('item'));
+
+      const findAll: IItemProfit = await itemRepository.createItemProfit('planks');
+
+      expect(findAll.cycles.length).toEqual(0);
+      expect(findAll.buildings).toHaveProperty('industry');
+      expect(findAll.buildings).toHaveProperty('supplies');
+      expect(findAll.buildings).toHaveProperty('hardware');
+      expect(findAll.buildings).toHaveProperty('farmers');
+      expect(findAll.buildings).toHaveProperty('furniture');
+      expect(findAll.buildings).toHaveProperty('gardening');
+      expect(findAll.buildings).toHaveProperty('fashion');
+      expect(findAll.buildings).toHaveProperty('fast-food');
+      expect(findAll.buildings).toHaveProperty('home-appliances');
+      expect(findAll.buildings).toHaveProperty('industry');
+
+      const { industry, supplies } = findAll.buildings;
+
+      expect(industry?.slots[0]?.slot).toEqual(1);
+      expect(industry?.slots[0]?.item.slug).toEqual('wood');
+      expect(industry?.slots[0]?.schedule).toEqual(0);
+      expect(industry?.slots[0]?.start).toEqual(0);
+      expect(industry?.slots[0]?.complete).toEqual(3);
+
+      expect(industry?.slots[1]?.slot).toEqual(2);
+      expect(industry?.slots[1]?.item.slug).toEqual('wood');
+      expect(industry?.slots[1]?.schedule).toEqual(0);
+      expect(industry?.slots[1]?.start).toEqual(0);
+      expect(industry?.slots[1]?.complete).toEqual(3);
+
+      expect(supplies?.slots[0]?.slot).toEqual(1);
+      expect(supplies?.slots[0]?.item.slug).toEqual('planks');
+      expect(supplies?.slots[0]?.schedule).toEqual(8);
+      expect(supplies?.slots[0]?.start).toEqual(8);
+      expect(supplies?.slots[0]?.complete).toEqual(38);
+
+      expect(findAll.cycles.length).toEqual(2);
+
+      expect(findAll.cycles[0]?.cycle).toEqual(1);
+      expect(findAll.cycles[0]?.items.length).toEqual(2);
+      expect(findAll.cycles[0]?.startProduction).toEqual(0);
+      expect(findAll.cycles[0]?.endProduction).toEqual(3);
+
+      expect(findAll.cycles[1]?.cycle).toEqual(2);
+      expect(findAll.cycles[0]?.items.length).toEqual(1);
+      expect(findAll.cycles[0]?.startProduction).toEqual(8);
+      expect(findAll.cycles[0]?.endProduction).toEqual(38);
+
+      // const stepOne = findAll.cycles[0];
+
+      // expect(stepOne?.item.name).toEqual('Woods');
+      // expect(stepOne?.item.slug).toEqual('Woods');
+      // expect(stepOne?.quantity).toEqual(2);
+    } finally {
+      await client.close();
+    }
+  });
+
+  test('workflow - pizza', async () => {
+    const client = new MongoClient(mongoStr, { useUnifiedTopology: true });
+    await client.connect();
+
+    try {
+      const itemRepository = new ItemRepository(client.db().collection('item'));
+
+      const findAll: IItemProfit = await itemRepository.createItemProfit('pizza');
+
+      expect(findAll.cycles.length).toEqual(0);
+
+      expect(findAll.buildings).toHaveProperty('farmers');
+      expect(findAll.buildings).toHaveProperty('industry');
+      expect(findAll.buildings).toHaveProperty('industry');
+      expect(findAll.buildings).toHaveProperty('supplies');
+      expect(findAll.buildings).toHaveProperty('hardware');
+      expect(findAll.buildings).toHaveProperty('farmers');
+      expect(findAll.buildings).toHaveProperty('furniture');
+      expect(findAll.buildings).toHaveProperty('gardening');
+      expect(findAll.buildings).toHaveProperty('fashion');
+      expect(findAll.buildings).toHaveProperty('fast-food');
+      expect(findAll.buildings).toHaveProperty('home-appliances');
+      expect(findAll.buildings).toHaveProperty('industry');
+
+      const { industry, farmers } = findAll.buildings;
+      const fastFood = findAll.buildings['fast-food'];
+
+      expect(industry?.slots.length).toEqual(9);
+
+      expect(industry?.slots[0]?.slot).toEqual(1);
+      expect(industry?.slots[0]?.item.slug).toEqual('seeds');
+      expect(industry?.slots[0]?.schedule).toEqual(0);
+      expect(industry?.slots[0]?.start).toEqual(0);
+      expect(industry?.slots[0]?.complete).toEqual(20);
+
+      expect(industry?.slots[0]?.slot).toEqual(2);
+      expect(industry?.slots[0]?.item.slug).toEqual('seeds');
+
+      expect(industry?.slots[0]?.slot).toEqual(3);
+      expect(industry?.slots[0]?.item.slug).toEqual('textiles');
+      expect(industry?.slots[0]?.schedule).toEqual(0);
+      expect(industry?.slots[0]?.start).toEqual(0);
+      expect(industry?.slots[0]?.complete).toEqual(180);
+
+      expect(industry?.slots[0]?.slot).toEqual(4);
+      expect(industry?.slots[0]?.item.slug).toEqual('textiles');
+
+      expect(industry?.slots[0]?.slot).toEqual(5);
+      expect(industry?.slots[0]?.item.slug).toEqual('animal-feed');
+      expect(industry?.slots[0]?.schedule).toEqual(0);
+      expect(industry?.slots[0]?.start).toEqual(0);
+      expect(industry?.slots[0]?.complete).toEqual(360);
+
+      expect(industry?.slots[0]?.slot).toEqual(6);
+      expect(industry?.slots[0]?.item.slug).toEqual('animal-feed');
+
+      expect(industry?.slots[0]?.slot).toEqual(7);
+      expect(industry?.slots[0]?.item.slug).toEqual('animal-feed');
+
+      expect(industry?.slots[0]?.slot).toEqual(8);
+      expect(industry?.slots[0]?.item.slug).toEqual('animal-feed');
+
+      expect(industry?.slots[0]?.slot).toEqual(9);
+      expect(industry?.slots[0]?.item.slug).toEqual('animal-feed');
+
+      expect(farmers?.slots[0]?.slot).toEqual(1);
+      expect(farmers?.slots[0]?.item.slug).toEqual('flour-bag');
+      expect(farmers?.slots[0]?.schedule).toEqual(185);
+      expect(farmers?.slots[0]?.start).toEqual(185);
+      expect(farmers?.slots[0]?.complete).toEqual(215);
+
+      expect(farmers?.slots[0]?.slot).toEqual(2);
+      expect(farmers?.slots[0]?.item.slug).toEqual('cheese');
+      expect(farmers?.slots[0]?.schedule).toEqual(365);
+      expect(farmers?.slots[0]?.start).toEqual(365);
+      expect(farmers?.slots[0]?.complete).toEqual(470);
+
+      expect(farmers?.slots[0]?.slot).toEqual(3);
+      expect(farmers?.slots[0]?.item.slug).toEqual('beef');
+      expect(farmers?.slots[0]?.schedule).toEqual(365);
+      expect(farmers?.slots[0]?.start).toEqual(470);
+      expect(farmers?.slots[0]?.complete).toEqual(620);
+
+      expect(fastFood?.slots[0]?.slot).toEqual(1);
+      expect(fastFood?.slots[0]?.item.slug).toEqual('pizza');
+      expect(fastFood?.slots[0]?.schedule).toEqual(625);
+      expect(fastFood?.slots[0]?.start).toEqual(625);
+      expect(fastFood?.slots[0]?.complete).toEqual(649);
+
+      expect(findAll.cycles.length).toEqual(4);
+
+      expect(findAll.cycles[0]?.cycle).toEqual(1);
+      expect(findAll.cycles[0]?.items.length).toEqual(9);
+      expect(findAll.cycles[0]?.startProduction).toEqual(0);
+      expect(findAll.cycles[0]?.endProduction).toEqual(360);
+
+      expect(findAll.cycles[1]?.cycle).toEqual(2);
+      expect(findAll.cycles[1]?.items.length).toEqual(1);
+      expect(findAll.cycles[1]?.startProduction).toEqual(185);
+      expect(findAll.cycles[1]?.endProduction).toEqual(215);
+
+      expect(findAll.cycles[2]?.cycle).toEqual(3);
+      expect(findAll.cycles[2]?.items.length).toEqual(2);
+      expect(findAll.cycles[2]?.startProduction).toEqual(365);
+      expect(findAll.cycles[2]?.endProduction).toEqual(620);
+
+      expect(findAll.cycles[3]?.cycle).toEqual(4);
+      expect(findAll.cycles[3]?.items.length).toEqual(1);
+      expect(findAll.cycles[3]?.startProduction).toEqual(625);
+      expect(findAll.cycles[3]?.endProduction).toEqual(649);
+
+      // const stepOne = findAll.cycles[0];
+
+      // expect(stepOne?.item.name).toEqual('Woods');
+      // expect(stepOne?.item.slug).toEqual('Woods');
+      // expect(stepOne?.quantity).toEqual(2);
+    } finally {
+      client.close();
+    }
+  });
+
+  test('workflow - shoes', async () => {
+    const client = new MongoClient(mongoStr, { useUnifiedTopology: true });
+    await client.connect();
+
+    try {
+      const itemRepository = new ItemRepository(client.db().collection('item'));
+
+      const findAll: IItemProfit = await itemRepository.createItemProfit('shoes');
+
+      const { industry, supplies, fashion } = findAll.buildings;
+
+      expect(industry?.slots.length).toEqual(6);
+      expect(supplies?.slots.length).toEqual(1);
+      expect(fashion?.slots.length).toEqual(1);
+
+      expect(findAll.cycles.length).toEqual(3);
+    } finally {
+      await client.close();
+    }
+  });
+
+  test('workflow - cream', async () => {
+    const client = new MongoClient(mongoStr, { useUnifiedTopology: true });
+    await client.connect();
+
+    try {
+      const itemRepository = new ItemRepository(client.db().collection('item'));
+
+      const findAll: IItemProfit = await itemRepository.createItemProfit('shoes');
+
+      const { industry, farmers } = findAll.buildings;
+
+      expect(industry?.slots.length).toEqual(1);
+      expect(farmers?.slots.length).toEqual(1);
+
+      expect(findAll.cycles.length).toEqual(2);
+    } finally {
+      await client.close();
+    }
+  });
+
+  test('workflow - textiles', async () => {
+    const client = new MongoClient(mongoStr, { useUnifiedTopology: true });
+    await client.connect();
+
+    try {
+      const itemRepository = new ItemRepository(client.db().collection('item'));
+
+      const findAll: IItemProfit = await itemRepository.createItemProfit('textiles');
+
+      const { industry, farmers } = findAll.buildings;
+
+      expect(industry?.slots.length).toEqual(1);
+      expect(farmers?.slots.length).toEqual(0);
+
+
+      expect(findAll.cycles.length).toEqual(2);
+    } finally {
+      await client.close();
+    }
+  });
+
+  test('workflow - burgers', async () => {
+    const client = new MongoClient(mongoStr, { useUnifiedTopology: true });
+    await client.connect();
+
+    try {
+      const itemRepository = new ItemRepository(client.db().collection('item'));
+
+      const findAll: IItemProfit = await itemRepository.createItemProfit('burgers');
+
+      expect(findAll.cycles.length).toEqual(0);
+      // expect(findAll.buildings).toHaveProperty('farmers');
+      // expect(findAll.buildings).toHaveProperty('industry');
+      const {
+        industry,
+        farmers,
+        hardware,
+        donuts,
+      } = findAll.buildings;
+      const fastFood = findAll.buildings['fast-food'];
+      const homeApp = findAll.buildings['home-appliances'];
+
+      expect(industry?.slots.length).toEqual(15);
+
+      // 1 to 5
+      expect(industry?.slots[0]?.slot).toEqual(1);
+      expect(industry?.slots[0]?.item.slug).toEqual('metal');
+
+      // 6 to 7
+      expect(industry?.slots[5]?.slot).toEqual(6);
+      expect(industry?.slots[5]?.item.slug).toEqual('woods');
+
+      // 8 to 9
+      expect(industry?.slots[0]?.slot).toEqual(8);
+      expect(industry?.slots[0]?.item.slug).toEqual('plastic');
+
+      // 10 to 11
+      expect(industry?.slots[0]?.slot).toEqual(10);
+      expect(industry?.slots[0]?.item.slug).toEqual('seeds');
+
+      // 12 to 13
+      expect(industry?.slots[0]?.slot).toEqual(12);
+      expect(industry?.slots[0]?.item.slug).toEqual('textiles');
+
+      // 14 to 15
+      expect(industry?.slots[0]?.slot).toEqual(14);
+      expect(industry?.slots[0]?.item.slug).toEqual('animal-feed');
+
+      expect(hardware?.slots.length).toEqual(1);
+
+      expect(hardware?.slots[0]?.slot).toEqual(1);
+      expect(hardware?.slots[0]?.item.slug).toEqual('cooking-utensils');
+
+      expect(farmers?.slots.length).toEqual(3);
+
+      expect(farmers?.slots[0]?.slot).toEqual(1);
+      expect(farmers?.slots[0]?.item.slug).toEqual('flour-bag');
+
+      expect(farmers?.slots[0]?.slot).toEqual(2);
+      expect(farmers?.slots[0]?.item.slug).toEqual('cream');
+
+      expect(farmers?.slots[0]?.slot).toEqual(3);
+      expect(farmers?.slots[0]?.item.slug).toEqual('beef');
+
+      expect(donuts?.slots.length).toEqual(1);
+      expect(donuts?.slots[0]?.slot).toEqual(1);
+      expect(donuts?.slots[0]?.item.slug).toEqual('bread-roll');
+
+      expect(homeApp?.slots.length).toEqual(1);
+      expect(homeApp?.slots[0]?.slot).toEqual(1);
+      expect(homeApp?.slots[0]?.item.slug).toEqual('bbg-grill');
+
+      expect(fastFood?.slots.length).toEqual(1);
+      expect(fastFood?.slots[0]?.slot).toEqual(1);
+      expect(fastFood?.slots[0]?.item.slug).toEqual('burgers');
+
+      expect(findAll.cycles.length).toEqual(7);
+
+      expect(findAll.cycles[0]?.cycle).toEqual(1);
+      expect(findAll.cycles[0]?.items.length).toEqual(11);
+      expect(findAll.cycles[0]?.startProduction).toEqual(0);
+      expect(findAll.cycles[0]?.endProduction).toEqual(9);
+
+      // cooking
+      expect(findAll.cycles[0]?.cycle).toEqual(2);
+      expect(findAll.cycles[0]?.items.length).toEqual(1);
+      expect(findAll.cycles[0]?.startProduction).toEqual(14);
+      expect(findAll.cycles[0]?.endProduction).toEqual(59);
+
+      // bgg grill
+      expect(findAll.cycles[0]?.cycle).toEqual(3);
+      expect(findAll.cycles[0]?.items.length).toEqual(1);
+      expect(findAll.cycles[0]?.startProduction).toEqual(64);
+      expect(findAll.cycles[0]?.endProduction).toEqual(229);
+
+      // farmers items 1 180
+      expect(findAll.cycles[0]?.cycle).toEqual(4);
+      expect(findAll.cycles[0]?.items.length).toEqual(1);
+      expect(findAll.cycles[0]?.startProduction).toEqual(185);
+      expect(findAll.cycles[0]?.endProduction).toEqual(215);
+
+      // farmers items 2 cream - beef
+      expect(findAll.cycles[0]?.cycle).toEqual(5);
+      expect(findAll.cycles[0]?.items.length).toEqual(2);
+      expect(findAll.cycles[0]?.startProduction).toEqual(365);
+      expect(findAll.cycles[0]?.endProduction).toEqual(590);
+
+      // donuts bread roll
+      expect(findAll.cycles[0]?.cycle).toEqual(6);
+      expect(findAll.cycles[0]?.items.length).toEqual(1);
+      expect(findAll.cycles[0]?.startProduction).toEqual(435);
+      expect(findAll.cycles[0]?.endProduction).toEqual(495);
+
+      // burgers
+      expect(findAll.cycles[0]?.cycle).toEqual(6);
+      expect(findAll.cycles[0]?.items.length).toEqual(1);
+      expect(findAll.cycles[0]?.startProduction).toEqual(595);
+      expect(findAll.cycles[0]?.endProduction).toEqual(640);
+      // const stepOne = findAll.cycles[0];
+
+      // expect(stepOne?.item.name).toEqual('Woods');
+      // expect(stepOne?.item.slug).toEqual('Woods');
+      // expect(stepOne?.quantity).toEqual(2);
+    } finally {
+      client.close();
+    }
+  });
+
   test('find all items depends by list of ids - planks', async () => {
     const client = new MongoClient(mongoStr, { useUnifiedTopology: true });
     await client.connect();
@@ -110,7 +485,8 @@ describe('Item Repository', () => {
 
     const itemRepository = new ItemRepository(client.db().collection('item'));
 
-    const findAll: IItemModel[] | null = await itemRepository.findDependsByBuilding({building: 'furniture',
+    const findAll: IItemModel[] | null = await itemRepository.findDependsByBuilding({
+      building: 'furniture',
       order: 'asc',
       orderBy: 'maxValue',
       filter: {},
