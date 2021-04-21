@@ -172,9 +172,23 @@ class ItemRepository extends Collection {
 
       return [...Array(quantity).keys()].map(() => rest);
     }).flat();
+
+    // let lastComplete = 0;
+    // let start = 0;
+
     const industrySlots: IItemProfitBuildingSlots[] = itemsExpand.map(
       (a : any, index: number) => {
         const criticalPath = ItemRepository.getItemCriticalPath(a, items);
+
+        // console.log(a.slug, criticalPath, lastComplete, start);
+
+        // if (lastComplete === 0) {
+        //   start = criticalPath;
+        //   lastComplete = start + a.productionTime;
+        // } else {
+        //   start = criticalPath + lastComplete;
+        //   lastComplete = start + a.productionTime;
+        // }
 
         const slot: IItemProfitBuildingSlots = {
           slot: (index + 1),

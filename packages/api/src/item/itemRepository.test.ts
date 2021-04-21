@@ -392,10 +392,16 @@ describe('Item Repository', () => {
       expect(donuts?.slots.length).toEqual(1);
       expect(donuts?.slots[0]?.slot).toEqual(1);
       expect(donuts?.slots[0]?.item.slug).toEqual('bread-roll');
+      expect(donuts?.slots[0]?.schedule).toEqual(425);
+      expect(donuts?.slots[0]?.start).toEqual(425);
+      expect(donuts?.slots[0]?.complete).toEqual(485);
 
       expect(homeApp?.slots.length).toEqual(1);
       expect(homeApp?.slots[0]?.slot).toEqual(1);
       expect(homeApp?.slots[0]?.item.slug).toEqual('bbg-grill');
+      // expect(homeApp?.slots[0]?.schedule).toEqual(425);
+      // expect(homeApp?.slots[0]?.start).toEqual(425);
+      // expect(donuts?.slots[0]?.complete).toEqual(485);
 
       expect(fastFood?.slots.length).toEqual(1);
       expect(fastFood?.slots[0]?.slot).toEqual(1);
