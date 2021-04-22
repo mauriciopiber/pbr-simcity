@@ -174,32 +174,23 @@ class ItemRepository extends Collection {
     }).flat();
 
     let lastComplete = 0;
+    let lastCritical = 0;
 
     const industrySlots: IItemProfitBuildingSlots[] = itemsExpand.map(
       (a : any, index: number) => {
         const criticalPath = ItemRepository.getItemCriticalPath(a, items);
 
-        const complete = (
-          ((criticalPath + a.productionTime) === lastComplete)
-            ? lastComplete + a.productionTime
-            : criticalPath + a.productionTime
-        );
-
         const start = (
-          ((criticalPath + a.productionTime) === lastComplete)
+          (lastCritical === criticalPath)
             ? (lastComplete)
             : criticalPath
         );
 
-        // console.log(a.slug, criticalPath, lastComplete, start);
-
-        // if (lastComplete === 0) {
-        //   start = criticalPath;
-        //   lastComplete = start + a.productionTime;
-        // } else {
-        //   start = criticalPath + lastComplete;
-        //   lastComplete = start + a.productionTime;
-        // }
+        const complete = (
+          (lastCritical === criticalPath)
+            ? start + a.productionTime
+            : criticalPath + a.productionTime
+        );
 
         const slot: IItemProfitBuildingSlots = {
           slot: (index + 1),
@@ -210,7 +201,8 @@ class ItemRepository extends Collection {
         };
 
         lastComplete = complete;
-        console.log(a.slug, start, lastComplete);
+        lastCritical = criticalPath;
+        // console.log(a.slug, start, lastComplete);
         return slot;
       },
     );
