@@ -16,13 +16,16 @@ import {
 } from '@pbr-simcity/types/types';
 import Collection from '@pbr-simcity/api/src/collection';
 
+
 class ItemRepository extends Collection {
   async getAll() {
     const docs = this.collection.find();
     return docs.toArray();
   }
 
-  async findDependsItems(depends: IItemDependency[]): Promise<IItemProfitDependency[]> {
+  async findDependsItems(
+    depends: IItemDependency[],
+  ): Promise<IItemProfitDependency[]> {
     const getDependsItems = depends.map(
       async (a: IItemDependency): Promise<IItemProfitDependency> => {
         const itemDepends = await this.findById(a.item);
@@ -37,16 +40,22 @@ class ItemRepository extends Collection {
       },
     );
 
-    const dependsItems: IItemProfitDependency[] = await Promise.all(getDependsItems);
+    const dependsItems: IItemProfitDependency[] = await Promise.all(
+      getDependsItems,
+    );
     return dependsItems;
   }
 
-  async recursiveDependency(depends: IItemDependency[]): Promise<IItemProfitDependency[]> {
-    const dependsItems: IItemProfitDependency[] = await this.findDependsItems(depends);
+  async recursiveDependency(
+    depends: IItemDependency[],
+  ): Promise<IItemProfitDependency[]> {
+    const dependsItems: IItemProfitDependency[] = await this.findDependsItems(
+      depends,
+    );
 
-    const dependsInner: IItemDependency[] = dependsItems.map(
-      (a: IItemModel) => a.depends,
-    ).flat();
+    const dependsInner: IItemDependency[] = dependsItems
+      .map((a: IItemModel) => a.depends)
+      .flat();
 
     if (dependsInner.length <= 0) {
       return dependsItems;
@@ -54,13 +63,12 @@ class ItemRepository extends Collection {
 
     const moreItems = await this.recursiveDependency(dependsInner);
 
-    return [
-      ...dependsItems,
-      ...moreItems,
-    ];
+    return [...dependsItems, ...moreItems];
   }
 
-  async flatItemsFromDependency(rootItem: string): Promise<IItemProfitDependency[]> {
+  async flatItemsFromDependency(
+    rootItem: string,
+  ): Promise<IItemProfitDependency[]> {
     const itemModel: IItemModel | null = await this.findOneBySlug(rootItem);
 
     if (!itemModel) {
@@ -69,19 +77,24 @@ class ItemRepository extends Collection {
 
     const { depends } = itemModel;
 
-    const dependsItems: IItemProfitDependency[] = await this.recursiveDependency(depends);
+    const dependsItems: IItemProfitDependency[] = await this.recursiveDependency(
+      depends,
+    );
 
-    const groupItems = dependsItems.reduce((res: any, value: IItemProfitDependency) => {
-      if (res[value.slug]) {
-        res[value.slug].quantity += value.quantity;
+    const groupItems = dependsItems.reduce(
+      (res: any, value: IItemProfitDependency) => {
+        if (res[value.slug]) {
+          res[value.slug].quantity += value.quantity;
+          return res;
+        }
+
+        res[value.slug] = {
+          ...value,
+        };
         return res;
-      }
-
-      res[value.slug] = {
-        ...value,
-      };
-      return res;
-    }, {});
+      },
+      {},
+    );
 
     const groupItemsValues: IItemProfitDependency[] = Object.values(groupItems);
 
@@ -93,12 +106,14 @@ class ItemRepository extends Collection {
       ...groupItemsValues,
     ];
 
-    allItems.sort((a: IItemProfitDependency, b: IItemProfitDependency): number => {
-      if (a.level > b.level) {
-        return 1;
-      }
-      return -1;
-    });
+    allItems.sort(
+      (a: IItemProfitDependency, b: IItemProfitDependency): number => {
+        if (a.level > b.level) {
+          return 1;
+        }
+        return -1;
+      },
+    );
 
     return allItems;
   }
@@ -111,23 +126,22 @@ class ItemRepository extends Collection {
       (a: IItemProfitDependency) => `${a.building}` === `${buildingId}`,
     );
 
-    const itemsExpandIndustry = itemsDependsIndustry.map((a: IItemDependency) => {
-      const {
-        quantity,
-        ...rest
-      } = a;
+    const itemsExpandIndustry = itemsDependsIndustry
+      .map((a: IItemDependency) => {
+        const { quantity, ...rest } = a;
 
-      if (quantity === 1) {
-        return a;
-      }
+        if (quantity === 1) {
+          return a;
+        }
 
-      return [...Array(quantity).keys()].map(() => rest);
-    }).flat();
+        return [...Array(quantity).keys()].map(() => rest);
+      })
+      .flat();
 
     const industrySlots: IItemProfitBuildingSlots[] = itemsExpandIndustry.map(
-      (a : any, index: number) => {
+      (a: any, index: number) => {
         const slot: IItemProfitBuildingSlots = {
-          slot: (index + 1),
+          slot: index + 1,
           schedule: 0,
           start: 0,
           complete: a.productionTime,
@@ -142,14 +156,48 @@ class ItemRepository extends Collection {
     return industryBuilding;
   }
 
-  static getItemCriticalPath(item: IItemModel, items: IItemProfitDependency[]): number {
+  static getItemCriticalPath(
+    item: IItemProfitDependency,
+    items: IItemProfitDependency[],
+    // industryId = '6067df64e0fc61d7365eb582',
+  ): number {
+    console.log(item);
     const rootDepends = item.depends;
 
-    const depends = rootDepends.map((a: IItemDependency) => {
-      const itemDepends = items.filter((b: IItemModel) => `${b._id}` === `${a.item}`);
-      return itemDepends;
-    }).flat().map((a: IItemModel) => a.productionTime);
-    return 5 + Math.max(...depends);
+    const dependsLvl1 = rootDepends
+      .map((a: IItemDependency) => {
+        const itemDepends = items.filter(
+          (b: IItemModel) => `${b._id}` === `${a.item}`,
+        );
+        return itemDepends;
+      }).flat();
+
+    const maxLvl1 = dependsLvl1.reduce(
+      (prev, current) => ((prev.productionTime > current.productionTime) ? prev : current)
+    );
+
+    // console.log(maxLvl1);
+    const dependsLvl1Value = maxLvl1.productionTime;
+
+    if (maxLvl1.depends.length <= 0) {
+      return 5 + dependsLvl1Value;
+    }
+
+    const dependsLvl2 = maxLvl1.depends
+      .map((a: IItemDependency) => {
+        const itemDepends = items.filter(
+          (b: IItemModel) => `${b._id}` === `${a.item}`,
+        );
+        return itemDepends;
+      }).flat();
+
+    const maxLvl2 = dependsLvl2.reduce(
+      (prev, current) => ((prev.productionTime > current.productionTime) ? prev : current)
+    );
+
+    const dependsLvl2Value = maxLvl2.productionTime;
+
+    return 5 + dependsLvl1Value + dependsLvl2Value;
   }
 
   static createSequentialBuildingProfitSlots(
@@ -160,40 +208,35 @@ class ItemRepository extends Collection {
       (a: IItemProfitDependency) => `${a.building}` === `${buildingId}`,
     );
 
-    const itemsExpand = itemsDepends.map((a: IItemDependency) => {
-      const {
-        quantity,
-        ...rest
-      } = a;
+    const itemsExpand = itemsDepends
+      .map((a: IItemDependency) => {
+        const { quantity, ...rest } = a;
 
-      if (quantity === 1) {
-        return a;
-      }
+        if (quantity === 1) {
+          return a;
+        }
 
-      return [...Array(quantity).keys()].map(() => rest);
-    }).flat();
+        return [...Array(quantity).keys()].map(() => rest);
+      })
+      .flat();
 
     let lastComplete = 0;
     let lastCritical = 0;
 
+    // console.log(JSON.stringify(items));
     const industrySlots: IItemProfitBuildingSlots[] = itemsExpand.map(
-      (a : any, index: number) => {
+      (a: any, index: number) => {
+        // console.log(JSON.stringify(a));
         const criticalPath = ItemRepository.getItemCriticalPath(a, items);
 
-        const start = (
-          (lastCritical === criticalPath)
-            ? (lastComplete)
-            : criticalPath
-        );
+        const start = lastCritical === criticalPath ? lastComplete : criticalPath;
 
-        const complete = (
-          (lastCritical === criticalPath)
-            ? start + a.productionTime
-            : criticalPath + a.productionTime
-        );
+        const complete = lastCritical === criticalPath
+          ? start + a.productionTime
+          : criticalPath + a.productionTime;
 
         const slot: IItemProfitBuildingSlots = {
-          slot: (index + 1),
+          slot: index + 1,
           schedule: criticalPath,
           start,
           complete,
@@ -219,19 +262,24 @@ class ItemRepository extends Collection {
 
     const buildings = await this.findBuildings();
 
-    const buildingsProfit = buildings.reduce((a: any, b: IBuildingModel) => ({
-      ...a,
-      [b.slug]: {
-        _id: b._id,
-        name: b.name,
-      },
-    }), {});
+    const buildingsProfit = buildings.reduce(
+      (a: any, b: IBuildingModel) => ({
+        ...a,
+        [b.slug]: {
+          _id: b._id,
+          name: b.name,
+        },
+      }),
+      {},
+    );
 
-    const items: IItemProfitDependency[] = await this.flatItemsFromDependency(item);
+    const items: IItemProfitDependency[] = await this.flatItemsFromDependency(
+      item,
+    );
 
     // prepare buildings - industry
 
-    const industryBuilding: IItemProfitBuilding = ItemRepository
+    const industryBuilding: IItemProfitBuilding = ItemRepository //
       .createParallelBuildingProfitSlots(
         items,
         buildingsProfit.industry._id,
@@ -319,7 +367,7 @@ class ItemRepository extends Collection {
       supplies: suppliesBuilding,
     };
 
-    const itemProfit : IItemProfit = {
+    const itemProfit: IItemProfit = {
       cycles: [],
       buildings: profitBuildings,
     };
@@ -364,14 +412,9 @@ class ItemRepository extends Collection {
   }
 
   async findDependsByBuilding(args: any): Promise<IItemModel[]> {
-    const {
-      building,
-    } = args;
+    const { building } = args;
 
-    const {
-      match,
-      sort,
-    }: any = await ItemRepository.createMatchFilter(args);
+    const { match, sort }: any = await ItemRepository.createMatchFilter(args);
 
     const docs = this.collection.aggregate([
       {
@@ -447,14 +490,9 @@ class ItemRepository extends Collection {
   }
 
   async findUsedByBuilding(args: any): Promise<IItemModel[]> {
-    const {
-      match,
-      sort,
-    }: any = await ItemRepository.createMatchFilter(args);
+    const { match, sort }: any = await ItemRepository.createMatchFilter(args);
 
-    const {
-      building,
-    } = args;
+    const { building } = args;
 
     const docs = this.collection.aggregate([
       { $unwind: { path: '$depends', preserveNullAndEmptyArrays: true } },
@@ -609,10 +647,7 @@ class ItemRepository extends Collection {
   }
 
   async findManyByFilter(args: IItemArgs): Promise<IItemModel[]> {
-    const {
-      match,
-      sort,
-    }: any = await ItemRepository.createMatchFilter(args);
+    const { match, sort }: any = await ItemRepository.createMatchFilter(args);
 
     const docs = await this.collection
       .aggregate([

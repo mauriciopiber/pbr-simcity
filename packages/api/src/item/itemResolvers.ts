@@ -17,20 +17,32 @@ const resolvers = {
       const { item } = dataSources;
       return item.findManyByFilter(args);
     },
-    async itemsByBuilding(_: any, args: IItemArgs, context: any): Promise<IItem[]> {
+    async itemsByBuilding(
+      _: any,
+      args: IItemArgs,
+      context: any,
+    ): Promise<IItem[]> {
       const { dataSources } = context;
       const { item } = dataSources;
       const data = await item.findManyByBuildingSlug(args);
       return data;
     },
-    async itemsDependsByBuilding(_: any, args: IItemArgs, context: any): Promise<IItem[]> {
+    async itemsDependsByBuilding(
+      _: any,
+      args: IItemArgs,
+      context: any,
+    ): Promise<IItem[]> {
       const { dataSources } = context;
       const { item } = dataSources;
       const data = await item.findDependsByBuilding(args);
       console.log(data);
       return data;
     },
-    async itemsUsedByBuilding(_: any, args: IItemArgs, context: any): Promise<IItem[]> {
+    async itemsUsedByBuilding(
+      _: any,
+      args: IItemArgs,
+      context: any,
+    ): Promise<IItem[]> {
       const { dataSources } = context;
       const { item } = dataSources;
       // console.log(args);

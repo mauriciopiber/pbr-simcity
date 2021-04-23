@@ -1,9 +1,374 @@
 import { MongoClient /* ObjectID */ } from 'mongodb';
-import { IItemModel, IItemProfit, IItemProfitDependency } from '@pbr-simcity/types/types';
+import {
+  IItemModel,
+  IItemProfit,
+  IItemProfitDependency,
+} from '@pbr-simcity/types/types';
 
 import ItemRepository from '@pbr-simcity/api/src/item/itemRepository';
 
 const mongoStr = 'mongodb://localhost:27017/simcity';
+
+describe('Critical Path', () => {
+  const itemsCriticalPath = [
+    {
+      _id: '6067df64e0fc61d7365eb58c',
+      name: 'Metal',
+      level: 1,
+      building: '6067df64e0fc61d7365eb582',
+      slug: 'metal',
+      productionTime: 1,
+      maxValue: 10,
+      billTime: 0,
+      billCost: 0,
+      profitOwnProduction: 10,
+      profitOwnByMinute: 10,
+      depends: [],
+      profitOwnByHour: 600,
+      quantity: 5,
+    },
+    {
+      _id: '6067df64e0fc61d7365eb58d',
+      name: 'Wood',
+      level: 2,
+      building: '6067df64e0fc61d7365eb582',
+      slug: 'wood',
+      productionTime: 3,
+      maxValue: 20,
+      billTime: 0,
+      billCost: 0,
+      profitOwnProduction: 20,
+      profitOwnByMinute: 6.666666666666667,
+      depends: [],
+      profitOwnByHour: 400,
+      quantity: 2,
+    },
+    {
+      _id: '6067df64e0fc61d7365eb58e',
+      name: 'Plastic',
+      level: 5,
+      building: '6067df64e0fc61d7365eb582',
+      slug: 'plastic',
+      productionTime: 9,
+      maxValue: 25,
+      billTime: 0,
+      billCost: 0,
+      profitOwnProduction: 25,
+      profitOwnByMinute: 2.7777777777777777,
+      depends: [],
+      profitOwnByHour: 166.66666666666666,
+      quantity: 2,
+    },
+    {
+      _id: '6067df64e0fc61d7365eb58f',
+      name: 'Seeds',
+      level: 7,
+      building: '6067df64e0fc61d7365eb582',
+      slug: 'seeds',
+      productionTime: 20,
+      maxValue: 30,
+      billTime: 0,
+      billCost: 0,
+      profitOwnProduction: 30,
+      profitOwnByMinute: 1.5,
+      depends: [],
+      profitOwnByHour: 90,
+      quantity: 2,
+    },
+    {
+      _id: '6067df64e0fc61d7365eb592',
+      name: 'Textiles',
+      level: 15,
+      building: '6067df64e0fc61d7365eb582',
+      slug: 'textiles',
+      productionTime: 180,
+      maxValue: 90,
+      billTime: 0,
+      billCost: 0,
+      profitOwnProduction: 90,
+      profitOwnByMinute: 0.5,
+      depends: [],
+      profitOwnByHour: 30,
+      quantity: 2,
+    },
+    {
+      _id: '6067df64e0fc61d7365eb5a0',
+      name: 'Cooking Utensils',
+      level: 17,
+      building: '6067df64e0fc61d7365eb584',
+      slug: 'cooking-utensils',
+      productionTime: 45,
+      maxValue: 250,
+      billTime: 9,
+      billCost: 110,
+      profitOwnProduction: 140,
+      profitOwnByMinute: 3.111111111111111,
+      depends: [
+        { item: '6067df64e0fc61d7365eb58d', quantity: 2 },
+        { item: '6067df64e0fc61d7365eb58c', quantity: 2 },
+        { item: '6067df64e0fc61d7365eb58e', quantity: 2 },
+      ],
+      profitOwnByHour: 186.66666666666666,
+      quantity: 1,
+    },
+    {
+      _id: '6067df64e0fc61d7365eb5aa',
+      name: 'Flour Bag',
+      level: 17,
+      building: '6067df64e0fc61d7365eb585',
+      slug: 'flour-bag',
+      productionTime: 30,
+      maxValue: 570,
+      billTime: 180,
+      billCost: 240,
+      profitOwnProduction: 330,
+      profitOwnByMinute: 11,
+      depends: [
+        { item: '6067df64e0fc61d7365eb592', quantity: 2 },
+        { item: '6067df64e0fc61d7365eb58f', quantity: 2 },
+      ],
+      profitOwnByHour: 660,
+      quantity: 2,
+    },
+    {
+      _id: '6067df64e0fc61d7365eb5ac',
+      name: 'Cream',
+      level: 23,
+      building: '6067df64e0fc61d7365eb585',
+      slug: 'cream',
+      productionTime: 75,
+      maxValue: 440,
+      billTime: 360,
+      billCost: 140,
+      profitOwnProduction: 300,
+      profitOwnByMinute: 4,
+      depends: [{ item: '6067df64e0fc61d7365eb595', quantity: 1 }],
+      profitOwnByHour: 240,
+      quantity: 1,
+    },
+    {
+      _id: '6067df64e0fc61d7365eb595',
+      name: 'Animal Feed',
+      level: 23,
+      building: '6067df64e0fc61d7365eb582',
+      slug: 'animal-feed',
+      productionTime: 360,
+      maxValue: 140,
+      billTime: 0,
+      billCost: 0,
+      profitOwnProduction: 140,
+      profitOwnByMinute: 0.3888888888888889,
+      depends: [],
+      profitOwnByHour: 23.333333333333332,
+      quantity: 4,
+    },
+    {
+      _id: '6067df64e0fc61d7365eb5b7',
+      name: 'Bread Roll',
+      level: 24,
+      building: '6067df64e0fc61d7365eb588',
+      slug: 'bread-roll',
+      productionTime: 60,
+      maxValue: 1840,
+      billTime: 435,
+      billCost: 1580,
+      profitOwnProduction: 260,
+      profitOwnByMinute: 4.333333333333333,
+      depends: [
+        { item: '6067df64e0fc61d7365eb5ac', quantity: 1 },
+        { item: '6067df64e0fc61d7365eb5aa', quantity: 2 },
+      ],
+      profitOwnByHour: 260,
+      quantity: 1,
+    },
+    {
+      _id: '6067df64e0fc61d7365eb5af',
+      name: 'Beef',
+      level: 27,
+      building: '6067df64e0fc61d7365eb585',
+      slug: 'beef',
+      productionTime: 150,
+      maxValue: 860,
+      billTime: 360,
+      billCost: 420,
+      profitOwnProduction: 440,
+      profitOwnByMinute: 2.933333333333333,
+      depends: [{ item: '6067df64e0fc61d7365eb595', quantity: 3 }],
+      profitOwnByHour: 176,
+      quantity: 1,
+    },
+    {
+      _id: '6067df64e0fc61d7365eb5c6',
+      name: 'BBG Grill',
+      level: 29,
+      building: '6067df64e0fc61d7365eb58b',
+      slug: 'bbg-grill',
+      productionTime: 165,
+      maxValue: 530,
+      billTime: 54,
+      billCost: 280,
+      profitOwnProduction: 250,
+      profitOwnByMinute: 1.5151515151515151,
+      depends: [
+        { item: '6067df64e0fc61d7365eb58c', quantity: 3 },
+        { item: '6067df64e0fc61d7365eb5a0', quantity: 1 },
+      ],
+      profitOwnByHour: 90.9090909090909,
+      quantity: 1,
+    },
+    {
+      _id: '6067df64e0fc61d7365eb5c2',
+      name: 'Burgers',
+      level: 31,
+      building: '6067df64e0fc61d7365eb58a',
+      slug: 'burgers',
+      productionTime: 35,
+      maxValue: 3620,
+      billTime: 510,
+      billCost: 3230,
+      profitOwnProduction: 390,
+      profitOwnByMinute: 11.142857142857142,
+      depends: [
+        { item: '6067df64e0fc61d7365eb5af', quantity: 1 },
+        { item: '6067df64e0fc61d7365eb5b7', quantity: 1 },
+        { item: '6067df64e0fc61d7365eb5c6', quantity: 1 },
+      ],
+      profitOwnByHour: 668.5714285714286,
+      quantity: 1,
+    },
+  ];
+
+  const burgers = {
+    _id: '6067df64e0fc61d7365eb5c2',
+    name: 'Burgers',
+    level: 31,
+    building: '6067df64e0fc61d7365eb58a',
+    slug: 'burgers',
+    productionTime: 35,
+    maxValue: 3620,
+    billTime: 510,
+    billCost: 3230,
+    profitOwnProduction: 390,
+    profitOwnByMinute: 11.142857142857142,
+    depends: [
+      { item: '6067df64e0fc61d7365eb5af', quantity: 1 },
+      { item: '6067df64e0fc61d7365eb5b7', quantity: 1 },
+      { item: '6067df64e0fc61d7365eb5c6', quantity: 1 },
+    ],
+    profitOwnByHour: 668.5714285714286,
+    quantity: 1,
+  };
+
+  const breadRoll = {
+    _id: '6067df64e0fc61d7365eb5b7',
+    name: 'Bread Roll',
+    level: 24,
+    building: '6067df64e0fc61d7365eb588',
+    slug: 'bread-roll',
+    productionTime: 60,
+    maxValue: 1840,
+    billTime: 435,
+    billCost: 1580,
+    profitOwnProduction: 260,
+    profitOwnByMinute: 4.333333333333333,
+    depends: [
+      { item: '6067df64e0fc61d7365eb5ac', quantity: 1 },
+      { item: '6067df64e0fc61d7365eb5aa', quantity: 2 },
+    ],
+    usedIn: [],
+    profitOwnByHour: 260,
+    // quantity: 1,
+  };
+
+  const bbgGrill = {
+    _id: '6067df64e0fc61d7365eb5c6',
+    name: 'BBG Grill',
+    level: 29,
+    building: '6067df64e0fc61d7365eb58b',
+    slug: 'bbg-grill',
+    productionTime: 165,
+    maxValue: 530,
+    billTime: 54,
+    billCost: 280,
+    profitOwnProduction: 250,
+    profitOwnByMinute: 1.5151515151515151,
+    depends: [
+      { item: '6067df64e0fc61d7365eb58c', quantity: 3 },
+      { item: '6067df64e0fc61d7365eb5a0', quantity: 1 },
+    ],
+    profitOwnByHour: 90.9090909090909,
+    quantity: 1,
+  };
+
+  const beef = {
+    _id: '6067df64e0fc61d7365eb5af',
+    name: 'Beef',
+    level: 27,
+    building: '6067df64e0fc61d7365eb585',
+    slug: 'beef',
+    productionTime: 150,
+    maxValue: 860,
+    billTime: 360,
+    billCost: 420,
+    profitOwnProduction: 440,
+    profitOwnByMinute: 2.933333333333333,
+    depends: [{ item: '6067df64e0fc61d7365eb595', quantity: 3 }],
+    profitOwnByHour: 176,
+    quantity: 1,
+  };
+
+  test('critical path - bread roll', async () => {
+    const client = new MongoClient(mongoStr, { useUnifiedTopology: true });
+    await client.connect();
+
+    try {
+      /** @ts-ignore */
+      const criticalPath = ItemRepository.getItemCriticalPath(breadRoll, itemsCriticalPath);
+      expect(criticalPath).toEqual(440);
+    } finally {
+      await client.close();
+    }
+  });
+
+  test('critical path - burgers', async () => {
+    const client = new MongoClient(mongoStr, { useUnifiedTopology: true });
+    await client.connect();
+
+    try {
+      /** @ts-ignore */
+      const criticalPath = ItemRepository.getItemCriticalPath(burgers, itemsCriticalPath);
+      expect(criticalPath).toEqual(555);
+    } finally {
+      await client.close();
+    }
+  });
+
+  test('critical path - beefs', async () => {
+    const client = new MongoClient(mongoStr, { useUnifiedTopology: true });
+    await client.connect();
+
+    try {
+      /** @ts-ignore */
+      const criticalPath = ItemRepository.getItemCriticalPath(beef, itemsCriticalPath);
+      expect(criticalPath).toEqual(365);
+    } finally {
+      await client.close();
+    }
+  });
+
+  test('critical path - bbg grill', async () => {
+    const client = new MongoClient(mongoStr, { useUnifiedTopology: true });
+    await client.connect();
+
+    try {
+      /** @ts-ignore */
+      const criticalPath = ItemRepository.getItemCriticalPath(bbgGrill, itemsCriticalPath);
+      expect(criticalPath).toEqual(59);
+    } finally {
+      await client.close();
+    }
+  });
+});
 
 describe('Item Repository', () => {
   test('workflow - planks', async () => {
@@ -13,7 +378,9 @@ describe('Item Repository', () => {
     try {
       const itemRepository = new ItemRepository(client.db().collection('item'));
 
-      const findAll: IItemProfit = await itemRepository.createItemProfit('planks');
+      const findAll: IItemProfit = await itemRepository.createItemProfit(
+        'planks',
+      );
 
       expect(findAll.cycles.length).toEqual(0);
       expect(findAll.buildings).toHaveProperty('industry');
@@ -71,7 +438,9 @@ describe('Item Repository', () => {
     try {
       const itemRepository = new ItemRepository(client.db().collection('item'));
 
-      const findAll: IItemProfit = await itemRepository.createItemProfit('pizza');
+      const findAll: IItemProfit = await itemRepository.createItemProfit(
+        'pizza',
+      );
 
       expect(findAll.cycles.length).toEqual(0);
 
@@ -185,7 +554,9 @@ describe('Item Repository', () => {
 
     try {
       const itemRepository = new ItemRepository(client.db().collection('item'));
-      const findAll: IItemModel[] = await itemRepository.flatItemsFromDependency('burgers');
+      const findAll: IItemModel[] = await itemRepository.flatItemsFromDependency(
+        'burgers',
+      );
 
       expect(findAll.length).toEqual(13);
     } finally {
@@ -199,7 +570,9 @@ describe('Item Repository', () => {
 
     try {
       const itemRepository = new ItemRepository(client.db().collection('item'));
-      const findAll: IItemProfitDependency[] = await itemRepository.flatItemsFromDependency('lemonade');
+      const findAll: IItemProfitDependency[] = await itemRepository.flatItemsFromDependency(
+        'lemonade',
+      );
 
       expect(findAll.length).toEqual(10);
 
@@ -216,7 +589,9 @@ describe('Item Repository', () => {
 
     try {
       const itemRepository = new ItemRepository(client.db().collection('item'));
-      const findAll: IItemModel[] = await itemRepository.flatItemsFromDependency('textiles');
+      const findAll: IItemModel[] = await itemRepository.flatItemsFromDependency(
+        'textiles',
+      );
 
       expect(findAll.length).toEqual(1);
     } finally {
@@ -230,7 +605,9 @@ describe('Item Repository', () => {
 
     try {
       const itemRepository = new ItemRepository(client.db().collection('item'));
-      const findAll: IItemModel[] = await itemRepository.flatItemsFromDependency('shoes');
+      const findAll: IItemModel[] = await itemRepository.flatItemsFromDependency(
+        'shoes',
+      );
 
       expect(findAll.length).toEqual(5);
     } finally {
@@ -245,7 +622,9 @@ describe('Item Repository', () => {
     try {
       const itemRepository = new ItemRepository(client.db().collection('item'));
 
-      const findAll: IItemProfit = await itemRepository.createItemProfit('shoes');
+      const findAll: IItemProfit = await itemRepository.createItemProfit(
+        'shoes',
+      );
 
       const { industry, supplies, fashion } = findAll.buildings;
 
@@ -266,7 +645,9 @@ describe('Item Repository', () => {
     try {
       const itemRepository = new ItemRepository(client.db().collection('item'));
 
-      const findAll: IItemProfit = await itemRepository.createItemProfit('cream');
+      const findAll: IItemProfit = await itemRepository.createItemProfit(
+        'cream',
+      );
 
       const { industry, farmers } = findAll.buildings;
 
@@ -286,7 +667,9 @@ describe('Item Repository', () => {
     try {
       const itemRepository = new ItemRepository(client.db().collection('item'));
 
-      const findAll: IItemProfit = await itemRepository.createItemProfit('textiles');
+      const findAll: IItemProfit = await itemRepository.createItemProfit(
+        'textiles',
+      );
 
       const { industry, farmers } = findAll.buildings;
 
@@ -312,17 +695,14 @@ describe('Item Repository', () => {
     try {
       const itemRepository = new ItemRepository(client.db().collection('item'));
 
-      const findAll: IItemProfit = await itemRepository.createItemProfit('burgers');
+      const findAll: IItemProfit = await itemRepository.createItemProfit(
+        'burgers',
+      );
 
       expect(findAll.cycles.length).toEqual(0);
       // expect(findAll.buildings).toHaveProperty('farmers');
       // expect(findAll.buildings).toHaveProperty('industry');
-      const {
-        industry,
-        farmers,
-        hardware,
-        donuts,
-      } = findAll.buildings;
+      const { industry, farmers, hardware, donuts } = findAll.buildings;
       const fastFood = findAll.buildings['fast-food'];
       const homeApp = findAll.buildings['home-appliances'];
 
@@ -558,12 +938,15 @@ describe('Item Repository', () => {
 
     const itemRepository = new ItemRepository(client.db().collection('item'));
 
-    const findAll: IItemModel[] | null = await itemRepository.findDependsByBuilding({
-      building: 'furniture',
-      order: 'asc',
-      orderBy: 'maxValue',
-      filter: {},
-    });
+    const findAll:
+      | IItemModel[]
+      | null = await itemRepository.findDependsByBuilding({
+        building: 'furniture',
+        order: 'asc',
+        orderBy: 'maxValue',
+        filter: {},
+      },
+    );
 
     if (!findAll || findAll.length < 1) {
       throw new Error('Missing Planks by ID');
@@ -685,7 +1068,9 @@ describe('Item Repository', () => {
     try {
       const itemRepository = new ItemRepository(client.db().collection('item'));
 
-      const findAll: IItemModel[] | null = await itemRepository.findUsedByBuilding({
+      const findAll:
+        | IItemModel[]
+        | null = await itemRepository.findUsedByBuilding({
         building: 'farmers',
         order: 'asc',
         orderBy: 'maxValue',
@@ -708,9 +1093,11 @@ describe('Item Repository', () => {
 
     const itemRepository = new ItemRepository(client.db().collection('item'));
 
-    const findAll: IItemModel[] = await itemRepository.findManyByFilter(
-      { filter: { level: 5 }, order: 'asc', orderBy: 'maxValue' },
-    );
+    const findAll: IItemModel[] = await itemRepository.findManyByFilter({
+      filter: { level: 5 },
+      order: 'asc',
+      orderBy: 'maxValue',
+    });
 
     if (!findAll || findAll.length < 1) {
       throw new Error('Missing Planks by ID');

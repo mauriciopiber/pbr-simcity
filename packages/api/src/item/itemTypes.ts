@@ -36,9 +36,24 @@ const typeDefs = gql`
 
   type Query {
     items(order: String, orderBy: String, filter: ItemFilter): [Item]
-    itemsByBuilding(building: String!, order: String, orderBy: String, filter: ItemFilter): [Item]
-    itemsDependsByBuilding(building: String!, order: String, orderBy: String, filter: ItemFilter): [Item]
-    itemsUsedByBuilding(building: String!, order: String, orderBy: String, filter: ItemFilter): [Item]
+    itemsByBuilding(
+      building: String!
+      order: String
+      orderBy: String
+      filter: ItemFilter
+    ): [Item]
+    itemsDependsByBuilding(
+      building: String!
+      order: String
+      orderBy: String
+      filter: ItemFilter
+    ): [Item]
+    itemsUsedByBuilding(
+      building: String!
+      order: String
+      orderBy: String
+      filter: ItemFilter
+    ): [Item]
     item(_id: ObjectID, slug: String): Item!
   }
 `;
