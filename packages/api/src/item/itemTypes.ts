@@ -6,13 +6,6 @@ const typeDefs = gql`
     quantity: PositiveInt!
   }
 
-  type ItemProfit {
-    cost: Int!
-    profit: Int!
-    profitByMinute: PositiveFloat!
-    profitByHour: PositiveFloat!
-  }
-
   type Item {
     _id: ObjectID!
     name: String!
@@ -24,7 +17,6 @@ const typeDefs = gql`
     profitOwnProduction: Int!
     profitOwnByMinute: Float!
     profitOwnByHour: Float!
-    profit: ItemProfit!
     slug: String!
     usedIn: [Item]
     depends: [ItemDepends]

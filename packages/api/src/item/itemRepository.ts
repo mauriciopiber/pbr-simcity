@@ -2,7 +2,6 @@
 import { ObjectId } from 'mongodb';
 import {
   IItemDependency,
-  IItemDependencyValues,
   IItemArgs,
   IItemProfit,
   IItemModel,
@@ -161,7 +160,6 @@ class ItemRepository extends Collection {
     items: IItemProfitDependency[],
     // industryId = '6067df64e0fc61d7365eb582',
   ): number {
-    console.log(item);
     const rootDepends = item.depends;
 
     const dependsLvl1 = rootDepends
@@ -176,7 +174,6 @@ class ItemRepository extends Collection {
       (prev, current) => ((prev.productionTime > current.productionTime) ? prev : current)
     );
 
-    // console.log(maxLvl1);
     const dependsLvl1Value = maxLvl1.productionTime;
 
     if (maxLvl1.depends.length <= 0) {
@@ -223,10 +220,8 @@ class ItemRepository extends Collection {
     let lastComplete = 0;
     let lastCritical = 0;
 
-    // console.log(JSON.stringify(items));
     const industrySlots: IItemProfitBuildingSlots[] = itemsExpand.map(
       (a: any, index: number) => {
-        // console.log(JSON.stringify(a));
         const criticalPath = ItemRepository.getItemCriticalPath(a, items);
 
         const start = lastCritical === criticalPath ? lastComplete : criticalPath;
@@ -245,7 +240,6 @@ class ItemRepository extends Collection {
 
         lastComplete = complete;
         lastCritical = criticalPath;
-        // console.log(a.slug, start, lastComplete);
         return slot;
       },
     );
@@ -1013,32 +1007,6 @@ class ItemRepository extends Collection {
 
     return docs.toArray();
     // return [];
-  }
-
-  async findItemDependencyCost(
-    items: IItemDependency[],
-  ): Promise<IItemDependencyValues> {
-    const itemsPromise = items.map(async (p) => ({
-      item: await this.findById(p.item),
-      quantity: p.quantity,
-    }));
-
-    const itemsDeps = await Promise.all(itemsPromise);
-
-    const cost = itemsDeps.reduce((a: number, b: IItemDependency): number => {
-      const maxValue = b?.item?.maxValue || 0;
-      return a + maxValue * b.quantity;
-    }, 0);
-
-    const time = itemsDeps.reduce((a: number, b: IItemDependency): number => {
-      const maxTime = b?.item?.productionTime || 0;
-      return a + maxTime;
-    }, 0);
-
-    return {
-      cost,
-      time,
-    };
   }
 }
 

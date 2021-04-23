@@ -22,10 +22,6 @@ export interface IItem {
   depends: IItemDependency[];
 }
 
-export interface IItemDependencyValues {
-  cost: number;
-  time: number;
-}
 
 export interface ItemBuilding extends IItem {
   productionPlace?: IBuilding;
