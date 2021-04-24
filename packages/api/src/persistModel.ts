@@ -1,10 +1,18 @@
-import { IItem, IBuilding } from '@pbr-simcity/types/types';
+import {
+  IItemStatic,
+  IBuildingStatic,
+  IBuildingDoc,
+  IItemStaticWithoutDependency,
+  IItemDependencyStatic,
+  IItemDocDependency,
+  IItemDoc,
+} from '@pbr-simcity/types/types';
 import { MongoClient } from 'mongodb';
 import { buildingsList, itemsList } from '@pbr-simcity/api/src/itemList';
 
 async function persistModel(
-  buildings: IBuilding[],
-  items: IItem[],
+  buildings: IBuildingStatic[],
+  items: IItemStatic[],
 ): Promise<void> {
   const mongoStr = 'mongodb://localhost:27017/simcity';
   const client = new MongoClient(mongoStr, { useUnifiedTopology: true });
@@ -19,12 +27,15 @@ async function persistModel(
     //
     const itemsCollection = client.db().collection('item');
 
-    const itemsWithBuildings = items.map((p) => {
-      const building = buildingsDb.find((a) => a.name === p.building.name);
+    const itemsWithBuildings = items.map((p: IItemStatic): IItemStaticWithoutDependency => {
+      const building: IBuildingDoc = buildingsDb.find(
+        (a: IBuildingDoc) => a.name === p.building.name,
+      );
 
       return {
         ...p,
         building: building._id,
+        // depends: [],
       };
     });
 
@@ -32,11 +43,13 @@ async function persistModel(
       itemsWithBuildings,
     );
 
-    const itemsWithDepends = itemsDb.map((a) => {
+    const itemsWithDepends = itemsDb.map((a: IItemStaticWithoutDependency): IItemDoc => {
       const { depends } = a;
 
-      const dependsWithId = depends.map((b: any) => {
-        const itemId = itemsDb.find((c) => c.name === b.item.name);
+      const dependsWithId = depends.map((b: IItemDependencyStatic): IItemDocDependency => {
+        const itemId = itemsDb.find(
+          (c: IItemStaticWithoutDependency): boolean => c.name === b.item.name,
+        );
         return {
           ...b,
           item: itemId._id,
@@ -49,25 +62,16 @@ async function persistModel(
       };
     });
 
-    const itemPromises = itemsWithDepends.map(async (a: any) => {
+    const itemPromises = itemsWithDepends.map(async (a: IItemDoc) => {
       const { _id, ...rest } = a;
 
       return itemsCollection.updateOne({ _id: { $eq: _id } }, { $set: rest });
     });
 
     await Promise.all(itemPromises);
-
-    // const userCollection = client.db().collection('user');
-    // await userCollection.insertMany(userList);
-  } catch (e) {
-    console.error(e);
-    throw e;
   } finally {
     await client.close();
   }
-
-  // const calculateItems: IItemPrint[] = profit(buildings, items.filter(p => p.level <= 21));
-  // renderTable(calculateItems)
 }
 
 persistModel(buildingsList, itemsList);

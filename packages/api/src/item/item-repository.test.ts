@@ -1,5 +1,6 @@
 import { MongoClient /* ObjectID */ } from 'mongodb';
 import {
+  IItemDoc,
   IItemModel,
   IItemProfit,
   IItemProfitDependency,
@@ -945,8 +946,7 @@ describe('Item Repository', () => {
         order: 'asc',
         orderBy: 'maxValue',
         filter: {},
-      },
-    );
+      });
 
     if (!findAll || findAll.length < 1) {
       throw new Error('Missing Planks by ID');
@@ -1071,11 +1071,11 @@ describe('Item Repository', () => {
       const findAll:
         | IItemModel[]
         | null = await itemRepository.findUsedByBuilding({
-        building: 'farmers',
-        order: 'asc',
-        orderBy: 'maxValue',
-        filter: {},
-      });
+          building: 'farmers',
+          order: 'asc',
+          orderBy: 'maxValue',
+          filter: {},
+        });
 
       if (!findAll || findAll.length < 1) {
         throw new Error('Missing Planks by ID');
@@ -1472,6 +1472,35 @@ describe('Item Repository', () => {
       expect(findOne.profitOwnProduction).toEqual(260);
       expect(findOne.billTime).toEqual(435);
       return;
+      // to add
+      // expect(findOne.totalProductionTime).toEqual(555);
+      // expect(findOne.hourProfitOwnProduction).toEqual(280);
+    } catch (e) {
+      throw new Error(e);
+    } finally {
+      await client.close();
+    }
+  });
+
+  test('find doc - pizza', async () => {
+    const client = new MongoClient(mongoStr, { useUnifiedTopology: true });
+    await client.connect();
+
+    const itemRepository = new ItemRepository(client.db().collection('item'));
+
+    const findOne: IItemDoc | null = await itemRepository.findOneDocBySlug(
+      'pizza',
+    );
+    if (!findOne) {
+      throw new Error('Pizza not found');
+    }
+    try {
+      expect(findOne.name).toEqual('Pizza');
+      expect(findOne.slug).toEqual('pizza');
+      expect(findOne.productionTime).toEqual(24);
+      expect(findOne.maxValue).toEqual(2560);
+      expect(findOne.depends?.length).toEqual(3);
+
       // to add
       // expect(findOne.totalProductionTime).toEqual(555);
       // expect(findOne.hourProfitOwnProduction).toEqual(280);

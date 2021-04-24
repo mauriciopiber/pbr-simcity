@@ -1,45 +1,100 @@
-export interface IItemDependency {
-  item?: any;
-  quantity: number;
-}
+type BuildingSlugs = 'industry'
+| 'supplies'
+| 'hardware'
+| 'farmers'
+| 'furniture'
+| 'gardening'
+| 'donut'
+| 'fashion'
+| 'fast-food'
+| 'home-appliances';
+
 
 export interface IBuilding {
   name: string;
   // items: IItem[],
   slots: number;
   parallel: boolean;
-  slug: string;
+  slug: BuildingSlugs;
   nextSlot: number | null;
+  stars: number;
 }
 
-export interface IItem {
+export interface IBuildingStatic extends IBuilding {
+
+}
+
+export interface IBuildingDoc extends IBuildingStatic {
+  _id: string;
+}
+
+export interface IItemDocDependency {
+  item: string;
+  quantity: number;
+}
+
+export interface IItemPrimitive {
   name: string;
   productionTime: number;
   level: number;
-  building: IBuilding;
+  building: string;
   maxValue: number;
   slug: string;
-  depends: IItemDependency[];
 }
 
-
-export interface ItemBuilding extends IItem {
-  productionPlace?: IBuilding;
-}
-
-export interface IItemPrint {
+export interface IItemStaticDependency {
   name: string;
-  time: number;
+  building: string;
+  productionTime: number;
+  level: number;
   maxValue: number;
-  cost: number;
-  profit: number;
-  profitByMinute: number;
-  profitByHour: number;
-  // structuralProfitMinute: number,
-  // structuralProfitHour: number,
+  slug: string;
 }
 
-export interface IItemModel extends IItem {
+export interface IItemStatic {
+  name: string;
+  building: IBuildingStatic;
+  productionTime: number;
+  level: number;
+  maxValue: number;
+  slug: string;
+  depends: IItemDependencyStatic[];
+}
+
+export interface IItemStaticWithoutDependency {
+  name: string;
+  building: string;
+  productionTime: number;
+  level: number;
+  maxValue: number;
+  slug: string;
+  depends: IItemDependencyStatic[];
+}
+
+export interface IItemDependencyStatic {
+  item: IItemStatic;
+  quantity: number;
+}
+export interface IItemDoc extends IItemPrimitive {
+  _id?: string;
+  depends?: IItemDocDependency[];
+}
+
+export interface IItemModelDependency {
+  item: IItemModel;
+  quantity: number;
+}
+// export interface IItem {
+//   name: string;
+//   productionTime: number;
+//   level: number;
+//   building: IBuilding;
+//   maxValue: number;
+//   slug: string;
+//   depends: IItemDependency[];
+// }
+
+export interface IItemModel extends IItemPrimitive {
   _id: string;
   billCost: number;
   billTime: number;
@@ -47,17 +102,25 @@ export interface IItemModel extends IItem {
   usedIn: IItemModel[];
   profitOwnByMinute: number;
   profitOwnByHour: number;
+  depends: IItemModelDependency[];
 }
 
-export interface IBuildingModel extends IBuilding {
+export interface IBuildingModel extends IBuildingDoc {
   _id: string;
   items: IItemModel[];
 }
 
+/**
+ * Item Filter - Used for repository filter
+ */
 export interface IItemFilter {
   level?: any;
 }
-export interface IItemArgs {
+
+/**
+ * Item Args
+ */
+export interface IItemResolverArgs {
   order: string;
   orderBy: string;
   filter: IItemFilter;

@@ -1,87 +1,97 @@
-import { IItem, IBuilding } from '@pbr-simcity/types/types';
+import { IItemStatic, IBuildingStatic } from '@pbr-simcity/types/types';
 /** Define buildings */
 
-const industry: IBuilding = {
+const industry: IBuildingStatic = {
   name: 'Industry',
   slots: 6 * 5 + 2 * 4,
   parallel: true,
   nextSlot: null,
   slug: 'industry',
+  stars: 0,
 };
 
-const supplies: IBuilding = {
+const supplies: IBuildingStatic = {
   name: 'Supplies Store',
   slots: 8,
   parallel: false,
   nextSlot: 40,
   slug: 'supplies',
+  stars: 0,
 };
 
-const hardware: IBuilding = {
+const hardware: IBuildingStatic = {
   name: 'Hardware Store',
   slots: 8,
   parallel: false,
   nextSlot: 40,
   slug: 'hardware',
+  stars: 0,
 };
 
-const farmer: IBuilding = {
+const farmer: IBuildingStatic = {
   name: "Farmer's Market",
   slots: 6,
   parallel: false,
   nextSlot: 32,
   slug: 'farmers',
+  stars: 0,
 };
 
-const furniture: IBuilding = {
+const furniture: IBuildingStatic = {
   name: 'Furniture Store',
   slots: 4,
   parallel: false,
   nextSlot: 20,
   slug: 'furniture',
+  stars: 0,
 };
 
-const gardening: IBuilding = {
+const gardening: IBuildingStatic = {
   name: 'Gardening Supplies',
   slots: 5,
   parallel: false,
   nextSlot: 26,
   slug: 'gardening',
+  stars: 0,
 };
 
-const donut: IBuilding = {
+const donut: IBuildingStatic = {
   name: 'Donut Shop',
   slots: 6,
   parallel: false,
   nextSlot: 32,
   slug: 'donut',
+  stars: 0,
 };
 
-const fashion: IBuilding = {
+const fashion: IBuildingStatic = {
   name: 'Fashion Store',
   slots: 4,
   parallel: false,
   nextSlot: 20,
   slug: 'fashion',
+  stars: 0,
 };
 
-const fastFood: IBuilding = {
+const fastFood: IBuildingStatic = {
   name: 'Fast Food Restaurant',
   slots: 3,
   parallel: false,
   nextSlot: 14,
   slug: 'fast-food',
+  stars: 0,
 };
 
-const home: IBuilding = {
+const home: IBuildingStatic = {
   name: 'Home Appliances',
   slots: 3,
   parallel: false,
   nextSlot: 14,
   slug: 'home-appliances',
+  stars: 0,
 };
 
-export const buildingsList: IBuilding[] = [
+export const buildingsList: IBuildingStatic[] = [
   industry,
   supplies,
   hardware,
@@ -95,7 +105,7 @@ export const buildingsList: IBuilding[] = [
 ];
 
 /* Define Items */
-const metal: IItem = {
+const metal: IItemStatic = {
   name: 'Metal',
   productionTime: 1,
   level: 1,
@@ -105,7 +115,7 @@ const metal: IItem = {
   slug: 'metal',
 };
 
-const woods: IItem = {
+const woods: IItemStatic = {
   name: 'Wood',
   productionTime: 3,
   level: 2,
@@ -115,7 +125,7 @@ const woods: IItem = {
   slug: 'wood',
 };
 
-const plastic: IItem = {
+const plastic: IItemStatic = {
   name: 'Plastic',
   productionTime: 9,
   level: 5,
@@ -125,7 +135,7 @@ const plastic: IItem = {
   slug: 'plastic',
 };
 
-const seeds: IItem = {
+const seeds: IItemStatic = {
   name: 'Seeds',
   productionTime: 20,
   level: 7,
@@ -135,7 +145,7 @@ const seeds: IItem = {
   slug: 'seeds',
 };
 
-const minerals: IItem = {
+const minerals: IItemStatic = {
   name: 'Minerals',
   productionTime: 30,
   level: 11,
@@ -145,7 +155,7 @@ const minerals: IItem = {
   slug: 'minerals',
 };
 
-const chemicals: IItem = {
+const chemicals: IItemStatic = {
   name: 'Chemicals',
   productionTime: 120,
   level: 13,
@@ -155,7 +165,7 @@ const chemicals: IItem = {
   slug: 'chemicals',
 };
 
-const textiles: IItem = {
+const textiles: IItemStatic = {
   name: 'Textiles',
   productionTime: 180,
   level: 15,
@@ -165,7 +175,7 @@ const textiles: IItem = {
   slug: 'textiles',
 };
 
-const sugar: IItem = {
+const sugar: IItemStatic = {
   name: 'Sugar and Spices',
   productionTime: 240,
   level: 17,
@@ -175,7 +185,7 @@ const sugar: IItem = {
   slug: 'sugar',
 };
 
-const glass: IItem = {
+const glass: IItemStatic = {
   name: 'Glass',
   productionTime: 300,
   level: 19,
@@ -185,7 +195,7 @@ const glass: IItem = {
   slug: 'glass',
 };
 
-const animalFeed: IItem = {
+const animalFeed: IItemStatic = {
   name: 'Animal Feed',
   productionTime: 360,
   level: 23,
@@ -205,7 +215,7 @@ const electricalComponents = {
   slug: 'electrical-components',
 };
 
-const nails: IItem = {
+const nails: IItemStatic = {
   name: 'Nails',
   productionTime: 5,
   level: 1,
@@ -220,7 +230,7 @@ const nails: IItem = {
   ],
 };
 
-const planks: IItem = {
+const planks: IItemStatic = {
   name: 'Planks',
   slug: 'planks',
   productionTime: 30,
@@ -235,7 +245,7 @@ const planks: IItem = {
   ],
 };
 
-const bricks: IItem = {
+const bricks: IItemStatic = {
   name: 'Bricks',
   slug: 'bricks',
   productionTime: 20,
@@ -250,7 +260,7 @@ const bricks: IItem = {
   ],
 };
 
-const cement: IItem = {
+const cement: IItemStatic = {
   name: 'Cement',
   slug: 'cement',
   productionTime: 50,
@@ -269,7 +279,7 @@ const cement: IItem = {
   ],
 };
 
-const glue: IItem = {
+const glue: IItemStatic = {
   name: 'Glue',
   slug: 'glue',
   productionTime: 60,
@@ -288,7 +298,7 @@ const glue: IItem = {
   ],
 };
 
-const paint: IItem = {
+const paint: IItemStatic = {
   name: 'Paint',
   slug: 'paint',
   productionTime: 60,
@@ -311,7 +321,7 @@ const paint: IItem = {
   ],
 };
 
-const hammer: IItem = {
+const hammer: IItemStatic = {
   name: 'Hammer',
   slug: 'hammer',
   productionTime: 14,
@@ -330,7 +340,7 @@ const hammer: IItem = {
   ],
 };
 
-const measuringTape: IItem = {
+const measuringTape: IItemStatic = {
   name: 'Measuring Tape',
   slug: 'measuring-tape',
   productionTime: 20,
@@ -349,7 +359,7 @@ const measuringTape: IItem = {
   ],
 };
 
-const shovel: IItem = {
+const shovel: IItemStatic = {
   name: 'Shovel',
   slug: 'shovel',
   productionTime: 30,
@@ -372,7 +382,7 @@ const shovel: IItem = {
   ],
 };
 
-const cookingUtensils: IItem = {
+const cookingUtensils: IItemStatic = {
   name: 'Cooking Utensils',
   slug: 'cooking-utensils',
   productionTime: 45,
@@ -395,7 +405,7 @@ const cookingUtensils: IItem = {
   ],
 };
 
-const ladder: IItem = {
+const ladder: IItemStatic = {
   name: 'Ladder',
   slug: 'ladder',
   productionTime: 60,
@@ -414,7 +424,7 @@ const ladder: IItem = {
   ],
 };
 
-const drill: IItem = {
+const drill: IItemStatic = {
   name: 'Drill',
   slug: 'drill',
   productionTime: 120,
@@ -437,7 +447,7 @@ const drill: IItem = {
   ],
 };
 
-const grass: IItem = {
+const grass: IItemStatic = {
   name: 'Grass',
   slug: 'grass',
   productionTime: 30,
@@ -456,7 +466,7 @@ const grass: IItem = {
   ],
 };
 
-const treeSaplings: IItem = {
+const treeSaplings: IItemStatic = {
   name: 'Tree Saplings',
   slug: 'tree-saplings',
   productionTime: 90,
@@ -475,7 +485,7 @@ const treeSaplings: IItem = {
   ],
 };
 
-const gardenFurniture: IItem = {
+const gardenFurniture: IItemStatic = {
   name: 'Garden Furniture',
   slug: 'garden-furniture',
   productionTime: 135,
@@ -498,7 +508,7 @@ const gardenFurniture: IItem = {
   ],
 };
 
-const firePit: IItem = {
+const firePit: IItemStatic = {
   name: 'Fire Pit',
   slug: 'fire-pit',
   productionTime: 240,
@@ -521,7 +531,7 @@ const firePit: IItem = {
   ],
 };
 
-const LawnMower: IItem = {
+const LawnMower: IItemStatic = {
   name: 'Lawn Mower',
   slug: 'lawn-mower',
   productionTime: 120,
@@ -544,7 +554,7 @@ const LawnMower: IItem = {
   ],
 };
 
-const gardenGnomes: IItem = {
+const gardenGnomes: IItemStatic = {
   name: 'Garden Gnomes',
   slug: 'garden-gnomes',
   productionTime: 90,
@@ -563,7 +573,7 @@ const gardenGnomes: IItem = {
   ],
 };
 
-const vegetables: IItem = {
+const vegetables: IItemStatic = {
   name: 'Vegetables',
   slug: 'vegetables',
   productionTime: 20,
@@ -578,7 +588,7 @@ const vegetables: IItem = {
   ],
 };
 
-const flourBag: IItem = {
+const flourBag: IItemStatic = {
   name: 'Flour Bag',
   slug: 'flour-bag',
   productionTime: 30,
@@ -597,7 +607,7 @@ const flourBag: IItem = {
   ],
 };
 
-const fruit: IItem = {
+const fruit: IItemStatic = {
   name: 'Fruit and Berries',
   slug: 'fruit-and-berries',
   productionTime: 90,
@@ -616,7 +626,7 @@ const fruit: IItem = {
   ],
 };
 
-const cream: IItem = {
+const cream: IItemStatic = {
   name: 'Cream',
   slug: 'cream',
   productionTime: 75,
@@ -631,7 +641,7 @@ const cream: IItem = {
   ],
 };
 
-const corn: IItem = {
+const corn: IItemStatic = {
   name: 'Corn',
   slug: 'corn',
   productionTime: 60,
@@ -650,7 +660,7 @@ const corn: IItem = {
   ],
 };
 
-const cheese: IItem = {
+const cheese: IItemStatic = {
   name: 'Cheese',
   slug: 'cheese',
   productionTime: 105,
@@ -665,7 +675,7 @@ const cheese: IItem = {
   ],
 };
 
-const beef: IItem = {
+const beef: IItemStatic = {
   name: 'Beef',
   slug: 'beef',
   productionTime: 150,
@@ -680,7 +690,7 @@ const beef: IItem = {
   ],
 };
 
-const chairs: IItem = {
+const chairs: IItemStatic = {
   name: 'Chairs',
   slug: 'chairs',
   productionTime: 20,
@@ -703,7 +713,7 @@ const chairs: IItem = {
   ],
 };
 
-const tables: IItem = {
+const tables: IItemStatic = {
   name: 'Tables',
   slug: 'tables',
   productionTime: 30,
@@ -726,7 +736,7 @@ const tables: IItem = {
   ],
 };
 
-const homeTextiles: IItem = {
+const homeTextiles: IItemStatic = {
   name: 'Home Textiles',
   slug: 'home-textiles',
   productionTime: 75,
@@ -745,7 +755,7 @@ const homeTextiles: IItem = {
   ],
 };
 
-const cupboard: IItem = {
+const cupboard: IItemStatic = {
   name: 'Cupboard',
   slug: 'cupboard',
   level: 26,
@@ -768,7 +778,7 @@ const cupboard: IItem = {
   ],
 };
 
-const couch: IItem = {
+const couch: IItemStatic = {
   name: 'Couch',
   slug: 'couch',
   level: 33,
@@ -791,7 +801,7 @@ const couch: IItem = {
   ],
 };
 
-const donuts: IItem = {
+const donuts: IItemStatic = {
   name: 'Donuts',
   slug: 'donuts',
   level: 18,
@@ -810,7 +820,7 @@ const donuts: IItem = {
   ],
 };
 
-const greenSmoothie: IItem = {
+const greenSmoothie: IItemStatic = {
   name: 'Green Smoothie',
   slug: 'green-smoothie',
   level: 20,
@@ -829,7 +839,7 @@ const greenSmoothie: IItem = {
   ],
 };
 
-const breadRoll: IItem = {
+const breadRoll: IItemStatic = {
   name: 'Bread Roll',
   slug: 'bread-roll',
   level: 24,
@@ -848,7 +858,7 @@ const breadRoll: IItem = {
   ],
 };
 
-const cherryCheesecake: IItem = {
+const cherryCheesecake: IItemStatic = {
   name: 'Cherry Cheesecake',
   slug: 'cherry-cheesecake',
   level: 27,
@@ -871,7 +881,7 @@ const cherryCheesecake: IItem = {
   ],
 };
 
-const frozenYogurt: IItem = {
+const frozenYogurt: IItemStatic = {
   name: 'Frozen Yogurt',
   slug: 'frozen-yogurt',
   level: 28,
@@ -894,7 +904,7 @@ const frozenYogurt: IItem = {
   ],
 };
 
-const coffee: IItem = {
+const coffee: IItemStatic = {
   name: 'Coffee',
   slug: 'coffee',
   level: 33,
@@ -917,7 +927,7 @@ const coffee: IItem = {
   ],
 };
 
-const cap: IItem = {
+const cap: IItemStatic = {
   name: 'Cap',
   slug: 'cap',
   level: 19,
@@ -936,7 +946,7 @@ const cap: IItem = {
   ],
 };
 
-const shoes: IItem = {
+const shoes: IItemStatic = {
   name: 'Shoes',
   slug: 'shoes',
   level: 21,
@@ -959,7 +969,7 @@ const shoes: IItem = {
   ],
 };
 
-const watch: IItem = {
+const watch: IItemStatic = {
   slug: 'watch',
   name: 'Watch',
   level: 22,
@@ -982,7 +992,7 @@ const watch: IItem = {
   ],
 };
 
-const businessSuits: IItem = {
+const businessSuits: IItemStatic = {
   name: 'Business Suits',
   slug: 'business-suits',
   level: 32,
@@ -1005,7 +1015,7 @@ const businessSuits: IItem = {
   ],
 };
 
-const backpack: IItem = {
+const backpack: IItemStatic = {
   name: 'Backpack',
   slug: 'backpack',
   level: 34,
@@ -1028,7 +1038,7 @@ const backpack: IItem = {
   ],
 };
 
-const iceCream: IItem = {
+const iceCream: IItemStatic = {
   name: 'Ice Cream Sandwich',
   slug: 'ice-cream-sandwich',
   level: 25,
@@ -1047,7 +1057,7 @@ const iceCream: IItem = {
   ],
 };
 
-const pizza: IItem = {
+const pizza: IItemStatic = {
   name: 'Pizza',
   slug: 'pizza',
   level: 28,
@@ -1070,7 +1080,7 @@ const pizza: IItem = {
   ],
 };
 
-const cheeseFries: IItem = {
+const cheeseFries: IItemStatic = {
   name: 'Cheese Fries',
   slug: 'cheese-fries',
   level: 33,
@@ -1089,7 +1099,7 @@ const cheeseFries: IItem = {
   ],
 };
 
-const lemonade: IItem = {
+const lemonade: IItemStatic = {
   name: 'Lemonade',
   slug: 'lemonade',
   level: 37,
@@ -1112,7 +1122,7 @@ const lemonade: IItem = {
   ],
 };
 
-const bbqGrill: IItem = {
+const bbqGrill: IItemStatic = {
   name: 'BBG Grill',
   slug: 'bbg-grill',
   level: 29,
@@ -1131,7 +1141,7 @@ const bbqGrill: IItem = {
   ],
 };
 
-const refrigerator: IItem = {
+const refrigerator: IItemStatic = {
   name: 'Refrigerator',
   slug: 'refrigerator',
   level: 35,
@@ -1154,7 +1164,7 @@ const refrigerator: IItem = {
   ],
 };
 
-const lightingSystem: IItem = {
+const lightingSystem: IItemStatic = {
   name: 'Lighting System',
   slug: 'lighting-system',
   level: 36,
@@ -1177,7 +1187,7 @@ const lightingSystem: IItem = {
   ],
 };
 
-const tv: IItem = {
+const tv: IItemStatic = {
   name: 'TV',
   slug: 'tv',
   level: 38,
@@ -1200,7 +1210,7 @@ const tv: IItem = {
   ],
 };
 
-const microwaveOven: IItem = {
+const microwaveOven: IItemStatic = {
   name: 'Microwave Oven',
   slug: 'microwave-oven',
   level: 42,
@@ -1223,7 +1233,7 @@ const microwaveOven: IItem = {
   ],
 };
 
-const popCorn: IItem = {
+const popCorn: IItemStatic = {
   name: 'Pop Corn',
   slug: 'pop-corn',
   level: 43,
@@ -1242,7 +1252,7 @@ const popCorn: IItem = {
   ],
 };
 
-const burgers: IItem = {
+const burgers: IItemStatic = {
   name: 'Burgers',
   slug: 'burgers',
   level: 31,
@@ -1270,7 +1280,7 @@ const burgers: IItem = {
 
 // const ladder
 
-export const itemsList: IItem[] = [
+export const itemsList: IItemStatic[] = [
   /** Industry */
   metal,
   woods,

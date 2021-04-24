@@ -5,6 +5,7 @@ import {
   IItemArgs,
   IItemProfit,
   IItemModel,
+  IItemDoc,
   IItemProfitDependency,
   IItemFilter,
   IItemProfitBuldingList,
@@ -17,9 +18,14 @@ import Collection from '@pbr-simcity/api/src/collection';
 
 
 class ItemRepository extends Collection {
-  async getAll() {
+  async getAll(): Promise<IItemDoc[]> {
     const docs = this.collection.find();
     return docs.toArray();
+  }
+
+  async findOneDocBySlug(slug: string): Promise<IItemDoc> {
+    const docs = this.collection.findOne({ slug });
+    return docs;
   }
 
   async findDependsItems(
