@@ -16,9 +16,9 @@ export interface IBuildingModelItem extends IBuilding {
 }
 
 export interface IBuildingFilter {
-  slug: string;
-  level: number;
-  _id: string;
+  slug?: string;
+  level?: number;
+  _id?: string;
 }
 
 export interface IBuildingArgs {
