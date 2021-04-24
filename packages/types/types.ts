@@ -1,26 +1,14 @@
-export interface IItemDependency {
-  item?: any;
-  quantity: number;
-}
+import {
+  IBuilding,
+} from './buildings.types';
+import {
+  IItem,
+} from './items.types';
 
-export interface IBuilding {
-  name: string;
-  // items: IItem[],
-  slots: number;
-  parallel: boolean;
-  slug: string;
-  nextSlot: number | null;
-}
-
-export interface IItem {
-  name: string;
-  productionTime: number;
-  level: number;
-  building: IBuilding;
-  maxValue: number;
-  slug: string;
-  depends: IItemDependency[];
-}
+export * from './buildings.types';
+export * from './items.types';
+export * from './dataSource.types';
+// export * from './profits.types';
 
 export interface IItemDependencyValues {
   cost: number;
@@ -100,7 +88,8 @@ export interface IItemProfitDependency extends IItemModel {
 /**
  * Profit - Building Slots
  *
- * Cada slot utilizado para build com a descrição do tempo de agendamento, início da produção e fim da produção
+ * Cada slot utilizado para build com a descrição do tempo de agendamento,
+ * início da produção e fim da produção
  */
 export interface IItemProfitBuildingSlots {
   slot: number;
@@ -128,9 +117,10 @@ export interface IItemProfitBuldingList {
 
 /**
  * Profit
- * O perfil do material / item / conjunto de itens, quantos ciclos são necessários e como as buildings serão ocupadas
+ * O perfil do material / item / conjunto de itens,
+ * quantos ciclos são necessários e como as buildings serão ocupadas
  */
 export interface IItemProfit {
   cycles: IProfitCycle[],
   buildings: IItemProfitBuldingList
-};
+}

@@ -1,10 +1,10 @@
 // import { MongoDataSource } from 'apollo-datasource-mongodb'
 import { ObjectId } from 'mongodb';
 import Collection from '@pbr-simcity/api/src/collection';
-import { IBuildingModel } from '@pbr-simcity/types/types';
+import { IBuildingModel, IBuildingRepository } from '@pbr-simcity/types/types';
 
-class BuildingRepository extends Collection {
-  async getAll(): Promise<IBuildingModel[]> {
+class BuildingRepository extends Collection implements IBuildingRepository {
+  async findAll(): Promise<IBuildingModel[]> {
     const docs = this.collection.find();
     return docs.toArray();
   }

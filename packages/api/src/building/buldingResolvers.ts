@@ -1,23 +1,28 @@
-import { IBuilding, IItem } from '@pbr-simcity/types/types';
+import {
+  IBuilding, IItem, IBuildingFilter, IBuildingArgs, IContext,
+} from '@pbr-simcity/types/types';
 
 const resolvers = {
   Query: {
-    async buildings(_: any, _args: any, context: any): Promise<IBuilding[]> {
+    async buildings(_: unknown, _args: IBuildingArgs, context: IContext): Promise<IBuilding[]> {
       const { dataSources } = context;
+      const {
+        building,
+      } = dataSources;
 
-      const { building } = dataSources;
-
-      return building.getAll();
+      return building.resolveAllBuildings();
     },
-    async building(_: any, args: any, context: any): Promise<IItem[]> {
+    async building(_: unknown, args: IBuildingFilter, context: IContext): Promise<IBuilding> {
       const { dataSources } = context;
-      const { building } = dataSources;
+      const {
+        building,
+      } = dataSources;
 
-      return building.findOneBySlug(args.slug);
+      return building.resolveOneBuilding(args);
     },
   },
   Building: {
-    async items(parent: any, _args: any, context: any): Promise<IItem[]> {
+    async items(parent: any, _args: any, context: IContext): Promise<IItem[]> {
       const { dataSources } = context;
       const { item } = dataSources;
 
