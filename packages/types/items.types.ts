@@ -1,7 +1,7 @@
 import { IBuilding, IBuildingModel } from './buildings.types';
 import {
   IItemProfit,
-  IItemProfitBuilding,
+  // IItemProfitBuilding,
   IItemProfitDependency,
 } from './profits.types';
 
@@ -65,12 +65,12 @@ export interface IItemDataSource {
   findDependsItems(depends: IItemDependency[]): Promise<IItemProfitDependency[]>;
   recursiveDependency(depends: IItemDependency[]): Promise<IItemProfitDependency[]>;
   flatItemsFromDependency(rootItem: string): Promise<IItemProfitDependency[]>;
-  createParallelBuildingProfitSlots(
-    items: IItemProfitDependency[],
-    buildingId: string
-  ): IItemProfitBuilding;
-  createSequentialBuildingProfitSlots(): IItemProfitBuilding;
-  getItemCriticalPath(item: IItemProfitDependency, items: IItemProfitDependency[]): number;
+  // createParallelBuildingProfitSlots(
+  //   items: IItemProfitDependency[],
+  //   buildingId: string
+  // ): IItemProfitBuilding;
+  // createSequentialBuildingProfitSlots(): IItemProfitBuilding;
+  // getItemCriticalPath(item: IItemProfitDependency, items: IItemProfitDependency[]): number;
   resolveItemProfit(item: string): Promise<IItemProfit>
   /** Item itself */
   resolveFindAll(args: IItemArgs): Promise<IItemModel[]>

@@ -26,6 +26,19 @@ export default class ItemDataSource implements IItemDataSource {
     return this.itemRepository.findAll(match, order);
   }
 
+  async resolveFindItemsByBuildingId(args: IItemArgs): Promise<IItemModel[]> {
+    const {
+      building,
+    } = args;
+
+    if (!building) {
+      throw new Error('Missing building slug on call');
+    }
+    const match = ItemDataSource.createMatch(args);
+    const order = ItemDataSource.createOrder(args);
+    return this.itemRepository.findByBuildingId(building, match, order);
+  }
+
   async resolveFindItemsByBuildingSlug(args: IItemArgs): Promise<IItemModel[]> {
     const {
       building,
@@ -36,7 +49,7 @@ export default class ItemDataSource implements IItemDataSource {
     }
     const match = ItemDataSource.createMatch(args);
     const order = ItemDataSource.createOrder(args);
-    return this.itemRepository.findByBuildingSlug(building, match, order)
+    return this.itemRepository.findByBuildingSlug(building, match, order);
   }
 
   async resolveFindItemsDependsByBuildingSlug(args: IItemArgs): Promise<IItemModel[]> {
@@ -244,7 +257,6 @@ export default class ItemDataSource implements IItemDataSource {
     items: IItemProfitDependency[],
     // industryId = '6067df64e0fc61d7365eb582',
   ): number {
-
     const rootDepends = item.depends;
 
     const dependsLvl1 = rootDepends
@@ -432,7 +444,7 @@ export default class ItemDataSource implements IItemDataSource {
       );
 
     const homeAppliancesBuilding: IItemProfitBuilding = ItemDataSource
-      .createParallelBuildingProfitSlots(
+      .createSequentialBuildingProfitSlots(
         items,
         buildingsProfit['home-appliances']._id,
       );
