@@ -3,8 +3,8 @@ import { ObjectId } from 'mongodb';
 import {
   IItemModel,
   IItemDoc,
-  IBuildingModel,
   IItemRepository,
+  IBuildingPreviewModel,
 } from '@pbr-simcity/types/types';
 import Collection from '@pbr-simcity/api/src/collection';
 
@@ -24,7 +24,7 @@ export default class ItemRepository extends Collection implements IItemRepositor
     return docs.toArray();
   }
 
-  async findBuildings(): Promise<IBuildingModel[]> {
+  async findBuildings(): Promise<IBuildingPreviewModel[]> {
     const docs = this.collection.aggregate([
       {
         $lookup: {
@@ -42,6 +42,7 @@ export default class ItemRepository extends Collection implements IItemRepositor
               { _id: '$building._id' },
               { name: '$building.name' },
               { slug: '$building.slug' },
+              { parallel: '$building.parallel' },
             ],
           },
         },
@@ -51,11 +52,12 @@ export default class ItemRepository extends Collection implements IItemRepositor
           _id: '$_id',
           name: { $first: '$name' },
           slug: { $first: '$slug' },
+          parallel: { $first: '$parallel' },
         },
       },
     ]);
 
-    const buildings: IBuildingModel[] = await docs.toArray();
+    const buildings: IBuildingPreviewModel[] = await docs.toArray();
     return buildings;
   }
 

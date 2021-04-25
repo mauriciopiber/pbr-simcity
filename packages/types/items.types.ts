@@ -1,13 +1,19 @@
-import { IBuilding, IBuildingModel } from './buildings.types';
+import { IBuilding, IBuildingPreviewModel } from './buildings.types';
 import {
   IItemProfit,
   // IItemProfitBuilding,
   IItemProfitDependency,
+  IItemDependencyGraph,
 } from './profits.types';
 
 export interface IItemDependency {
   item?: any;
   quantity: number;
+}
+
+export interface IItemDependencyModel {
+  item: string;
+  quantity: string;
 }
 
 export interface IItemDependencyDoc {
@@ -60,7 +66,7 @@ export interface IItemArgs {
 }
 
 export interface IItemRepository {
-  findBuildings(): Promise<IBuildingModel[]>
+  findBuildings(): Promise<IBuildingPreviewModel[]>
   findAll(match: any, sort: any): Promise<IItemModel[]>
   findByBuildingId(building: string, match: any, sort: any): Promise<IItemModel[]>
   findByBuildingSlug(building: string, match: any, sort: any): Promise<IItemModel[]>
@@ -96,4 +102,5 @@ export interface IItemDataSource {
   resolveUsedInByItemId(parent: string, args: IItemArgs): Promise<IItemModel[]>
   resolveItemDependsByItemId(parent: string): Promise<IItemModel>
   resolveFindOneItem(args: IItemArgs): Promise<IItemModel>
+  resolveItemDependencyGraph(slug: string): Promise<IItemDependencyGraph>
 }

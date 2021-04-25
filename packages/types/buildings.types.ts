@@ -27,6 +27,13 @@ export interface IBuildingModel extends IBuilding {
   items: IItem[]
 }
 
+export interface IBuildingPreviewModel {
+  name: string;
+  slug: string;
+  _id: string;
+  parallel: boolean;
+}
+
 export interface IBuildingFilter {
   slug?: string;
   level?: number;

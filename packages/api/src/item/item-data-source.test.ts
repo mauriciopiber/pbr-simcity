@@ -3,6 +3,7 @@ import {
   IItemModel,
   IItemProfit,
   IItemProfitDependency,
+  IItemDependencyGraph,
 } from '@pbr-simcity/types/types';
 
 import ItemRepository from '@pbr-simcity/api/src/item/itemRepository';
@@ -52,6 +53,26 @@ describe('Item Data Source', () => {
     expect(itemBySlug.name).toEqual('Planks');
     expect(itemBySlug.slug).toEqual('planks');
     expect(itemBySlug.billCost).toEqual(40);
+  });
+
+  test('get dependency graph for - pizza', async () => {
+    const item: IItemDependencyGraph = await itemDataSource.resolveItemDependencyGraph('pizza');
+
+    console.log(item);
+    expect(item.slug).toEqual('pizza');
+    expect(item.criticalPath).toEqual(510);
+  });
+
+  test('get dependency graph for - burgers', async () => {
+    const item: IItemDependencyGraph = await itemDataSource.resolveItemDependencyGraph('burgers');
+    expect(item.slug).toEqual('burgers');
+    expect(item.criticalPath).toEqual(510);
+  });
+
+  test('get dependency graph for - shoes', async () => {
+    const item: IItemDependencyGraph = await itemDataSource.resolveItemDependencyGraph('shoes');
+    expect(item.slug).toEqual('shoes');
+    expect(item.criticalPath).toEqual(180);
   });
 });
 
@@ -382,13 +403,11 @@ describe('Items Profit - Critical Path', () => {
   };
 
   test('critical path - bread roll', async () => {
-    /** @ts-ignore */
     const criticalPath = ItemDataSource.getItemCriticalPath(breadRoll, itemsCriticalPath);
     expect(criticalPath).toEqual(440);
   });
 
   test('critical path - burgers', async () => {
-    /** @ts-ignore */
     const criticalPath = ItemDataSource.getItemCriticalPath(burgers, itemsCriticalPath);
     expect(criticalPath).toEqual(555);
   });
@@ -399,7 +418,6 @@ describe('Items Profit - Critical Path', () => {
   });
 
   test('critical path - bbg grill', async () => {
-    /** @ts-ignore */
     const criticalPath = ItemDataSource.getItemCriticalPath(bbgGrill, itemsCriticalPath);
     expect(criticalPath).toEqual(59);
   });

@@ -1,6 +1,9 @@
 import {
   IItemModel,
 } from './items.types';
+import {
+  IBuildingPreviewModel
+} from './buildings.types';
 
 /**
  * Profit
@@ -51,12 +54,10 @@ export interface IItemProfitBuildingSlots {
  * Cada building do projeto e a descrição de como os slots de produção serão ocupados no ciclo.
  */
 export interface IItemProfitBuilding {
-  name: string;
-  slug: string;
+  // name: string;
+  // slug: string;
   slots: IItemProfitBuildingSlots[];
 }
-
-
 
 /**
  * Profit - Building List
@@ -66,6 +67,10 @@ export interface IItemProfitBuldingList {
   [key: string]: IItemProfitBuilding;
 }
 
+
+export interface IItemProfitBuildingPreviewList {
+ [key: string]: IBuildingPreviewModel
+}
 /**
  * Profit
  * O perfil do material / item / conjunto de itens,
@@ -74,4 +79,12 @@ export interface IItemProfitBuldingList {
 export interface IItemProfit {
   cycles: IProfitCycle[],
   buildings: IItemProfitBuldingList
+}
+
+
+export interface IItemDependencyGraph {
+  slug: string;
+  criticalPath: number;
+  productionTime: number;
+  maxTime: number;
 }

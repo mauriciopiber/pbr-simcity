@@ -6,12 +6,15 @@ import {
   IItemProfitDependency,
   IItemProfitBuldingList,
   IItemProfitBuildingSlots,
+  IBuildingPreviewModel,
   IItemDependency,
   IItemArgs,
-  IBuildingModel,
   // IBuilding,
   IItemProfitBuilding,
+  IItemDependencyGraph,
 } from '@pbr-simcity/types/types';
+
+/* eslint-disable class-methods-use-this */
 
 export default class ItemDataSource implements IItemDataSource {
   itemRepository: IItemRepository;
@@ -113,6 +116,65 @@ export default class ItemDataSource implements IItemDataSource {
     return this.itemRepository.findUsedInByItemId(parent, match, order);
   }
 
+  recursiveCreateDependencyGraph(depends: any[], items: any[]): any[] {
+    return depends.map((a: any) => {
+      const itemDepends = items.find((b: any) => `${b._id}` === `${a.item}`);
+
+      const innerDependencyGraph = this.recursiveCreateDependencyGraph(itemDepends.depends, items);
+
+      // console.log(innerDependencyGraph);
+
+      const criticalPath = innerDependencyGraph.reduce(
+        (prev: any, current: any) => (
+          (prev > current.productionTime) ? prev : current.productionTime
+        ),
+        0,
+      );
+
+      return {
+        slug: itemDepends.slug,
+        quantity: a.quantity,
+        parallel: itemDepends.building.parallel,
+        productionTime: itemDepends.productionTime,
+        depends: innerDependencyGraph,
+        criticalPath: criticalPath + itemDepends.productionTime,
+      };
+    });
+  }
+
+  async resolveItemDependencyGraph(slug: string): Promise<IItemDependencyGraph> {
+    const item: IItemModel | null = await this.itemRepository.findOneBySlug(slug);
+
+    if (!item) {
+      throw new Error('Item not found');
+    }
+
+    const buildings = await this.itemRepository.findBuildings();
+
+    const depends = await this.recursiveDependency(item.depends);
+
+    const dependsWithBuilding = depends.map((a: any) => ({
+      ...a,
+      building: buildings.find((b: any) => `${b._id}` === `${a.building}`),
+    }));
+
+    const dependencyGraph = this.recursiveCreateDependencyGraph(item.depends, dependsWithBuilding);
+
+    const criticalPath = dependencyGraph.reduce(
+      (prev: any, current: any) => (
+        (prev > current.criticalPath) ? prev : current.criticalPath
+      ),
+      0,
+    );
+    // console.log(dependencyGraph);
+
+    return {
+      slug: item.slug,
+      criticalPath,
+      productionTime: item.productionTime,
+      maxTime: criticalPath + item.productionTime,
+    };
+  }
   /** Profit */
 
   async findDependsItems(
@@ -351,10 +413,12 @@ export default class ItemDataSource implements IItemDataSource {
       throw new Error('Missing item to analyse');
     }
 
-    const buildings: IBuildingModel[] = await this.itemRepository.findBuildings();
+    const buildings: IBuildingPreviewModel[] = await this.itemRepository.findBuildings();
+
+    // console.log(buildings);
 
     const buildingsProfit = buildings.reduce(
-      (a: any, b: IBuildingModel) => ({
+      (a: any, b: IBuildingPreviewModel) => ({
         ...a,
         [b.slug]: {
           _id: b._id,
