@@ -401,20 +401,20 @@ describe('Items Profit - Critical Path', () => {
     expect(farmers?.slots[2]?.item.slug).toEqual('cream');
     expect(farmers?.slots[2]?.schedule).toEqual(360);
     expect(farmers?.slots[2]?.start).toEqual(360);
-    expect(farmers?.slots[2]?.complete).toEqual(440);
+    expect(farmers?.slots[2]?.complete).toEqual(435);
 
     expect(farmers?.slots[3]?.slot).toEqual(4);
     expect(farmers?.slots[3]?.item.slug).toEqual('beef');
-    expect(farmers?.slots[3]?.schedule).toEqual(365);
-    expect(farmers?.slots[3]?.start).toEqual(440);
-    expect(farmers?.slots[3]?.complete).toEqual(590);
+    expect(farmers?.slots[3]?.schedule).toEqual(360);
+    expect(farmers?.slots[3]?.start).toEqual(435);
+    expect(farmers?.slots[3]?.complete).toEqual(585);
 
     expect(donuts?.slots.length).toEqual(1);
     expect(donuts?.slots[0]?.slot).toEqual(1);
     expect(donuts?.slots[0]?.item.slug).toEqual('bread-roll');
-    expect(donuts?.slots[0]?.schedule).toEqual(425);
-    expect(donuts?.slots[0]?.start).toEqual(425);
-    expect(donuts?.slots[0]?.complete).toEqual(485);
+    expect(donuts?.slots[0]?.schedule).toEqual(435);
+    expect(donuts?.slots[0]?.start).toEqual(435);
+    expect(donuts?.slots[0]?.complete).toEqual(495);
 
     expect(homeApp?.slots.length).toEqual(1);
     expect(homeApp?.slots[0]?.slot).toEqual(1);
@@ -585,12 +585,12 @@ describe('Items Profit - Critical Path', () => {
     expect(farmerSlots[2]?.item.slug).toEqual('cream');
     expect(farmerSlots[2]?.schedule).toEqual(360);
     expect(farmerSlots[2]?.start).toEqual(360);
-    expect(farmerSlots[2]?.complete).toEqual(440);
+    expect(farmerSlots[2]?.complete).toEqual(435);
 
     expect(farmerSlots[3]?.slot).toEqual(4);
     expect(farmerSlots[3]?.item.slug).toEqual('beef');
-    expect(farmerSlots[3]?.schedule).toEqual(365);
-    expect(farmerSlots[3]?.start).toEqual(440);
-    expect(farmerSlots[3]?.complete).toEqual(590);
+    expect(farmerSlots[3]?.schedule).toEqual(360);
+    expect(farmerSlots[3]?.start).toEqual(435);
+    expect(farmerSlots[3]?.complete).toEqual(585);
   });
 });

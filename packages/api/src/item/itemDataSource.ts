@@ -448,38 +448,7 @@ export default class ItemDataSource implements IItemDataSource {
     return industryBuilding;
   }
 
-  // async createSlot(a, index, lastCritical, lastComplete) {
-  //   // console.log(JSON.stringify(a));
-  //   const dependencyGraph = await this.resolveItemDependencyGraph(a.slug);
-
-  //   const { criticalPath } = dependencyGraph;
-
-  //   // console.log(dependencyGraph);
-
-  //   const start = lastCritical === criticalPath ? lastComplete : criticalPath;
-
-  //   const complete = lastCritical === criticalPath
-  //     ? start + a.productionTime
-  //     : criticalPath + a.productionTime;
-
-  //   const slot: IItemProfitBuildingSlots = {
-  //     slot: index + 1,
-  //     schedule: criticalPath,
-  //     start,
-  //     complete,
-  //     item: a,
-  //   };
-
-  //   lastComplete = complete;
-  //   lastCritical = criticalPath;
-  //   // console.log(a.slug, start, lastComplete);
-  //   return slot;
-  // }
-
   async resolveItemProfitSequentialSlots(items: any[]) {
-    let lastComplete = 0;
-    let lastCritical = 0;
-
     const dependencyGraphItemsPromises = items.map(async (a: any) => {
       const dependencyGraph = await this.resolveItemDependencyGraph(a.slug);
       return {
@@ -489,17 +458,25 @@ export default class ItemDataSource implements IItemDataSource {
 
     const allDependencyGraph = await Promise.all(dependencyGraphItemsPromises);
 
-    console.log(allDependencyGraph);
+    const dependencyGraphs = allDependencyGraph.reduce((a: any, b:any) => {
+      const slug: string | undefined = Object.keys(b)[0];
+      if (!slug) {
+        throw new Error('Error finding dependency graph');
+      }
+      return {
+        ...a,
+        [slug]: b[slug],
+      };
+    }, {});
 
-    // console.log(JSON.stringify(items));
-    const sequentialSlotsPromises: Promise<IItemProfitBuildingSlots>[] = items.map(
-      async (a: any, index: number) => {
-        // console.log(JSON.stringify(a));
-        const dependencyGraph = await this.resolveItemDependencyGraph(a.slug);
+    let lastComplete = 0;
+    let lastCritical = 0;
+
+    const sequentialSlotsPromises: IItemProfitBuildingSlots[] = items.map(
+      (a: any, index: number) => {
+        const dependencyGraph = dependencyGraphs[a.slug];
 
         const { criticalPath } = dependencyGraph;
-
-        // console.log(dependencyGraph);
 
         const start = lastCritical === criticalPath ? lastComplete : criticalPath;
 
@@ -517,13 +494,11 @@ export default class ItemDataSource implements IItemDataSource {
 
         lastComplete = complete;
         lastCritical = criticalPath;
-        // console.log(a.slug, start, lastComplete);
         return slot;
       },
     );
 
-    const sequentialSlots = await Promise.all(sequentialSlotsPromises);
-    return sequentialSlots;
+    return sequentialSlotsPromises;
   }
 
   async createSequentialBuildingProfitSlots(
