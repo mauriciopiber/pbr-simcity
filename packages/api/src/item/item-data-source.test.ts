@@ -56,21 +56,26 @@ describe('Item Data Source', () => {
   });
 
   test('get dependency graph for - pizza', async () => {
-    const item: IItemDependencyGraph = await itemDataSource.resolveItemDependencyGraph('pizza');
+    const item: IItemDependencyGraph = await itemDataSource.resolveItemDependencyGraph(
+      'pizza',
+    );
 
-    console.log(item);
     expect(item.slug).toEqual('pizza');
     expect(item.criticalPath).toEqual(510);
   });
 
   test('get dependency graph for - burgers', async () => {
-    const item: IItemDependencyGraph = await itemDataSource.resolveItemDependencyGraph('burgers');
+    const item: IItemDependencyGraph = await itemDataSource.resolveItemDependencyGraph(
+      'burgers',
+    );
     expect(item.slug).toEqual('burgers');
     expect(item.criticalPath).toEqual(510);
   });
 
   test('get dependency graph for - shoes', async () => {
-    const item: IItemDependencyGraph = await itemDataSource.resolveItemDependencyGraph('shoes');
+    const item: IItemDependencyGraph = await itemDataSource.resolveItemDependencyGraph(
+      'shoes',
+    );
     expect(item.slug).toEqual('shoes');
     expect(item.criticalPath).toEqual(180);
   });
@@ -93,333 +98,6 @@ describe('Items Profit - Critical Path', () => {
 
   afterEach(async () => {
     await client.close();
-  });
-
-  const itemsCriticalPath = [
-    {
-      _id: '6067df64e0fc61d7365eb58c',
-      name: 'Metal',
-      level: 1,
-      building: '6067df64e0fc61d7365eb582',
-      slug: 'metal',
-      productionTime: 1,
-      maxValue: 10,
-      billTime: 0,
-      billCost: 0,
-      profitOwnProduction: 10,
-      profitOwnByMinute: 10,
-      depends: [],
-      profitOwnByHour: 600,
-      quantity: 5,
-    },
-    {
-      _id: '6067df64e0fc61d7365eb58d',
-      name: 'Wood',
-      level: 2,
-      building: '6067df64e0fc61d7365eb582',
-      slug: 'wood',
-      productionTime: 3,
-      maxValue: 20,
-      billTime: 0,
-      billCost: 0,
-      profitOwnProduction: 20,
-      profitOwnByMinute: 6.666666666666667,
-      depends: [],
-      profitOwnByHour: 400,
-      quantity: 2,
-    },
-    {
-      _id: '6067df64e0fc61d7365eb58e',
-      name: 'Plastic',
-      level: 5,
-      building: '6067df64e0fc61d7365eb582',
-      slug: 'plastic',
-      productionTime: 9,
-      maxValue: 25,
-      billTime: 0,
-      billCost: 0,
-      profitOwnProduction: 25,
-      profitOwnByMinute: 2.7777777777777777,
-      depends: [],
-      profitOwnByHour: 166.66666666666666,
-      quantity: 2,
-    },
-    {
-      _id: '6067df64e0fc61d7365eb58f',
-      name: 'Seeds',
-      level: 7,
-      building: '6067df64e0fc61d7365eb582',
-      slug: 'seeds',
-      productionTime: 20,
-      maxValue: 30,
-      billTime: 0,
-      billCost: 0,
-      profitOwnProduction: 30,
-      profitOwnByMinute: 1.5,
-      depends: [],
-      profitOwnByHour: 90,
-      quantity: 2,
-    },
-    {
-      _id: '6067df64e0fc61d7365eb592',
-      name: 'Textiles',
-      level: 15,
-      building: '6067df64e0fc61d7365eb582',
-      slug: 'textiles',
-      productionTime: 180,
-      maxValue: 90,
-      billTime: 0,
-      billCost: 0,
-      profitOwnProduction: 90,
-      profitOwnByMinute: 0.5,
-      depends: [],
-      profitOwnByHour: 30,
-      quantity: 2,
-    },
-    {
-      _id: '6067df64e0fc61d7365eb5a0',
-      name: 'Cooking Utensils',
-      level: 17,
-      building: '6067df64e0fc61d7365eb584',
-      slug: 'cooking-utensils',
-      productionTime: 45,
-      maxValue: 250,
-      billTime: 9,
-      billCost: 110,
-      profitOwnProduction: 140,
-      profitOwnByMinute: 3.111111111111111,
-      depends: [
-        { item: '6067df64e0fc61d7365eb58d', quantity: 2 },
-        { item: '6067df64e0fc61d7365eb58c', quantity: 2 },
-        { item: '6067df64e0fc61d7365eb58e', quantity: 2 },
-      ],
-      profitOwnByHour: 186.66666666666666,
-      quantity: 1,
-    },
-    {
-      _id: '6067df64e0fc61d7365eb5aa',
-      name: 'Flour Bag',
-      level: 17,
-      building: '6067df64e0fc61d7365eb585',
-      slug: 'flour-bag',
-      productionTime: 30,
-      maxValue: 570,
-      billTime: 180,
-      billCost: 240,
-      profitOwnProduction: 330,
-      profitOwnByMinute: 11,
-      depends: [
-        { item: '6067df64e0fc61d7365eb592', quantity: 2 },
-        { item: '6067df64e0fc61d7365eb58f', quantity: 2 },
-      ],
-      profitOwnByHour: 660,
-      quantity: 2,
-    },
-    {
-      _id: '6067df64e0fc61d7365eb5ac',
-      name: 'Cream',
-      level: 23,
-      building: '6067df64e0fc61d7365eb585',
-      slug: 'cream',
-      productionTime: 75,
-      maxValue: 440,
-      billTime: 360,
-      billCost: 140,
-      profitOwnProduction: 300,
-      profitOwnByMinute: 4,
-      depends: [{ item: '6067df64e0fc61d7365eb595', quantity: 1 }],
-      profitOwnByHour: 240,
-      quantity: 1,
-    },
-    {
-      _id: '6067df64e0fc61d7365eb595',
-      name: 'Animal Feed',
-      level: 23,
-      building: '6067df64e0fc61d7365eb582',
-      slug: 'animal-feed',
-      productionTime: 360,
-      maxValue: 140,
-      billTime: 0,
-      billCost: 0,
-      profitOwnProduction: 140,
-      profitOwnByMinute: 0.3888888888888889,
-      depends: [],
-      profitOwnByHour: 23.333333333333332,
-      quantity: 4,
-    },
-    {
-      _id: '6067df64e0fc61d7365eb5b7',
-      name: 'Bread Roll',
-      level: 24,
-      building: '6067df64e0fc61d7365eb588',
-      slug: 'bread-roll',
-      productionTime: 60,
-      maxValue: 1840,
-      billTime: 435,
-      billCost: 1580,
-      profitOwnProduction: 260,
-      profitOwnByMinute: 4.333333333333333,
-      depends: [
-        { item: '6067df64e0fc61d7365eb5ac', quantity: 1 },
-        { item: '6067df64e0fc61d7365eb5aa', quantity: 2 },
-      ],
-      profitOwnByHour: 260,
-      quantity: 1,
-    },
-    {
-      _id: '6067df64e0fc61d7365eb5af',
-      name: 'Beef',
-      level: 27,
-      building: '6067df64e0fc61d7365eb585',
-      slug: 'beef',
-      productionTime: 150,
-      maxValue: 860,
-      billTime: 360,
-      billCost: 420,
-      profitOwnProduction: 440,
-      profitOwnByMinute: 2.933333333333333,
-      depends: [{ item: '6067df64e0fc61d7365eb595', quantity: 3 }],
-      profitOwnByHour: 176,
-      quantity: 1,
-    },
-    {
-      _id: '6067df64e0fc61d7365eb5c6',
-      name: 'BBG Grill',
-      level: 29,
-      building: '6067df64e0fc61d7365eb58b',
-      slug: 'bbg-grill',
-      productionTime: 165,
-      maxValue: 530,
-      billTime: 54,
-      billCost: 280,
-      profitOwnProduction: 250,
-      profitOwnByMinute: 1.5151515151515151,
-      depends: [
-        { item: '6067df64e0fc61d7365eb58c', quantity: 3 },
-        { item: '6067df64e0fc61d7365eb5a0', quantity: 1 },
-      ],
-      profitOwnByHour: 90.9090909090909,
-      quantity: 1,
-    },
-    {
-      _id: '6067df64e0fc61d7365eb5c2',
-      name: 'Burgers',
-      level: 31,
-      building: '6067df64e0fc61d7365eb58a',
-      slug: 'burgers',
-      productionTime: 35,
-      maxValue: 3620,
-      billTime: 510,
-      billCost: 3230,
-      profitOwnProduction: 390,
-      profitOwnByMinute: 11.142857142857142,
-      depends: [
-        { item: '6067df64e0fc61d7365eb5af', quantity: 1 },
-        { item: '6067df64e0fc61d7365eb5b7', quantity: 1 },
-        { item: '6067df64e0fc61d7365eb5c6', quantity: 1 },
-      ],
-      profitOwnByHour: 668.5714285714286,
-      quantity: 1,
-    },
-  ];
-
-  const burgers = {
-    _id: '6067df64e0fc61d7365eb5c2',
-    name: 'Burgers',
-    level: 31,
-    building: '6067df64e0fc61d7365eb58a',
-    slug: 'burgers',
-    productionTime: 35,
-    maxValue: 3620,
-    billTime: 510,
-    billCost: 3230,
-    profitOwnProduction: 390,
-    profitOwnByMinute: 11.142857142857142,
-    depends: [
-      { item: '6067df64e0fc61d7365eb5af', quantity: 1 },
-      { item: '6067df64e0fc61d7365eb5b7', quantity: 1 },
-      { item: '6067df64e0fc61d7365eb5c6', quantity: 1 },
-    ],
-    profitOwnByHour: 668.5714285714286,
-    quantity: 1,
-  };
-
-  const breadRoll = {
-    _id: '6067df64e0fc61d7365eb5b7',
-    name: 'Bread Roll',
-    level: 24,
-    building: '6067df64e0fc61d7365eb588',
-    slug: 'bread-roll',
-    productionTime: 60,
-    maxValue: 1840,
-    billTime: 435,
-    billCost: 1580,
-    profitOwnProduction: 260,
-    profitOwnByMinute: 4.333333333333333,
-    depends: [
-      { item: '6067df64e0fc61d7365eb5ac', quantity: 1 },
-      { item: '6067df64e0fc61d7365eb5aa', quantity: 2 },
-    ],
-    usedIn: [],
-    profitOwnByHour: 260,
-    // quantity: 1,
-  };
-
-  const bbgGrill = {
-    _id: '6067df64e0fc61d7365eb5c6',
-    name: 'BBG Grill',
-    level: 29,
-    building: '6067df64e0fc61d7365eb58b',
-    slug: 'bbg-grill',
-    productionTime: 165,
-    maxValue: 530,
-    billTime: 54,
-    billCost: 280,
-    profitOwnProduction: 250,
-    profitOwnByMinute: 1.5151515151515151,
-    depends: [
-      { item: '6067df64e0fc61d7365eb58c', quantity: 3 },
-      { item: '6067df64e0fc61d7365eb5a0', quantity: 1 },
-    ],
-    profitOwnByHour: 90.9090909090909,
-    quantity: 1,
-  };
-
-  const beef = {
-    _id: '6067df64e0fc61d7365eb5af',
-    name: 'Beef',
-    level: 27,
-    building: '6067df64e0fc61d7365eb585',
-    slug: 'beef',
-    productionTime: 150,
-    maxValue: 860,
-    billTime: 360,
-    billCost: 420,
-    profitOwnProduction: 440,
-    profitOwnByMinute: 2.933333333333333,
-    depends: [{ item: '6067df64e0fc61d7365eb595', quantity: 3 }],
-    profitOwnByHour: 176,
-    quantity: 1,
-  };
-
-  test('critical path - bread roll', async () => {
-    const criticalPath = ItemDataSource.getItemCriticalPath(breadRoll, itemsCriticalPath);
-    expect(criticalPath).toEqual(440);
-  });
-
-  test('critical path - burgers', async () => {
-    const criticalPath = ItemDataSource.getItemCriticalPath(burgers, itemsCriticalPath);
-    expect(criticalPath).toEqual(555);
-  });
-
-  test('critical path - beefs', async () => {
-    const criticalPath = ItemDataSource.getItemCriticalPath(beef, itemsCriticalPath);
-    expect(criticalPath).toEqual(365);
-  });
-
-  test('critical path - bbg grill', async () => {
-    const criticalPath = ItemDataSource.getItemCriticalPath(bbgGrill, itemsCriticalPath);
-    expect(criticalPath).toEqual(59);
   });
 
   test('workflow - planks', async () => {
@@ -456,9 +134,9 @@ describe('Items Profit - Critical Path', () => {
 
     expect(supplies?.slots[0]?.slot).toEqual(1);
     expect(supplies?.slots[0]?.item.slug).toEqual('planks');
-    expect(supplies?.slots[0]?.schedule).toEqual(8);
-    expect(supplies?.slots[0]?.start).toEqual(8);
-    expect(supplies?.slots[0]?.complete).toEqual(38);
+    expect(supplies?.slots[0]?.schedule).toEqual(3);
+    expect(supplies?.slots[0]?.start).toEqual(3);
+    expect(supplies?.slots[0]?.complete).toEqual(33);
 
     // expect(findAll.cycles.length).toEqual(2);
 
@@ -536,26 +214,26 @@ describe('Items Profit - Critical Path', () => {
 
     expect(farmers?.slots[0]?.slot).toEqual(1);
     expect(farmers?.slots[0]?.item.slug).toEqual('flour-bag');
-    expect(farmers?.slots[0]?.schedule).toEqual(185);
-    expect(farmers?.slots[0]?.start).toEqual(185);
-    expect(farmers?.slots[0]?.complete).toEqual(215);
+    expect(farmers?.slots[0]?.schedule).toEqual(180);
+    expect(farmers?.slots[0]?.start).toEqual(180);
+    expect(farmers?.slots[0]?.complete).toEqual(210);
 
     expect(farmers?.slots[1]?.slot).toEqual(2);
     expect(farmers?.slots[1]?.item.slug).toEqual('cheese');
-    expect(farmers?.slots[1]?.schedule).toEqual(365);
-    expect(farmers?.slots[1]?.start).toEqual(365);
-    expect(farmers?.slots[1]?.complete).toEqual(470);
+    expect(farmers?.slots[1]?.schedule).toEqual(360);
+    expect(farmers?.slots[1]?.start).toEqual(360);
+    expect(farmers?.slots[1]?.complete).toEqual(465);
 
     expect(farmers?.slots[2]?.slot).toEqual(3);
     expect(farmers?.slots[2]?.item.slug).toEqual('beef');
-    expect(farmers?.slots[2]?.schedule).toEqual(365);
-    expect(farmers?.slots[2]?.start).toEqual(470);
-    expect(farmers?.slots[2]?.complete).toEqual(620);
+    expect(farmers?.slots[2]?.schedule).toEqual(360);
+    expect(farmers?.slots[2]?.start).toEqual(465);
+    expect(farmers?.slots[2]?.complete).toEqual(615);
 
     expect(fastFood?.slots[0]?.slot).toEqual(1);
     expect(fastFood?.slots[0]?.item.slug).toEqual('pizza');
-    expect(fastFood?.slots[0]?.schedule).toEqual(625);
-    expect(fastFood?.slots[0]?.start).toEqual(625);
+    expect(fastFood?.slots[0]?.schedule).toEqual(615);
+    expect(fastFood?.slots[0]?.start).toEqual(615);
     expect(fastFood?.slots[0]?.complete).toEqual(649);
 
     // expect(findAll.cycles.length).toEqual(4);
@@ -664,12 +342,7 @@ describe('Items Profit - Critical Path', () => {
     expect(findAll.cycles.length).toEqual(0);
     // expect(findAll.buildings).toHaveProperty('farmers');
     // expect(findAll.buildings).toHaveProperty('industry');
-    const {
-      industry,
-      farmers,
-      hardware,
-      donuts,
-    } = findAll.buildings;
+    const { industry, farmers, hardware, donuts } = findAll.buildings;
     const fastFood = findAll.buildings['fast-food'];
     const homeApp = findAll.buildings['home-appliances'];
 
@@ -706,28 +379,28 @@ describe('Items Profit - Critical Path', () => {
 
     expect(hardware?.slots[0]?.slot).toEqual(1);
     expect(hardware?.slots[0]?.item.slug).toEqual('cooking-utensils');
-    expect(hardware?.slots[0]?.schedule).toEqual(14);
-    expect(hardware?.slots[0]?.start).toEqual(14);
-    expect(hardware?.slots[0]?.complete).toEqual(59);
+    expect(hardware?.slots[0]?.schedule).toEqual(9);
+    expect(hardware?.slots[0]?.start).toEqual(9);
+    expect(hardware?.slots[0]?.complete).toEqual(54);
 
     expect(farmers?.slots.length).toEqual(4);
 
     expect(farmers?.slots[0]?.slot).toEqual(1);
     expect(farmers?.slots[0]?.item.slug).toEqual('flour-bag');
-    expect(farmers?.slots[0]?.schedule).toEqual(185);
-    expect(farmers?.slots[0]?.start).toEqual(185);
-    expect(farmers?.slots[0]?.complete).toEqual(215);
+    expect(farmers?.slots[0]?.schedule).toEqual(180);
+    expect(farmers?.slots[0]?.start).toEqual(180);
+    expect(farmers?.slots[0]?.complete).toEqual(210);
 
     expect(farmers?.slots[1]?.slot).toEqual(2);
     expect(farmers?.slots[1]?.item.slug).toEqual('flour-bag');
-    expect(farmers?.slots[1]?.schedule).toEqual(185);
-    expect(farmers?.slots[1]?.start).toEqual(215);
-    expect(farmers?.slots[1]?.complete).toEqual(245);
+    expect(farmers?.slots[1]?.schedule).toEqual(180);
+    expect(farmers?.slots[1]?.start).toEqual(210);
+    expect(farmers?.slots[1]?.complete).toEqual(240);
 
     expect(farmers?.slots[2]?.slot).toEqual(3);
     expect(farmers?.slots[2]?.item.slug).toEqual('cream');
-    expect(farmers?.slots[2]?.schedule).toEqual(365);
-    expect(farmers?.slots[2]?.start).toEqual(365);
+    expect(farmers?.slots[2]?.schedule).toEqual(360);
+    expect(farmers?.slots[2]?.start).toEqual(360);
     expect(farmers?.slots[2]?.complete).toEqual(440);
 
     expect(farmers?.slots[3]?.slot).toEqual(4);
@@ -796,5 +469,128 @@ describe('Items Profit - Critical Path', () => {
     // expect(findAll.cycles[0]?.items.length).toEqual(1);
     // expect(findAll.cycles[0]?.startProduction).toEqual(595);
     // expect(findAll.cycles[0]?.endProduction).toEqual(640);
+  });
+
+  test('create sequential order of slots in building', async () => {
+    const items = [
+      {
+        _id: '608398a336051c27a775b9e0',
+        name: 'Flour Bag',
+        level: 17,
+        building: {
+          _id: '608398a336051c27a775b9bb',
+          name: "Farmer's Market",
+          slug: 'farmers',
+          parallel: false,
+        },
+        slug: 'flour-bag',
+        productionTime: 30,
+        maxValue: 570,
+        billTime: 180,
+        billCost: 240,
+        profitOwnProduction: 330,
+        profitOwnByMinute: 11,
+        depends: [
+          { item: '608398a336051c27a775b9c8', quantity: 2 },
+          { item: '608398a336051c27a775b9c5', quantity: 2 },
+        ],
+        profitOwnByHour: 660,
+      },
+      {
+        _id: '608398a336051c27a775b9e0',
+        name: 'Flour Bag',
+        level: 17,
+        building: {
+          _id: '608398a336051c27a775b9bb',
+          name: "Farmer's Market",
+          slug: 'farmers',
+          parallel: false,
+        },
+        slug: 'flour-bag',
+        productionTime: 30,
+        maxValue: 570,
+        billTime: 180,
+        billCost: 240,
+        profitOwnProduction: 330,
+        profitOwnByMinute: 11,
+        depends: [
+          { item: '608398a336051c27a775b9c8', quantity: 2 },
+          { item: '608398a336051c27a775b9c5', quantity: 2 },
+        ],
+        profitOwnByHour: 660,
+      },
+      {
+        _id: '608398a336051c27a775b9e2',
+        name: 'Cream',
+        level: 23,
+        building: {
+          _id: '608398a336051c27a775b9bb',
+          name: "Farmer's Market",
+          slug: 'farmers',
+          parallel: false,
+        },
+        slug: 'cream',
+        productionTime: 75,
+        maxValue: 440,
+        billTime: 360,
+        billCost: 140,
+        profitOwnProduction: 300,
+        profitOwnByMinute: 4,
+        depends: [{ item: '608398a336051c27a775b9cb', quantity: 1 }],
+        profitOwnByHour: 240,
+        quantity: 1,
+      },
+      {
+        _id: '608398a336051c27a775b9e5',
+        name: 'Beef',
+        level: 27,
+        building: {
+          _id: '608398a336051c27a775b9bb',
+          name: "Farmer's Market",
+          slug: 'farmers',
+          parallel: false,
+        },
+        slug: 'beef',
+        productionTime: 150,
+        maxValue: 860,
+        billTime: 360,
+        billCost: 420,
+        profitOwnProduction: 440,
+        profitOwnByMinute: 2.933333333333333,
+        depends: [{ item: '608398a336051c27a775b9cb', quantity: 3 }],
+        profitOwnByHour: 176,
+        quantity: 1,
+      },
+    ];
+
+    const farmerSlots: any[] = await itemDataSource.resolveItemProfitSequentialSlots(
+      items,
+    );
+
+    expect(farmerSlots.length).toEqual(4);
+
+    expect(farmerSlots[0]?.slot).toEqual(1);
+    expect(farmerSlots[0]?.item.slug).toEqual('flour-bag');
+    expect(farmerSlots[0]?.schedule).toEqual(180);
+    expect(farmerSlots[0]?.start).toEqual(180);
+    expect(farmerSlots[0]?.complete).toEqual(210);
+
+    expect(farmerSlots[1]?.slot).toEqual(2);
+    expect(farmerSlots[1]?.item.slug).toEqual('flour-bag');
+    expect(farmerSlots[1]?.schedule).toEqual(180);
+    expect(farmerSlots[1]?.start).toEqual(210);
+    expect(farmerSlots[1]?.complete).toEqual(240);
+
+    expect(farmerSlots[2]?.slot).toEqual(3);
+    expect(farmerSlots[2]?.item.slug).toEqual('cream');
+    expect(farmerSlots[2]?.schedule).toEqual(360);
+    expect(farmerSlots[2]?.start).toEqual(360);
+    expect(farmerSlots[2]?.complete).toEqual(440);
+
+    expect(farmerSlots[3]?.slot).toEqual(4);
+    expect(farmerSlots[3]?.item.slug).toEqual('beef');
+    expect(farmerSlots[3]?.schedule).toEqual(365);
+    expect(farmerSlots[3]?.start).toEqual(440);
+    expect(farmerSlots[3]?.complete).toEqual(590);
   });
 });
