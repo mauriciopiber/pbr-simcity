@@ -2,12 +2,17 @@
 import { ObjectId } from 'mongodb';
 import {
   IItemModel,
+  IItemDoc,
   IBuildingModel,
   IItemRepository,
 } from '@pbr-simcity/types/types';
 import Collection from '@pbr-simcity/api/src/collection';
 
 export default class ItemRepository extends Collection implements IItemRepository {
+  async findDoc(slug: string): Promise<IItemDoc> {
+    return this.collection.findOne({ slug });
+  }
+
   async findAll(match: any, sort: any): Promise<IItemModel[]> {
     const docs = this.collection.aggregate(
       [

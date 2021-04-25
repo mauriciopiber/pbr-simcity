@@ -44,12 +44,14 @@ describe('Test Brand resolvers', () => {
     const server = new ApolloServer({
       typeDefs,
       resolvers,
+      /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
       /* @ts-ignore */
       dataSources: () => ({
         item: itemApi,
         profitItem: profitItemApi,
       }),
     });
+    /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
     /* @ts-ignore */
     const { query: queryMock } = createTestClient(server);
     query = queryMock;

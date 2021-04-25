@@ -51,8 +51,12 @@ export interface IItemProfitBuildingSlots {
  * Cada building do projeto e a descrição de como os slots de produção serão ocupados no ciclo.
  */
 export interface IItemProfitBuilding {
+  name: string;
+  slug: string;
   slots: IItemProfitBuildingSlots[];
 }
+
+
 
 /**
  * Profit - Building List

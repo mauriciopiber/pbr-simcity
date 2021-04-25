@@ -9,7 +9,6 @@ import ItemDataSource from '@pbr-simcity/api/src/item/itemDataSource';
 import BuilidingRepository from '@pbr-simcity/api/src/building/buildingRepository';
 import BuildingDataSource from '@pbr-simcity/api/src/building/buildingDataSource';
 
-
 function createDataSource(client: any) {
   const itemRepository = new ItemRepository(client.db().collection('item'));
   const itemDataSource = new ItemDataSource(itemRepository);
@@ -35,9 +34,11 @@ describe('Test Item Resolvers', () => {
     const server = new ApolloServer({
       typeDefs,
       resolvers,
+      /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
       /** @ts-ignore */
       dataSources: () => createDataSource(client),
     });
+    /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
     /** @ts-ignore */
     const { query: queryMock } = createTestClient(server);
     query = queryMock;

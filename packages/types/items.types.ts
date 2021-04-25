@@ -10,6 +10,11 @@ export interface IItemDependency {
   quantity: number;
 }
 
+export interface IItemDependencyDoc {
+  item: string;
+  quantity: number;
+}
+
 export interface IItem {
   name: string;
   productionTime: number;
@@ -18,6 +23,16 @@ export interface IItem {
   maxValue: number;
   slug: string;
   depends: IItemDependency[];
+}
+
+export interface IItemDoc {
+  name: string;
+  productionTime: number;
+  level: number;
+  building: string;
+  maxValue: number;
+  slug: string;
+  depends: IItemDependencyDoc[];
 }
 
 export interface IItemModel extends IItem {

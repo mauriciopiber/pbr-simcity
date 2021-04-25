@@ -34,9 +34,11 @@ describe('Test Brand resolvers', () => {
     const server = new ApolloServer({
       typeDefs,
       resolvers,
+      /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
       /** @ts-ignore */
       dataSources: () => createDataSource(client),
     });
+    /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
     /* @ts-ignore */
     const { query: queryMock } = createTestClient(server);
     query = queryMock;
