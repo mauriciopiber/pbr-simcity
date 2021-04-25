@@ -480,6 +480,17 @@ export default class ItemDataSource implements IItemDataSource {
     let lastComplete = 0;
     let lastCritical = 0;
 
+    const dependencyGraphItemsPromises = items.map(async (a: any) => {
+      const dependencyGraph = await this.resolveItemDependencyGraph(a.slug);
+      return {
+        [a.slug]: dependencyGraph,
+      };
+    });
+
+    const allDependencyGraph = await Promise.all(dependencyGraphItemsPromises);
+
+    console.log(allDependencyGraph);
+
     // console.log(JSON.stringify(items));
     const sequentialSlotsPromises: Promise<IItemProfitBuildingSlots>[] = items.map(
       async (a: any, index: number) => {
