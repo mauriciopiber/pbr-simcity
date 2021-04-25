@@ -70,12 +70,6 @@ export const QUERY_ITEMS_BY_BUILDING = gql`
       name
       slug
     }
-    profit {
-      cost
-      profit
-      profitByMinute
-      profitByHour
-    }
     building {
       _id
       name
@@ -127,12 +121,6 @@ export const QUERY_ITEMS_DEPEND_BY_BUILDING = gql`
       name
       slug
     }
-    profit {
-      cost
-      profit
-      profitByMinute
-      profitByHour
-    }
     building {
       _id
       name
@@ -175,12 +163,6 @@ export const QUERY_ITEMS_USED_BY_BUILDING = gql`
       _id
       name
       slug
-    }
-    profit {
-      cost
-      profit
-      profitByMinute
-      profitByHour
     }
     depends {
       item {
@@ -238,12 +220,6 @@ export const QUERY_ITEMS = gql`
         }
         quantity
       }
-      profit {
-        cost
-        profit
-        profitByMinute
-        profitByHour
-      }
       building {
         _id
         name
@@ -271,12 +247,6 @@ fragment itemDepends on Item {
     name
     parallel
   }
-  profit {
-    cost
-    profit
-    profitByMinute
-    profitByHour
-  }
 }
   query Item(
     $slug: String
@@ -288,12 +258,6 @@ fragment itemDepends on Item {
       slug
       productionTime
       level
-      profit {
-        cost
-        profit
-        profitByMinute
-        profitByHour
-      }
       depends {
         quantity
         item {

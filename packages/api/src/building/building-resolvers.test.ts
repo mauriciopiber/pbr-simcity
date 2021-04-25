@@ -6,13 +6,19 @@ import resolvers from '@pbr-simcity/api/src/resolvers';
 import typeDefs from '@pbr-simcity/api/src/typeDefs';
 import BuilidingRepository from '@pbr-simcity/api/src/building/buildingRepository';
 import BuildingDataSource from '@pbr-simcity/api/src/building/buildingDataSource';
+import ItemRepository from '@pbr-simcity/api/src/item/itemRepository';
+import ItemDataSource from '@pbr-simcity/api/src/item/itemDataSource';
 
 function createDataSource(client: any) {
   const buildingRepository = new BuilidingRepository(client.db().collection('building'));
   const buildingDataSource = new BuildingDataSource(buildingRepository);
 
+  const itemRepository = new ItemRepository(client.db().collection('item'));
+  const itemDataSource = new ItemDataSource(itemRepository);
+
   return {
     building: buildingDataSource,
+    item: itemDataSource,
   };
 }
 
@@ -63,9 +69,7 @@ describe('Test Brand resolvers', () => {
     const ONE_BUILDING_BY_SLUG = gql`
       query {
         building(
-          filter: {
-            slug: "supplies"
-          }
+          slug: "supplies"
         ) {
           _id
           name
@@ -80,5 +84,18 @@ describe('Test Brand resolvers', () => {
 
     const res = await query({ query: ONE_BUILDING_BY_SLUG });
     expect(res.errors).toBe(undefined);
+
+    const {
+      data,
+    } = res;
+
+    const {
+      building,
+    } = data;
+
+    expect(building.items.length).toEqual(6);
+
+    expect(building.name).toEqual('Supplies Store');
+    expect(building.slug).toEqual('supplies');
   });
 });

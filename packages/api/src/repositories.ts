@@ -14,11 +14,13 @@ function createRepository(client: any): any {
     fs.readdirSync(path.join(__dirname, dir)).forEach((file): void => {
       // console.log(file);
       if (
-        file.match(/Repository.(ts|js)$/) !== null &&
-        file !== 'index.ts' &&
-        file !== 'index.js'
+        file.match(/Repository.(ts|js)$/) !== null
+        && file !== 'index.ts'
+        && file !== 'index.js'
       ) {
-        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        /* eslint-disable global-require */
+        /* eslint-disable @typescript-eslint/no-var-requires */
+        /* eslint-disable import/no-dynamic-require */
         const classRepository = require(path.resolve(__dirname, dir, file));
 
         if (!classRepository.default) {
@@ -32,6 +34,7 @@ function createRepository(client: any): any {
 
         const className = name.charAt(0).toLocaleLowerCase() + name.slice(1);
 
+        /* eslint-disable new-cap */
         dataSources[className] = new classRepository.default(
           client.db().collection(className),
         );

@@ -26,17 +26,13 @@ export default class ItemDataSource implements IItemDataSource {
     return this.itemRepository.findAll(match, order);
   }
 
-  async resolveFindItemsByBuildingId(args: IItemArgs): Promise<IItemModel[]> {
-    const {
-      building,
-    } = args;
-
-    if (!building) {
-      throw new Error('Missing building slug on call');
+  async resolveFindItemsByBuildingId(parent: string, args: IItemArgs): Promise<IItemModel[]> {
+    if (!parent) {
+      throw new Error('Missing parent ID');
     }
     const match = ItemDataSource.createMatch(args);
     const order = ItemDataSource.createOrder(args);
-    return this.itemRepository.findByBuildingId(building, match, order);
+    return this.itemRepository.findByBuildingId(parent, match, order);
   }
 
   async resolveFindItemsByBuildingSlug(args: IItemArgs): Promise<IItemModel[]> {

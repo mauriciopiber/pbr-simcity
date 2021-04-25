@@ -21,6 +21,7 @@ const server = new ApolloServer({
 
 // The `listen` method launches a web server.
 server.listen().then(() => {
+  /* eslint-disable no-debugger, no-console */
   console.log();
   console.log('running');
 });

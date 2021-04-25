@@ -24,7 +24,6 @@ export default class BuildingDataSource implements IBuildingDataSource {
       _id,
     } = filter;
 
-    console.log(slug, _id);
 
     if (slug) {
       return this.buildingRepository.findOneBySlug(slug);

@@ -74,10 +74,10 @@ export interface IItemDataSource {
   resolveItemProfit(item: string): Promise<IItemProfit>
   /** Item itself */
   resolveFindAll(args: IItemArgs): Promise<IItemModel[]>
-  resolveFindItemsByBuildingId(args: IItemArgs): Promise<IItemModel[]>
   resolveFindItemsByBuildingSlug(args: IItemArgs): Promise<IItemModel[]>
   resolveFindItemsDependsByBuildingSlug(args: IItemArgs): Promise<IItemModel[]>
   resolveFindItemsUsedInByBuildingSlug(args: IItemArgs): Promise<IItemModel[]>
+  resolveFindItemsByBuildingId(parent: string, args: IItemArgs): Promise<IItemModel[]>
   resolveUsedInByItemId(parent: string, args: IItemArgs): Promise<IItemModel[]>
   resolveItemDependsByItemId(parent: string): Promise<IItemModel>
   resolveFindOneItem(args: IItemArgs): Promise<IItemModel>

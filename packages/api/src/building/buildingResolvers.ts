@@ -1,5 +1,5 @@
 import {
-  IBuilding, IItem, IBuildingFilter, IBuildingArgs, IContext,
+  IBuilding, IItemModel, IBuildingFilter, IBuildingArgs, IContext, IItemArgs,
 } from '@pbr-simcity/types/types';
 
 const resolvers = {
@@ -22,11 +22,11 @@ const resolvers = {
     },
   },
   Building: {
-    async items(parent: any, _args: any, context: IContext): Promise<IItem[]> {
+    async items(parent: IItemModel, args: IItemArgs, context: IContext): Promise<IItemModel[]> {
       const { dataSources } = context;
       const { item } = dataSources;
 
-      const items = await item.resolveFindItemsByBuildingId(parent._id);
+      const items = await item.resolveFindItemsByBuildingId(parent._id, args);
 
       return items;
     },
