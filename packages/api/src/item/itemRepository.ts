@@ -1,379 +1,22 @@
 // import { MongoDataSource } from 'apollo-datasource-mongodb'
 import { ObjectId } from 'mongodb';
 import {
-  IItemDependency,
-  IItemDependencyValues,
-  IItemArgs,
-  IItemProfit,
   IItemModel,
-  IItemProfitDependency,
-  IItemFilter,
-  IItemProfitBuldingList,
-  // IProfitCycle,
   IBuildingModel,
-  IItemProfitBuildingSlots,
-  IItemProfitBuilding,
+  IItemRepository,
 } from '@pbr-simcity/types/types';
 import Collection from '@pbr-simcity/api/src/collection';
 
-
-class ItemRepository extends Collection {
-  async getAll() {
-    const docs = this.collection.find();
+export default class ItemRepository extends Collection implements IItemRepository {
+  async findAll(match: any, sort: any): Promise<IItemModel[]> {
+    const docs = this.collection.aggregate(
+      [
+        ...this.pipeline,
+        match || null,
+        sort || null,
+      ],
+    );
     return docs.toArray();
-  }
-
-  async findDependsItems(
-    depends: IItemDependency[],
-  ): Promise<IItemProfitDependency[]> {
-    const getDependsItems = depends.map(
-      async (a: IItemDependency): Promise<IItemProfitDependency> => {
-        const itemDepends = await this.findById(a.item);
-
-        if (!itemDepends) {
-          throw new Error('Missing Item from depends');
-        }
-        return {
-          ...itemDepends,
-          quantity: a.quantity,
-        };
-      },
-    );
-
-    const dependsItems: IItemProfitDependency[] = await Promise.all(
-      getDependsItems,
-    );
-    return dependsItems;
-  }
-
-  async recursiveDependency(
-    depends: IItemDependency[],
-  ): Promise<IItemProfitDependency[]> {
-    const dependsItems: IItemProfitDependency[] = await this.findDependsItems(
-      depends,
-    );
-
-    const dependsInner: IItemDependency[] = dependsItems
-      .map((a: IItemModel) => a.depends)
-      .flat();
-
-    if (dependsInner.length <= 0) {
-      return dependsItems;
-    }
-
-    const moreItems = await this.recursiveDependency(dependsInner);
-
-    return [...dependsItems, ...moreItems];
-  }
-
-  async flatItemsFromDependency(
-    rootItem: string,
-  ): Promise<IItemProfitDependency[]> {
-    const itemModel: IItemModel | null = await this.findOneBySlug(rootItem);
-
-    if (!itemModel) {
-      throw new Error('Missing Item Model');
-    }
-
-    const { depends } = itemModel;
-
-    const dependsItems: IItemProfitDependency[] = await this.recursiveDependency(
-      depends,
-    );
-
-    const groupItems = dependsItems.reduce(
-      (res: any, value: IItemProfitDependency) => {
-        if (res[value.slug]) {
-          res[value.slug].quantity += value.quantity;
-          return res;
-        }
-
-        res[value.slug] = {
-          ...value,
-        };
-        return res;
-      },
-      {},
-    );
-
-    const groupItemsValues: IItemProfitDependency[] = Object.values(groupItems);
-
-    const allItems = [
-      {
-        ...itemModel,
-        quantity: 1,
-      },
-      ...groupItemsValues,
-    ];
-
-    allItems.sort(
-      (a: IItemProfitDependency, b: IItemProfitDependency): number => {
-        if (a.level > b.level) {
-          return 1;
-        }
-        return -1;
-      },
-    );
-
-    return allItems;
-  }
-
-  static createParallelBuildingProfitSlots(
-    items: IItemProfitDependency[],
-    buildingId: string,
-  ): IItemProfitBuilding {
-    const itemsDependsIndustry: IItemProfitDependency[] = items.filter(
-      (a: IItemProfitDependency) => `${a.building}` === `${buildingId}`,
-    );
-
-    const itemsExpandIndustry = itemsDependsIndustry
-      .map((a: IItemDependency) => {
-        const { quantity, ...rest } = a;
-
-        if (quantity === 1) {
-          return a;
-        }
-
-        return [...Array(quantity).keys()].map(() => rest);
-      })
-      .flat();
-
-    const industrySlots: IItemProfitBuildingSlots[] = itemsExpandIndustry.map(
-      (a: any, index: number) => {
-        const slot: IItemProfitBuildingSlots = {
-          slot: index + 1,
-          schedule: 0,
-          start: 0,
-          complete: a.productionTime,
-          item: a,
-        };
-        return slot;
-      },
-    );
-    const industryBuilding: IItemProfitBuilding = {
-      slots: industrySlots,
-    };
-    return industryBuilding;
-  }
-
-  static getItemCriticalPath(
-    item: IItemProfitDependency,
-    items: IItemProfitDependency[],
-    // industryId = '6067df64e0fc61d7365eb582',
-  ): number {
-    console.log(item);
-    const rootDepends = item.depends;
-
-    const dependsLvl1 = rootDepends
-      .map((a: IItemDependency) => {
-        const itemDepends = items.filter(
-          (b: IItemModel) => `${b._id}` === `${a.item}`,
-        );
-        return itemDepends;
-      }).flat();
-
-    const maxLvl1 = dependsLvl1.reduce(
-      (prev, current) => ((prev.productionTime > current.productionTime) ? prev : current)
-    );
-
-    // console.log(maxLvl1);
-    const dependsLvl1Value = maxLvl1.productionTime;
-
-    if (maxLvl1.depends.length <= 0) {
-      return 5 + dependsLvl1Value;
-    }
-
-    const dependsLvl2 = maxLvl1.depends
-      .map((a: IItemDependency) => {
-        const itemDepends = items.filter(
-          (b: IItemModel) => `${b._id}` === `${a.item}`,
-        );
-        return itemDepends;
-      }).flat();
-
-    const maxLvl2 = dependsLvl2.reduce(
-      (prev, current) => ((prev.productionTime > current.productionTime) ? prev : current)
-    );
-
-    const dependsLvl2Value = maxLvl2.productionTime;
-
-    return 5 + dependsLvl1Value + dependsLvl2Value;
-  }
-
-  static createSequentialBuildingProfitSlots(
-    items: IItemProfitDependency[],
-    buildingId: string,
-  ): IItemProfitBuilding {
-    const itemsDepends: IItemProfitDependency[] = items.filter(
-      (a: IItemProfitDependency) => `${a.building}` === `${buildingId}`,
-    );
-
-    const itemsExpand = itemsDepends
-      .map((a: IItemDependency) => {
-        const { quantity, ...rest } = a;
-
-        if (quantity === 1) {
-          return a;
-        }
-
-        return [...Array(quantity).keys()].map(() => rest);
-      })
-      .flat();
-
-    let lastComplete = 0;
-    let lastCritical = 0;
-
-    // console.log(JSON.stringify(items));
-    const industrySlots: IItemProfitBuildingSlots[] = itemsExpand.map(
-      (a: any, index: number) => {
-        // console.log(JSON.stringify(a));
-        const criticalPath = ItemRepository.getItemCriticalPath(a, items);
-
-        const start = lastCritical === criticalPath ? lastComplete : criticalPath;
-
-        const complete = lastCritical === criticalPath
-          ? start + a.productionTime
-          : criticalPath + a.productionTime;
-
-        const slot: IItemProfitBuildingSlots = {
-          slot: index + 1,
-          schedule: criticalPath,
-          start,
-          complete,
-          item: a,
-        };
-
-        lastComplete = complete;
-        lastCritical = criticalPath;
-        // console.log(a.slug, start, lastComplete);
-        return slot;
-      },
-    );
-    const building: IItemProfitBuilding = {
-      slots: industrySlots,
-    };
-    return building;
-  }
-
-  async createItemProfit(item: string): Promise<IItemProfit> {
-    if (!item || item === '') {
-      throw new Error('Missing item to analyse');
-    }
-
-    const buildings = await this.findBuildings();
-
-    const buildingsProfit = buildings.reduce(
-      (a: any, b: IBuildingModel) => ({
-        ...a,
-        [b.slug]: {
-          _id: b._id,
-          name: b.name,
-        },
-      }),
-      {},
-    );
-
-    const items: IItemProfitDependency[] = await this.flatItemsFromDependency(
-      item,
-    );
-
-    // prepare buildings - industry
-
-    const industryBuilding: IItemProfitBuilding = ItemRepository //
-      .createParallelBuildingProfitSlots(
-        items,
-        buildingsProfit.industry._id,
-      );
-
-    // prepare buildings - supplies
-
-    const suppliesBuilding: IItemProfitBuilding = ItemRepository
-      .createSequentialBuildingProfitSlots(
-        items,
-        buildingsProfit.supplies._id,
-      );
-
-    // prepare buildings - hardware
-
-    const hardwareBuilding: IItemProfitBuilding = ItemRepository
-      .createSequentialBuildingProfitSlots(
-        items,
-        buildingsProfit.hardware._id,
-      );
-
-    // prepare buildings - fashion
-
-    const fashionBuilding: IItemProfitBuilding = ItemRepository
-      .createSequentialBuildingProfitSlots(
-        items,
-        buildingsProfit.fashion._id,
-      );
-
-    // prepare buildings - furniture
-
-    const furnitureBuilding: IItemProfitBuilding = ItemRepository
-      .createSequentialBuildingProfitSlots(
-        items,
-        buildingsProfit.furniture._id,
-      );
-
-    // prepare buildings - gardening
-
-    const gardeningBuilding: IItemProfitBuilding = ItemRepository
-      .createSequentialBuildingProfitSlots(
-        items,
-        buildingsProfit.gardening._id,
-      );
-
-    // prepare buildings - farmers market
-
-    const farmersBuilding: IItemProfitBuilding = ItemRepository
-      .createSequentialBuildingProfitSlots(
-        items,
-        buildingsProfit.farmers._id,
-      );
-
-    // prepare buildings - donut shop
-
-    const donutBuilding: IItemProfitBuilding = ItemRepository
-      .createSequentialBuildingProfitSlots(
-        items,
-        buildingsProfit.donut._id,
-      );
-
-    // prepare buildings - fast food restaurante
-    const fastFoodBuilding: IItemProfitBuilding = ItemRepository
-      .createSequentialBuildingProfitSlots(
-        items,
-        buildingsProfit['fast-food']._id,
-      );
-
-    const homeAppliancesBuilding: IItemProfitBuilding = ItemRepository
-      .createParallelBuildingProfitSlots(
-        items,
-        buildingsProfit['home-appliances']._id,
-      );
-
-    const profitBuildings: IItemProfitBuldingList = {
-      industry: industryBuilding,
-      'fast-food': fastFoodBuilding,
-      'home-appliances': homeAppliancesBuilding,
-      donuts: donutBuilding,
-      farmers: farmersBuilding,
-      furniture: furnitureBuilding,
-      gardening: gardeningBuilding,
-      fashion: fashionBuilding,
-      hardware: hardwareBuilding,
-      supplies: suppliesBuilding,
-    };
-
-    const itemProfit: IItemProfit = {
-      cycles: [],
-      buildings: profitBuildings,
-    };
-
-    // find depends.
-    return itemProfit;
   }
 
   async findBuildings(): Promise<IBuildingModel[]> {
@@ -411,10 +54,10 @@ class ItemRepository extends Collection {
     return buildings;
   }
 
-  async findDependsByBuilding(args: any): Promise<IItemModel[]> {
-    const { building } = args;
+  async findDependsByBuildingSlug(slug: string, match: any, sort: any): Promise<IItemModel[]> {
+    // const { building } = args;
 
-    const { match, sort }: any = await ItemRepository.createMatchFilter(args);
+    // const { match, sort }: any = await ItemRepository.createMatchFilter(args);
 
     const docs = this.collection.aggregate([
       {
@@ -426,7 +69,7 @@ class ItemRepository extends Collection {
         },
       },
       { $unwind: '$building' },
-      { $match: { 'building.slug': { $eq: building } } },
+      { $match: { 'building.slug': { $eq: slug } } },
       { $unwind: { path: '$depends', preserveNullAndEmptyArrays: true } },
       {
         $lookup: {
@@ -450,17 +93,19 @@ class ItemRepository extends Collection {
         },
       },
       ...this.pipeline,
-      { $match: match },
-      sort && {
-        $sort: sort,
-      },
+      match || null,
+      sort || null,
+      // { $match: match },
+      // sort && {
+      //   $sort: sort,
+      // },
     ]);
     return docs.toArray();
   }
 
-  async findDepends(_ids: string[]): Promise<IItemModel[]> {
+  async findDependsByItemsSlugs(items: string[], match: any, sort: any): Promise<IItemModel[]> {
     const docs = this.collection.aggregate([
-      { $match: { slug: { $in: _ids } } },
+      { $match: { slug: { $in: items } } },
       { $unwind: { path: '$depends', preserveNullAndEmptyArrays: true } },
       {
         $lookup: {
@@ -483,16 +128,29 @@ class ItemRepository extends Collection {
         },
       },
       ...this.pipeline,
+      match || null,
+      sort || null,
 
       // { $match: { 'items.item.slug': { $in: _ids } } },
     ]);
     return docs.toArray();
   }
 
-  async findUsedByBuilding(args: any): Promise<IItemModel[]> {
-    const { match, sort }: any = await ItemRepository.createMatchFilter(args);
+  async findUsedInByItemId(id: string, match: any, sort: any): Promise<IItemModel[]> {
+    const docs = await this.collection.aggregate([
+      {
+        $match: { 'depends.item': { $eq: new ObjectId(id) } },
+      },
+      ...this.pipeline,
+      match || null,
+      sort || null,
+    ]);
 
-    const { building } = args;
+    return docs.toArray();
+  }
+
+  async findUsedInByBuildingSlug(slug: string, match: any, sort: any): Promise<IItemModel[]> {
+    // const { match, sort }: any = await ItemRepository.createMatchFilter(args);
 
     const docs = this.collection.aggregate([
       { $unwind: { path: '$depends', preserveNullAndEmptyArrays: true } },
@@ -514,7 +172,7 @@ class ItemRepository extends Collection {
         },
       },
       { $unwind: '$building' },
-      { $match: { 'building.slug': { $eq: building } } },
+      { $match: { 'building.slug': { $eq: slug } } },
       // { $match: { 'items.item.slug': { $in: _ids } } },
       {
         $replaceRoot: {
@@ -558,16 +216,18 @@ class ItemRepository extends Collection {
         },
       },
       ...this.pipeline,
-      { $match: match },
-      {
-        $sort: sort,
-      },
+      match || null,
+      sort || null,
+      // { $match: match },
+      // {
+      //   $sort: sort,
+      // },
     ]);
 
     return docs.toArray();
   }
 
-  async findUsedBy(_ids: string[]): Promise<IItemModel[]> {
+  async findUsedInByItemsSlugs(items: string[], match: any, sort: any): Promise<IItemModel[]> {
     const docs = this.collection.aggregate([
       { $unwind: { path: '$depends', preserveNullAndEmptyArrays: true } },
       {
@@ -579,7 +239,7 @@ class ItemRepository extends Collection {
         },
       },
       { $unwind: { path: '$items.item', preserveNullAndEmptyArrays: true } },
-      { $match: { 'items.item.slug': { $in: _ids } } },
+      { $match: { 'items.item.slug': { $in: items } } },
       {
         $replaceRoot: {
           newRoot: {
@@ -621,60 +281,41 @@ class ItemRepository extends Collection {
         },
       },
       ...this.pipeline,
+      match || null,
+      sort || null,
     ]);
     return docs.toArray();
   }
 
-  static async createMatchFilter(args: IItemArgs) {
-    if (!args) {
-      return {};
-    }
+  // async findManyByFilter(args: IItemArgs): Promise<IItemModel[]> {
+  //   const { match, sort }: any = await ItemRepository.createMatchFilter(args);
 
-    const order = (args.order === 'desc' && 1) || -1;
+  //   const docs = await this.collection
+  //     .aggregate([
+  //       { $match: match },
+  //       // { $match: {
+  //       //   _id: new ObjectId(id)
+  //       // }},
+  //       ...this.pipeline,
+  //       {
+  //         $sort: sort,
+  //       },
+  //     ])
+  //     .toArray();
 
-    const sort = { [args.orderBy]: order };
+  //   // const docs = await this.collection.findOne({_id: {$eq: new ObjectId(id)}});
+  //   // return docs;
 
-    const match: IItemFilter = {};
+  //   return docs.map(
+  //     (p: IItemModel): IItemModel => ({
+  //       ...p,
+  //       depends: p.depends.filter((p: any) => p.item),
+  //     }),
+  //   );
+  // }
 
-    if (args.filter?.level) {
-      match.level = { $lte: args.filter.level };
-    }
-
-    return {
-      match,
-      sort,
-    };
-  }
-
-  async findManyByFilter(args: IItemArgs): Promise<IItemModel[]> {
-    const { match, sort }: any = await ItemRepository.createMatchFilter(args);
-
-    const docs = await this.collection
-      .aggregate([
-        { $match: match },
-        // { $match: {
-        //   _id: new ObjectId(id)
-        // }},
-        ...this.pipeline,
-        {
-          $sort: sort,
-        },
-      ])
-      .toArray();
-
-    // const docs = await this.collection.findOne({_id: {$eq: new ObjectId(id)}});
-    // return docs;
-
-    return docs.map(
-      (p: IItemModel): IItemModel => ({
-        ...p,
-        depends: p.depends.filter((p: any) => p.item),
-      }),
-    );
-  }
-
-  async findManyByBuildingSlug(args: any): Promise<IItemModel[]> {
-    const { building } = args;
+  async findByBuildingSlug(building: string): Promise<IItemModel[]> {
+    // const { building } = args;
     const docs = await this.collection
       .aggregate([
         {
@@ -702,7 +343,38 @@ class ItemRepository extends Collection {
     return docs;
   }
 
-  async findManyByBuilding(building: ObjectId): Promise<IItemModel[]> {
+
+  // async findByBuildingId(building: string): Promise<IItemModel[]> {
+  //   // const { building } = args;
+  //   const docs = await this.collection
+  //     .aggregate([
+  //       {
+  //         $lookup: {
+  //           from: 'building',
+  //           localField: 'building',
+  //           foreignField: '_id',
+  //           as: 'building',
+  //         },
+  //       },
+  //       { $unwind: '$building' },
+  //       { $match: { 'building._id': { $eq: new ObjectId(building) } } },
+  //       {
+  //         $addFields: {
+  //           building: '$building._id',
+  //         },
+  //       },
+  //       // { $match: {
+  //       //   _id: new ObjectId(id)
+  //       // }},
+  //       ...this.pipeline,
+  //     ])
+  //     .toArray();
+
+  //   return docs;
+  // }
+
+
+  async findByBuildingId(building: string, match: any, sort: any): Promise<IItemModel[]> {
     const docs = await this.collection
       .aggregate([
         { $match: { building: { $eq: new ObjectId(building) } } },
@@ -710,6 +382,8 @@ class ItemRepository extends Collection {
         //   _id: new ObjectId(id)
         // }},
         ...this.pipeline,
+        match || null,
+        sort || null,
       ])
       .toArray();
 
@@ -951,7 +625,7 @@ class ItemRepository extends Collection {
   //   //return docs[0] || null;
   // }
 
-  async findById(id: ObjectId): Promise<IItemModel | null> {
+  async findOneById(id: string): Promise<IItemModel | null> {
     const docs = await this.collection
       .aggregate([
         {
@@ -989,11 +663,6 @@ class ItemRepository extends Collection {
       ])
       .toArray();
 
-    // const docs = await this.collection.findOne({_id: {$eq: new ObjectId(id)}});
-    // return docs;
-    // return docs[0] || null;
-    // const docs = await this.collection.findOne({slug: {$eq: slug}});
-
     const model: IItemModel | undefined = docs[0];
 
     if (!model) {
@@ -1006,40 +675,12 @@ class ItemRepository extends Collection {
     };
   }
 
-  async findItemDependsById(id: ObjectId) {
-    const docs = await this.collection.find({
-      'depends.item': { $eq: new ObjectId(id) },
-    });
+  // async findItemDependsById(id: ObjectId) {
+  //   const docs = await this.collection.find({
+  //     'depends.item': { $eq: new ObjectId(id) },
+  //   });
 
-    return docs.toArray();
-    // return [];
-  }
-
-  async findItemDependencyCost(
-    items: IItemDependency[],
-  ): Promise<IItemDependencyValues> {
-    const itemsPromise = items.map(async (p) => ({
-      item: await this.findById(p.item),
-      quantity: p.quantity,
-    }));
-
-    const itemsDeps = await Promise.all(itemsPromise);
-
-    const cost = itemsDeps.reduce((a: number, b: IItemDependency): number => {
-      const maxValue = b?.item?.maxValue || 0;
-      return a + maxValue * b.quantity;
-    }, 0);
-
-    const time = itemsDeps.reduce((a: number, b: IItemDependency): number => {
-      const maxTime = b?.item?.productionTime || 0;
-      return a + maxTime;
-    }, 0);
-
-    return {
-      cost,
-      time,
-    };
-  }
+  //   return docs.toArray();
+  //   // return [];
+  // }
 }
-
-export default ItemRepository;

@@ -26,7 +26,7 @@ const resolvers = {
       const { dataSources } = context;
       const { item } = dataSources;
 
-      const items = await item.findManyByBuilding(parent._id);
+      const items = await item.resolveFindItemsByBuildingId(parent._id);
 
       return items;
     },

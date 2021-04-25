@@ -54,7 +54,13 @@ const typeDefs = gql`
       orderBy: String
       filter: ItemFilter
     ): [Item]
-    item(_id: ObjectID, slug: String): Item!
+    item(
+      _id: ObjectID,
+      slug: String
+      order: String
+      orderBy: String
+      filter: ItemFilter
+    ): Item!
   }
 `;
 

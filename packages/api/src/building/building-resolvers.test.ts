@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 import { ApolloServer } from 'apollo-server';
 import { createTestClient } from 'apollo-server-testing';
-import { ObjectID, MongoClient } from 'mongodb';
+import { MongoClient } from 'mongodb';
 import resolvers from '@pbr-simcity/api/src/resolvers';
 import typeDefs from '@pbr-simcity/api/src/typeDefs';
 import BuilidingRepository from '@pbr-simcity/api/src/building/buildingRepository';

@@ -11,7 +11,8 @@ export interface IBuilding {
   nextSlot: number | null;
 }
 
-export interface IBuildingModelItem extends IBuilding {
+export interface IBuildingModel extends IBuilding {
+  _id?: string;
   items: IItem[]
 }
 
@@ -27,13 +28,16 @@ export interface IBuildingArgs {
   orderBy: string;
 }
 
-export interface IBuildingDataSource {
-  resolveAllBuildings(): Promise<IBuilding[]>
-  resolveOneBuilding(filter: IBuildingFilter): Promise<IBuilding>
-}
 
 export interface IBuildingRepository {
   findAll(): Promise<IBuilding[]>
   findOneById(id: string): Promise<IBuilding>
   findOneBySlug(slug: string): Promise<IBuilding>
+}
+
+export interface IBuildingDataSource {
+  buildingRepository: IBuildingRepository;
+  resolveAllBuildings(): Promise<IBuilding[]>
+  resolveOneBuilding(filter: IBuildingFilter): Promise<IBuilding>
+  resolveOneBuildingByParentItemId(parent: string): Promise<IBuilding>
 }

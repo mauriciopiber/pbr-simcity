@@ -1,115 +1,83 @@
 import {
   IBuilding,
   IItem,
-  IItemDependencyValues,
+  IItemModel,
   IItemArgs,
+  IItemDependency,
+  IContext,
 } from '@pbr-simcity/types/types';
-
-function toFixedNumber(num: number, digits: number, base: number): number {
-  const pow = Math.pow(base || 10, digits);
-  return Math.round(num * pow) / pow;
-}
 
 const resolvers = {
   Query: {
-    async items(_: any, args: IItemArgs, context: any): Promise<IItem[]> {
+    async items(_: unknown, args: IItemArgs, context: IContext): Promise<IItemModel[]> {
       const { dataSources } = context;
       const { item } = dataSources;
-      return item.findManyByFilter(args);
+      return item.resolveFindAll(args);
     },
     async itemsByBuilding(
-      _: any,
+      _: unknown,
       args: IItemArgs,
-      context: any,
+      context: IContext,
     ): Promise<IItem[]> {
       const { dataSources } = context;
       const { item } = dataSources;
-      const data = await item.findManyByBuildingSlug(args);
+      const data = await item.resolveFindItemsByBuildingSlug(args);
       return data;
     },
     async itemsDependsByBuilding(
-      _: any,
+      _: unknown,
       args: IItemArgs,
-      context: any,
+      context: IContext,
     ): Promise<IItem[]> {
       const { dataSources } = context;
       const { item } = dataSources;
-      const data = await item.findDependsByBuilding(args);
-      console.log(data);
+      const data = await item.resolveFindItemsDependsByBuildingSlug(args);
       return data;
     },
     async itemsUsedByBuilding(
-      _: any,
+      _: unknown,
       args: IItemArgs,
-      context: any,
+      context: IContext,
     ): Promise<IItem[]> {
       const { dataSources } = context;
       const { item } = dataSources;
       // console.log(args);
-      return item.findUsedByBuilding(args);
+      return item.resolveFindItemsUsedInByBuildingSlug(args);
     },
-    async item(_: any, args: any, context: any): Promise<IItem[]> {
+    async item(_: unknown, args: any, context: IContext): Promise<IItemModel> {
       const { dataSources } = context;
       const { item } = dataSources;
 
-      const model = await item.findOneBySlug(args.slug);
-
-      return {
-        ...model,
-        // profitMongo: 2,
-      };
-      // return item.findBySlug(args.slug);
+      const model = await item.resolveFindOneItem(args);
+      return model;
     },
   },
   Item: {
     async building(
-      parent: any,
-      _args: any,
-      context: any,
-    ): Promise<IBuilding[]> {
+      parent: IItemModel,
+      _args: unknown,
+      context: IContext,
+    ): Promise<IBuilding> {
       const { dataSources } = context;
       const { building } = dataSources;
-      return building.findById(parent.building);
+      /** @ts-ignore */
+      return building.resolveOneBuildingByParentItemId(parent.building);
     },
-    async usedIn(parent: any, _args: any, context: any): Promise<IBuilding[]> {
+    async usedIn(parent: IItemModel, args: IItemArgs, context: IContext): Promise<IItemModel[]> {
       const { dataSources } = context;
       const { item } = dataSources;
 
       const { _id } = parent;
 
-      return item.findItemDependsById(_id);
-    },
-    async profit(parent: any, _args: any, context: any): Promise<any> {
-      const { dataSources } = context;
-      const { item } = dataSources;
-
-      const { maxValue } = parent;
-      const dependencyValues: IItemDependencyValues = await item.findItemDependencyCost(
-        parent.depends,
-      );
-
-      // const productionTime = item.productionTime + dependencyValues.time;
-      const { productionTime } = parent;
-      const { cost } = dependencyValues;
-      const profit = maxValue - cost;
-
-      const profitByMinute = toFixedNumber(profit / productionTime, 2, 10);
-      const profitByHour = toFixedNumber((profit / productionTime) * 60, 2, 10);
-
-      return {
-        cost,
-        profit,
-        profitByMinute,
-        profitByHour,
-      };
+      return item.resolveUsedInByItemId(_id, args);
     },
   },
   ItemDepends: {
-    async item(parent: any, _args: any, context: any): Promise<IItem> {
+    async item(parent: IItemDependency, _: unknown, context: IContext): Promise<IItemModel> {
       const { dataSources } = context;
       const { item } = dataSources;
 
-      return item.findById(parent.item);
+      return item.resolveItemDependsByItemId(parent.item);
     },
   },
 };

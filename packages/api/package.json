@@ -34,6 +34,7 @@
     "dev": "nodemon",
     "test": "jest",
     "build": "tsc",
+    "ts-check": "tsc --noEmit",
     "prod": "node dist/server.js",
     "drop": "ps aux | grep server.ts | awk '{print $2}' | xargs kill -9 || true",
     "lint": "eslint . --ext ts,tsx",

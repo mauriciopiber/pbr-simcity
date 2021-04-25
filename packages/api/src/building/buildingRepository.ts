@@ -9,7 +9,7 @@ class BuildingRepository extends Collection implements IBuildingRepository {
     return docs.toArray();
   }
 
-  async findById(id: ObjectId): Promise<IBuildingModel> {
+  async findOneById(id: string): Promise<IBuildingModel> {
     const docs = await this.collection.findOne({
       _id: { $eq: new ObjectId(id) },
     });

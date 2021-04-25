@@ -14,16 +14,26 @@ export default class BuildingDataSource implements IBuildingDataSource {
     return allBuildings;
   }
 
+  resolveOneBuildingByParentItemId(parent: string): Promise<IBuilding> {
+    return this.buildingRepository.findOneById(parent);
+  }
+
   resolveOneBuilding(filter: IBuildingFilter): Promise<IBuilding> {
     const {
       slug,
       _id,
     } = filter;
 
+    console.log(slug, _id);
+
     if (slug) {
       return this.buildingRepository.findOneBySlug(slug);
     }
 
-    return this.buildingRepository.findOneById(_id);
+    if (_id) {
+      return this.buildingRepository.findOneById(_id);
+    }
+
+    throw new Error('Building not found');
   }
 }
