@@ -2,12 +2,23 @@ import {
   IItem,
 } from './items.types';
 
+export type BuildingSlugs = 'industry'
+| 'supplies'
+| 'hardware'
+| 'farmers'
+| 'furniture'
+| 'gardening'
+| 'donut'
+| 'fashion'
+| 'fast-food'
+| 'home-appliances';
+
 export interface IBuilding {
   name: string;
   // items: IItem[],
   slots: number;
   parallel: boolean;
-  slug: string;
+  slug: BuildingSlugs;
   nextSlot: number | null;
 }
 
