@@ -61,7 +61,7 @@ describe('Item Data Source', () => {
     );
 
     expect(item.slug).toEqual('pizza');
-    expect(item.criticalPath).toEqual(510);
+    expect(item.criticalPath).toEqual(615);
   });
 
   test('get dependency graph for - burgers', async () => {
@@ -234,7 +234,7 @@ describe('Items Profit - Critical Path', () => {
     expect(fastFood?.slots[0]?.item.slug).toEqual('pizza');
     expect(fastFood?.slots[0]?.schedule).toEqual(615);
     expect(fastFood?.slots[0]?.start).toEqual(615);
-    expect(fastFood?.slots[0]?.complete).toEqual(649);
+    expect(fastFood?.slots[0]?.complete).toEqual(639);
 
     // expect(findAll.cycles.length).toEqual(4);
 

@@ -14,8 +14,6 @@ import {
   IItemDependencyGraph,
   BuildingSlugs,
 } from '@pbr-simcity/types/types';
-import { itemsList } from '../itemList';
-
 /* eslint-disable class-methods-use-this */
 
 export default class ItemDataSource implements IItemDataSource {
@@ -135,11 +133,13 @@ export default class ItemDataSource implements IItemDataSource {
 
       return {
         slug: itemDepends.slug,
+        building: itemDepends.building.slug,
         quantity: a.quantity,
         parallel: itemDepends.building.parallel,
         productionTime: itemDepends.productionTime,
         depends: innerDependencyGraph,
         criticalPath: criticalPath + itemDepends.productionTime,
+        innerPath: criticalPath,
       };
     });
   }
@@ -340,11 +340,27 @@ export default class ItemDataSource implements IItemDataSource {
 
     const dependencyGraph = this.recursiveCreateDependencyGraph(item.depends, dependsWithBuilding);
 
-    const criticalPath = dependencyGraph.reduce(
+    // console.log(dependencyGraph);
+
+    const criticalItem = dependencyGraph.reduce(
       (prev: any, current: any) => (
-        (prev > current.criticalPath) ? prev : current.criticalPath
+        (prev.criticalPath > current.criticalPath) ? prev : current
       ),
       0,
+    );
+
+    const criticalConflict = dependencyGraph.find(
+      (a: any) => a.building === criticalItem.building
+        && a.innerPath === criticalItem.innerPath
+        && a.slug !== criticalItem.slug,
+    );
+
+    const criticalPath = criticalItem.criticalPath + (
+      (
+        criticalConflict
+        && criticalConflict.parallel === false
+        && criticalConflict?.productionTime
+      ) || 0
     );
     // console.log(dependencyGraph);
 
