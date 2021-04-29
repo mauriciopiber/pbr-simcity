@@ -4,6 +4,7 @@ import {
   IItemModel,
   IItemArgs,
   IItemDependency,
+  IItemProfit,
   IContext,
 } from '@pbr-simcity/types/types';
 
@@ -51,6 +52,19 @@ const resolvers = {
       const model = await item.resolveFindOneItem(args);
       return model;
     },
+    async itemProfit(_: unknown, args: any, context: IContext): Promise<any> {
+      const { dataSources } = context;
+      const { item } = dataSources;
+
+      const model: IItemProfit = await item.resolveItemProfit(args.slug);
+      return {
+        ...model,
+        buildings: Object.keys(model.buildings).map((a: any) => ({
+          slug: a,
+          slots: model.buildings[a]?.slots,
+        })),
+      };
+    },
   },
   Item: {
     async building(
@@ -60,6 +74,7 @@ const resolvers = {
     ): Promise<IBuilding> {
       const { dataSources } = context;
       const { building } = dataSources;
+      /* eslint-disable  @typescript-eslint/ban-ts-comment */
       /** @ts-ignore */
       return building.resolveOneBuildingByParentItemId(parent.building);
     },

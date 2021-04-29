@@ -135,6 +135,30 @@ export const QUERY_ITEMS_DEPEND_BY_BUILDING = gql`
   }}
 `
 
+export const QUERY_ITEM_PROFIT = gql`
+query(
+  $slug: String!
+) {
+  itemProfit(slug: $slug) {
+    slug
+    buildings {
+      slug
+      slots {
+        slot
+        item {
+          _id
+          slug
+          name
+        }
+        schedule
+        start
+        complete
+      }
+    }
+  }
+}
+`
+
 
 export const QUERY_ITEMS_USED_BY_BUILDING = gql`
   query(

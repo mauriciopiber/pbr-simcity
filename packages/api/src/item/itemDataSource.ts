@@ -7,12 +7,15 @@ import {
   IItemProfitBuldingList,
   IItemProfitBuildingSlots,
   IBuildingPreviewModel,
+  ItemSortRepository,
+  // ItemMatchRepository,
   IItemDependency,
   IItemArgs,
   // IBuilding,
   IItemProfitBuilding,
   IItemDependencyGraph,
   BuildingSlugs,
+  ItemDependencyGraph,
 } from '@pbr-simcity/types/types';
 /* eslint-disable class-methods-use-this */
 
@@ -116,16 +119,24 @@ export default class ItemDataSource implements IItemDataSource {
     return this.itemRepository.findUsedInByItemId(parent, match, order);
   }
 
-  recursiveCreateDependencyGraph(depends: any[], items: any[]): any[] {
-    return depends.map((a: any) => {
-      const itemDepends = items.find((b: any) => `${b._id}` === `${a.item}`);
+  recursiveCreateDependencyGraph(
+    depends: IItemDependency[],
+    items: IItemModel[],
+  ): ItemDependencyGraph[] {
+    return depends.map((a: IItemDependency) => {
+      const itemDepends = items.find((b: IItemModel) => `${b._id}` === `${a.item}`);
 
-      const innerDependencyGraph = this.recursiveCreateDependencyGraph(itemDepends.depends, items);
+      if (!itemDepends) {
+        throw new Error('Item not found');
+      }
+
+      const innerDependencyGraph:
+        ItemDependencyGraph[] = this.recursiveCreateDependencyGraph(itemDepends.depends, items);
 
       // console.log(innerDependencyGraph);
 
       const criticalPath = innerDependencyGraph.reduce(
-        (prev: any, current: any) => (
+        (prev: number, current: ItemDependencyGraph) => (
           (prev > current.productionTime) ? prev : current.productionTime
         ),
         0,
@@ -252,6 +263,7 @@ export default class ItemDataSource implements IItemDataSource {
     };
 
     const itemProfit: IItemProfit = {
+      slug: item,
       cycles: [],
       buildings: profitBuildings,
     };
@@ -339,8 +351,6 @@ export default class ItemDataSource implements IItemDataSource {
     }));
 
     const dependencyGraph = this.recursiveCreateDependencyGraph(item.depends, dependsWithBuilding);
-
-    // console.log(dependencyGraph);
 
     const criticalItem = dependencyGraph.reduce(
       (prev: any, current: any) => (
@@ -545,7 +555,7 @@ export default class ItemDataSource implements IItemDataSource {
     return building;
   }
 
-  static createOrder(args: IItemArgs): any {
+  static createOrder(args: IItemArgs): ItemSortRepository {
     const order = (args.order === 'desc' && -1) || 1;
 
     const sort = { [args.orderBy]: order };

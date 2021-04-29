@@ -11,6 +11,7 @@ export interface IItemDependency {
   quantity: number;
 }
 
+
 export interface IItemDependencyModel {
   item: string;
   quantity: string;
@@ -64,6 +65,42 @@ export interface IItemArgs {
   id?: string;
   slug?: string;
 }
+
+export interface ItemDependencyGraph {
+  slug: string;
+  building: string;
+  quantity: number;
+  parallel: boolean;
+  productionTime: number;
+  depends: ItemDependencyGraph[];
+  innerPath: number;
+  criticalPath: number;
+}
+
+interface MatchItem {
+  [key: string]: string
+}
+
+interface MatchSort {
+  [key: string]: number;
+}
+
+export interface ItemMatchRepository {
+  $match: MatchItem;
+}
+
+export interface ItemSortRepository {
+  $sort: MatchSort
+}
+
+// slug: itemDepends.slug,
+//         building: itemDepends.building.slug,
+//         quantity: a.quantity,
+//         parallel: itemDepends.building.parallel,
+//         productionTime: itemDepends.productionTime,
+//         depends: innerDependencyGraph,
+//         criticalPath: criticalPath + itemDepends.productionTime,
+//         innerPath: criticalPath,
 
 export interface IItemRepository {
   findBuildings(): Promise<IBuildingPreviewModel[]>

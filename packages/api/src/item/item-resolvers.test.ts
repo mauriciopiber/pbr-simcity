@@ -48,6 +48,60 @@ describe('Test Item Resolvers', () => {
     await client.close();
   });
 
+  it('Get Item Profit - Chairs', async () => {
+    const ITEMS = gql`
+      query {
+        itemProfit(slug: "chairs") {
+          slug
+          buildings {
+            slug
+            slots {
+              slot
+              item {
+                _id
+                slug
+                name
+              }
+              schedule
+              start
+              complete
+            }
+          }
+        }
+      }
+    `;
+
+    const res = await query({ query: ITEMS });
+
+    expect(res.errors).toBe(undefined);
+
+    expect(res).toHaveProperty('data');
+
+    const {
+      data,
+    } = res;
+
+    expect(data).toHaveProperty('itemProfit');
+
+    const {
+      itemProfit,
+    } = data;
+
+    expect(itemProfit.slug).toEqual('chairs');
+
+    const {
+      buildings,
+    } = itemProfit;
+
+    const supplies = buildings.find((a: any) => a.slug === 'supplies');
+
+    const {
+      slots,
+    } = supplies;
+
+    expect(slots[0].item.slug).toEqual('nails');
+  });
+
   it('Test find all Items for tables', async () => {
     const ITEMS = gql`
       query {

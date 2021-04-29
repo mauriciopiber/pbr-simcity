@@ -10,6 +10,7 @@ import {
 import ItemMap from '@pbr-simcity/web/components/Item/ItemMap';
 import BuildingFlow from '@pbr-simcity/web/components/Item/BuildingFlow';
 import DependencyGraph from '@pbr-simcity/web/components/Item/DependencyGraph';
+import ItemProfit from '@pbr-simcity/web/components/Item/ItemProfit/ItemProfit';
 
 const QUERY_PATHS = gql`
   query {
@@ -104,6 +105,7 @@ function Page({ slug }: ItemProps) {
           <td>{(item.maxValue - dependsCost) / item.productionTime}</td>
         </tr>
       </table>
+      <ItemProfit item={item.slug}/>
       <div>
         <img alt={item.name} src={`/img/${item.slug}.png`} />
         <ItemMap name={item.name} depends={item.depends} usedIn={item.usedIn} />

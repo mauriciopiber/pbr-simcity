@@ -77,6 +77,7 @@ export interface IItemProfitBuildingPreviewList {
  * quantos ciclos são necessários e como as buildings serão ocupadas
  */
 export interface IItemProfit {
+  slug: string;
   cycles: IProfitCycle[],
   buildings: IItemProfitBuldingList
 }

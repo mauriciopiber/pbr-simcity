@@ -6,13 +6,6 @@ const typeDefs = gql`
     quantity: PositiveInt!
   }
 
-  type ItemProfit {
-    cost: Int!
-    profit: Int!
-    profitByMinute: PositiveFloat!
-    profitByHour: PositiveFloat!
-  }
-
   type Item {
     _id: ObjectID!
     name: String!
@@ -24,7 +17,6 @@ const typeDefs = gql`
     profitOwnProduction: Int!
     profitOwnByMinute: Float!
     profitOwnByHour: Float!
-    profit: ItemProfit!
     slug: String!
     usedIn: [Item]
     depends: [ItemDepends]
@@ -32,6 +24,24 @@ const typeDefs = gql`
 
   input ItemFilter {
     level: Int!
+  }
+
+  type BuildingProfitSlot {
+    slot: Int!
+    item: Item!
+    schedule: Int!
+    start: Int!
+    complete: Int!
+  }
+
+  type BuildingProfit {
+    slug: String!
+    slots: [BuildingProfitSlot]
+  }
+
+  type ItemProfit {
+    slug: String!
+    buildings: [BuildingProfit]
   }
 
   type Query {
@@ -61,6 +71,7 @@ const typeDefs = gql`
       orderBy: String
       filter: ItemFilter
     ): Item!
+    itemProfit(slug: String!): ItemProfit!
   }
 `;
 
