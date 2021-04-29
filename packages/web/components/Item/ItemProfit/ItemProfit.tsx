@@ -7,6 +7,7 @@ import { useQuery } from '@apollo/react-hooks';
 import {
   QUERY_ITEM_PROFIT,
 } from '@pbr-simcity/web/lib/items';
+import ItemProfitBuilding from '@pbr-simcity/web/components/Item/ItemProfit/ItemProfitBuilding';
 
 export interface ItemProfitProps {
   item: string;
@@ -42,18 +43,7 @@ const ItemProfit: FC<ItemProfitProps> = ({ item }) => {
             return null;
           }
           return (
-            <div key={a.slug} className="building">
-              <div>{a.slug}</div>
-              <div className="slots">
-                {a.slots.map((slotItem: any) => {
-                  return (
-                    <div key={slotItem.slot}>
-                      {slotItem.slot} - {slotItem.item.name} - {slotItem.schedule} - {slotItem.start} - {slotItem.complete}
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
+            <ItemProfitBuilding key={a.slug} building={a}/>
           )
         }))}
 
@@ -65,10 +55,7 @@ const ItemProfit: FC<ItemProfitProps> = ({ item }) => {
             padding: 15px;
             flex-wrap: wrap;
           }
-          .building {
-            padding: 15px;
-          }
-        `}
+                 `}
       </style>
     </div>
   )
