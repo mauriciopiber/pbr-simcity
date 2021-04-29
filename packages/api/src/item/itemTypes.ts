@@ -36,6 +36,7 @@ const typeDefs = gql`
 
   type BuildingProfit {
     slug: String!
+    name: String!
     slots: [BuildingProfitSlot]
   }
 

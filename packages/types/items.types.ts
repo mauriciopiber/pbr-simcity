@@ -11,7 +11,6 @@ export interface IItemDependency {
   quantity: number;
 }
 
-
 export interface IItemDependencyModel {
   item: string;
   quantity: string;

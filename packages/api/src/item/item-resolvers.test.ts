@@ -55,6 +55,7 @@ describe('Test Item Resolvers', () => {
           slug
           buildings {
             slug
+            name
             slots {
               slot
               item {

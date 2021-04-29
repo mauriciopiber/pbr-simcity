@@ -14,7 +14,6 @@ import {
   // IBuilding,
   IItemProfitBuilding,
   IItemDependencyGraph,
-  BuildingSlugs,
   ItemDependencyGraph,
 } from '@pbr-simcity/types/types';
 /* eslint-disable class-methods-use-this */
@@ -175,7 +174,7 @@ export default class ItemDataSource implements IItemDataSource {
     const industryBuilding: IItemProfitBuilding = ItemDataSource //
       .createParallelBuildingProfitSlots(
         itemsWithBuilding,
-        'industry',
+        buildings.find((a: IBuildingPreviewModel) => a.slug === 'industry'),
       );
 
     // prepare buildings - supplies
@@ -183,7 +182,7 @@ export default class ItemDataSource implements IItemDataSource {
     const suppliesBuilding: IItemProfitBuilding = await this
       .createSequentialBuildingProfitSlots(
         itemsWithBuilding,
-        'supplies',
+        buildings.find((a: IBuildingPreviewModel) => a.slug === 'supplies'),
       );
 
     // prepare buildings - hardware
@@ -191,7 +190,7 @@ export default class ItemDataSource implements IItemDataSource {
     const hardwareBuilding: IItemProfitBuilding = await this
       .createSequentialBuildingProfitSlots(
         itemsWithBuilding,
-        'hardware',
+        buildings.find((a: IBuildingPreviewModel) => a.slug === 'hardware'),
       );
 
     // prepare buildings - fashion
@@ -199,7 +198,7 @@ export default class ItemDataSource implements IItemDataSource {
     const fashionBuilding: IItemProfitBuilding = await this
       .createSequentialBuildingProfitSlots(
         itemsWithBuilding,
-        'fashion',
+        buildings.find((a: IBuildingPreviewModel) => a.slug === 'fashion'),
       );
 
     // prepare buildings - furniture
@@ -207,7 +206,7 @@ export default class ItemDataSource implements IItemDataSource {
     const furnitureBuilding: IItemProfitBuilding = await this
       .createSequentialBuildingProfitSlots(
         itemsWithBuilding,
-        'furniture',
+        buildings.find((a: IBuildingPreviewModel) => a.slug === 'furniture'),
       );
 
     // prepare buildings - gardening
@@ -215,7 +214,7 @@ export default class ItemDataSource implements IItemDataSource {
     const gardeningBuilding: IItemProfitBuilding = await this
       .createSequentialBuildingProfitSlots(
         itemsWithBuilding,
-        'gardening',
+        buildings.find((a: IBuildingPreviewModel) => a.slug === 'gardening'),
       );
 
     // prepare buildings - farmers market
@@ -223,7 +222,7 @@ export default class ItemDataSource implements IItemDataSource {
     const farmersBuilding: IItemProfitBuilding = await this
       .createSequentialBuildingProfitSlots(
         itemsWithBuilding,
-        'farmers',
+        buildings.find((a: IBuildingPreviewModel) => a.slug === 'farmers'),
       );
 
     // console.log(farmersBuilding);
@@ -233,20 +232,20 @@ export default class ItemDataSource implements IItemDataSource {
     const donutBuilding: IItemProfitBuilding = await this
       .createSequentialBuildingProfitSlots(
         itemsWithBuilding,
-        'donut',
+        buildings.find((a: IBuildingPreviewModel) => a.slug === 'donut'),
       );
 
     // prepare buildings - fast food restaurante
     const fastFoodBuilding: IItemProfitBuilding = await this
       .createSequentialBuildingProfitSlots(
         itemsWithBuilding,
-        'fast-food',
+        buildings.find((a: IBuildingPreviewModel) => a.slug === 'fast-food'),
       );
 
     const homeAppliancesBuilding: IItemProfitBuilding = await this
       .createSequentialBuildingProfitSlots(
         itemsWithBuilding,
-        'home-appliances',
+        buildings.find((a: IBuildingPreviewModel) => a.slug === 'home-appliances'),
       );
 
     const profitBuildings: IItemProfitBuldingList = {
@@ -438,10 +437,13 @@ export default class ItemDataSource implements IItemDataSource {
 
   static createParallelBuildingProfitSlots(
     items: IItemProfitDependency[],
-    buildingSlug: BuildingSlugs,
+    building: IBuildingPreviewModel | null | undefined,
   ): IItemProfitBuilding {
+    if (!building) {
+      throw new Error('Missing building');
+    }
     const itemsDependsIndustry: IItemProfitDependency[] = items.filter(
-      (a: IItemProfitDependency) => `${a.building.slug}` === `${buildingSlug}`,
+      (a: IItemProfitDependency) => `${a.building.slug}` === `${building.slug}`,
     );
 
     const itemsExpandIndustry = itemsDependsIndustry
@@ -469,6 +471,8 @@ export default class ItemDataSource implements IItemDataSource {
       },
     );
     const industryBuilding: IItemProfitBuilding = {
+      slug: building.slug,
+      name: building.name,
       slots: industrySlots,
     };
     return industryBuilding;
@@ -529,10 +533,14 @@ export default class ItemDataSource implements IItemDataSource {
 
   async createSequentialBuildingProfitSlots(
     items: IItemProfitDependency[],
-    buildingSlug: BuildingSlugs,
+    building: IBuildingPreviewModel | null | undefined,
   ): Promise<IItemProfitBuilding> {
+    if (!building) {
+      throw new Error('Building not found');
+    }
+
     const itemsDepends: IItemProfitDependency[] = items.filter(
-      (a: IItemProfitDependency) => `${a.building.slug}` === `${buildingSlug}`,
+      (a: IItemProfitDependency) => `${a.building.slug}` === `${building.slug}`,
     );
 
     const itemsExpand = itemsDepends
@@ -549,10 +557,12 @@ export default class ItemDataSource implements IItemDataSource {
 
     const sequentialSlots = await this.resolveItemProfitSequentialSlots(itemsExpand);
 
-    const building: IItemProfitBuilding = {
+    const buildingProfit: IItemProfitBuilding = {
+      slug: building.slug,
+      name: building.name,
       slots: sequentialSlots,
     };
-    return building;
+    return buildingProfit;
   }
 
   static createOrder(args: IItemArgs): ItemSortRepository {

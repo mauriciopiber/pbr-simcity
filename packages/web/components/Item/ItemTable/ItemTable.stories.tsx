@@ -28,7 +28,7 @@ Primary.args = {
         slots: 1,
         parallel: true,
         nextSlot: 1,
-        slug: 'donuts-shop',
+        slug: 'donut',
       },
       usedIn: [],
       slug: 'donuts',

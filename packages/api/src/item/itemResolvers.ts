@@ -61,6 +61,7 @@ const resolvers = {
         ...model,
         buildings: Object.keys(model.buildings).map((a: any) => ({
           slug: a,
+          name: model.buildings[a]?.name,
           slots: model.buildings[a]?.slots,
         })),
       };
