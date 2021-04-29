@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "ts-check": "tsc --noEmit"
+  },
   "dependencies": {
     "eslint-config-airbnb-base": "^14.2.1",
     "prettier": "^2.2.1"
