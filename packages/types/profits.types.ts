@@ -2,7 +2,7 @@ import {
   IItemModel,
 } from './items.types';
 import {
-  IBuildingPreviewModel
+  IBuildingPreviewModel,
 } from './buildings.types';
 
 /**
@@ -56,6 +56,7 @@ export interface IItemProfitBuildingSlots {
 export interface IItemProfitBuilding {
   name: string;
   slug: string;
+  order: number;
   slots: IItemProfitBuildingSlots[];
 }
 
@@ -80,7 +81,6 @@ export interface IItemProfit {
   cycles: IProfitCycle[],
   buildings: IItemProfitBuldingList
 }
-
 
 export interface IItemDependencyGraph {
   slug: string;

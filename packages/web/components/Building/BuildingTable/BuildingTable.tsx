@@ -29,7 +29,7 @@ const BuildingTable: FC<BuildingTableProps> = ({ buildings, setOrder }) => (
     </thead>
     <tbody>
       {buildings.map((p: IBuildingModel) => (
-        <tr key={p.slug}>
+        <tr key={p.slug} className={`building-${p.slug}`}>
           <td>
             <Link href={`/buildings/${p.slug}`}>
               <a>{p.name}</a>

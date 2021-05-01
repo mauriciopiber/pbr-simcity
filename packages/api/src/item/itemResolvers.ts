@@ -57,13 +57,31 @@ const resolvers = {
       const { item } = dataSources;
 
       const model: IItemProfit = await item.resolveItemProfit(args.slug);
+      const buildings = Object.keys(model.buildings).map((a: any) => ({
+        slug: a,
+        name: model.buildings[a]?.name,
+        order: model.buildings[a]?.order,
+        slots: model.buildings[a]?.slots,
+      }));
+
+      // console.log(buildings);
+
+      function compare(a: any, b: any) {
+        if (a.order < b.order) {
+          return -1;
+        }
+
+        if (a.order > b.order) {
+          return 1;
+        }
+        return 0;
+      }
+
+      buildings.sort(compare);
+
       return {
         ...model,
-        buildings: Object.keys(model.buildings).map((a: any) => ({
-          slug: a,
-          name: model.buildings[a]?.name,
-          slots: model.buildings[a]?.slots,
-        })),
+        buildings,
       };
     },
   },

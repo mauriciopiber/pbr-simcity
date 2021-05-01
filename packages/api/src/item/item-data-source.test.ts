@@ -113,7 +113,7 @@ describe('Items Profit - Critical Path', () => {
     expect(findAll.buildings).toHaveProperty('furniture');
     expect(findAll.buildings).toHaveProperty('gardening');
     expect(findAll.buildings).toHaveProperty('fashion');
-    expect(findAll.buildings).toHaveProperty('donuts');
+    expect(findAll.buildings).toHaveProperty('donut');
     expect(findAll.buildings).toHaveProperty('fast-food');
     expect(findAll.buildings).toHaveProperty('home-appliances');
     expect(findAll.buildings).toHaveProperty('industry');
@@ -342,7 +342,7 @@ describe('Items Profit - Critical Path', () => {
     expect(findAll.cycles.length).toEqual(0);
     // expect(findAll.buildings).toHaveProperty('farmers');
     // expect(findAll.buildings).toHaveProperty('industry');
-    const { industry, farmers, hardware, donuts } = findAll.buildings;
+    const { industry, farmers, hardware, donut } = findAll.buildings;
     const fastFood = findAll.buildings['fast-food'];
     const homeApp = findAll.buildings['home-appliances'];
 
@@ -409,19 +409,19 @@ describe('Items Profit - Critical Path', () => {
     expect(farmers?.slots[3]?.start).toEqual(435);
     expect(farmers?.slots[3]?.complete).toEqual(585);
 
-    expect(donuts?.slots.length).toEqual(1);
-    expect(donuts?.slots[0]?.slot).toEqual(1);
-    expect(donuts?.slots[0]?.item.slug).toEqual('bread-roll');
-    expect(donuts?.slots[0]?.schedule).toEqual(435);
-    expect(donuts?.slots[0]?.start).toEqual(435);
-    expect(donuts?.slots[0]?.complete).toEqual(495);
+    expect(donut?.slots.length).toEqual(1);
+    expect(donut?.slots[0]?.slot).toEqual(1);
+    expect(donut?.slots[0]?.item.slug).toEqual('bread-roll');
+    expect(donut?.slots[0]?.schedule).toEqual(435);
+    expect(donut?.slots[0]?.start).toEqual(435);
+    expect(donut?.slots[0]?.complete).toEqual(495);
 
     expect(homeApp?.slots.length).toEqual(1);
     expect(homeApp?.slots[0]?.slot).toEqual(1);
     expect(homeApp?.slots[0]?.item.slug).toEqual('bbg-grill');
     // expect(homeApp?.slots[0]?.schedule).toEqual(425);
     // expect(homeApp?.slots[0]?.start).toEqual(425);
-    // expect(donuts?.slots[0]?.complete).toEqual(485);
+    // expect(donut?.slots[0]?.complete).toEqual(485);
 
     expect(fastFood?.slots.length).toEqual(1);
     expect(fastFood?.slots[0]?.slot).toEqual(1);
@@ -458,7 +458,7 @@ describe('Items Profit - Critical Path', () => {
     // expect(findAll.cycles[0]?.startProduction).toEqual(365);
     // expect(findAll.cycles[0]?.endProduction).toEqual(590);
 
-    // // donuts bread roll
+    // // donut bread roll
     // expect(findAll.cycles[0]?.cycle).toEqual(6);
     // expect(findAll.cycles[0]?.items.length).toEqual(1);
     // expect(findAll.cycles[0]?.startProduction).toEqual(435);

@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { IItemFilter } from '@pbr-simcity/types/types';
 import { useForm } from 'react-hook-form';
 
+
 export interface ItemFilterProps {
   defaultValues: IItemFilter;
   setFilter: Function;

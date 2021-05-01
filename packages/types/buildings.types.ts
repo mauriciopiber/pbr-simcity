@@ -20,6 +20,8 @@ export interface IBuilding {
   parallel: boolean;
   slug: BuildingSlugs;
   nextSlot: number | null;
+  stars: number | null;
+  order: number;
 }
 
 export interface IBuildingModel extends IBuilding {
@@ -32,6 +34,7 @@ export interface IBuildingPreviewModel {
   slug: string;
   _id: string;
   parallel: boolean;
+  order: number;
 }
 
 export interface IBuildingFilter {

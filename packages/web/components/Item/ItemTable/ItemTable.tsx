@@ -62,7 +62,7 @@ const ItemTable: FC<ItemTableProps> = ({ items, setOrder }) => {
       </thead>
       <tbody>
         {items.map((p: IItemModel) => (
-          <tr key={p.slug}>
+          <tr key={p.slug} className={`building-${p.building.slug}`}>
             <td>
               <ItemIcon size="xs" key={p.slug} name={p.name} slug={p.slug} />
             </td>

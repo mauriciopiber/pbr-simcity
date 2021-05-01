@@ -252,7 +252,7 @@ export default class ItemDataSource implements IItemDataSource {
       industry: industryBuilding,
       'fast-food': fastFoodBuilding,
       'home-appliances': homeAppliancesBuilding,
-      donuts: donutBuilding,
+      donut: donutBuilding,
       farmers: farmersBuilding,
       furniture: furnitureBuilding,
       gardening: gardeningBuilding,
@@ -474,6 +474,7 @@ export default class ItemDataSource implements IItemDataSource {
       slug: building.slug,
       name: building.name,
       slots: industrySlots,
+      order: building.order,
     };
     return industryBuilding;
   }
@@ -561,6 +562,7 @@ export default class ItemDataSource implements IItemDataSource {
       slug: building.slug,
       name: building.name,
       slots: sequentialSlots,
+      order: building.order,
     };
     return buildingProfit;
   }

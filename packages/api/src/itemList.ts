@@ -7,6 +7,8 @@ const industry: IBuilding = {
   parallel: true,
   nextSlot: null,
   slug: 'industry',
+  stars: null,
+  order: 1,
 };
 
 const supplies: IBuilding = {
@@ -15,6 +17,8 @@ const supplies: IBuilding = {
   parallel: false,
   nextSlot: 40,
   slug: 'supplies',
+  stars: 0,
+  order: 2,
 };
 
 const hardware: IBuilding = {
@@ -23,38 +27,8 @@ const hardware: IBuilding = {
   parallel: false,
   nextSlot: 40,
   slug: 'hardware',
-};
-
-const farmer: IBuilding = {
-  name: "Farmer's Market",
-  slots: 6,
-  parallel: false,
-  nextSlot: 32,
-  slug: 'farmers',
-};
-
-const furniture: IBuilding = {
-  name: 'Furniture Store',
-  slots: 4,
-  parallel: false,
-  nextSlot: 20,
-  slug: 'furniture',
-};
-
-const gardening: IBuilding = {
-  name: 'Gardening Supplies',
-  slots: 5,
-  parallel: false,
-  nextSlot: 26,
-  slug: 'gardening',
-};
-
-const donut: IBuilding = {
-  name: 'Donut Shop',
-  slots: 6,
-  parallel: false,
-  nextSlot: 32,
-  slug: 'donut',
+  stars: 0,
+  order: 3,
 };
 
 const fashion: IBuilding = {
@@ -63,14 +37,48 @@ const fashion: IBuilding = {
   parallel: false,
   nextSlot: 20,
   slug: 'fashion',
+  stars: 0,
+  order: 4,
 };
 
-const fastFood: IBuilding = {
-  name: 'Fast Food Restaurant',
-  slots: 3,
+const furniture: IBuilding = {
+  name: 'Furniture Store',
+  slots: 4,
   parallel: false,
-  nextSlot: 14,
-  slug: 'fast-food',
+  nextSlot: 20,
+  slug: 'furniture',
+  stars: 0,
+  order: 5,
+};
+
+const gardening: IBuilding = {
+  name: 'Gardening Supplies',
+  slots: 5,
+  parallel: false,
+  nextSlot: 26,
+  slug: 'gardening',
+  stars: 0,
+  order: 6,
+};
+
+const farmer: IBuilding = {
+  name: "Farmer's Market",
+  slots: 6,
+  parallel: false,
+  nextSlot: 32,
+  slug: 'farmers',
+  stars: 0,
+  order: 7,
+};
+
+const donut: IBuilding = {
+  name: 'Donut Shop',
+  slots: 6,
+  parallel: false,
+  nextSlot: 32,
+  slug: 'donut',
+  stars: 0,
+  order: 8,
 };
 
 const home: IBuilding = {
@@ -79,19 +87,31 @@ const home: IBuilding = {
   parallel: false,
   nextSlot: 14,
   slug: 'home-appliances',
+  stars: 0,
+  order: 9,
+};
+
+const fastFood: IBuilding = {
+  name: 'Fast Food Restaurant',
+  slots: 3,
+  parallel: false,
+  nextSlot: 14,
+  slug: 'fast-food',
+  stars: 0,
+  order: 10,
 };
 
 export const buildingsList: IBuilding[] = [
   industry,
   supplies,
   hardware,
-  farmer,
+  fashion,
   furniture,
   gardening,
+  farmer,
   donut,
-  fashion,
-  fastFood,
   home,
+  fastFood,
 ];
 
 /* Define Items */

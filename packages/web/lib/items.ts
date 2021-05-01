@@ -143,6 +143,7 @@ query(
     slug
     buildings {
       slug
+      name
       slots {
         slot
         item {

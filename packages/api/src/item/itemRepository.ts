@@ -43,6 +43,7 @@ export default class ItemRepository extends Collection implements IItemRepositor
               { name: '$building.name' },
               { slug: '$building.slug' },
               { parallel: '$building.parallel' },
+              { order: '$building.order' },
             ],
           },
         },
@@ -53,6 +54,12 @@ export default class ItemRepository extends Collection implements IItemRepositor
           name: { $first: '$name' },
           slug: { $first: '$slug' },
           parallel: { $first: '$parallel' },
+          order: { $first: '$order' },
+        },
+      },
+      {
+        $sort: {
+          order: -1,
         },
       },
     ]);
