@@ -211,6 +211,108 @@ export const QUERY_ITEMS_USED_BY_BUILDING = gql`
   }}
 `
 
+
+export const QUERY_ITEMS_USED_IN_ITEMS = gql`
+query(
+  $slugs: [String]!
+  $order: String!
+  $orderBy: String!
+  $filter: ItemFilter!
+) {
+  itemsDependsByItems(
+  slugs: $slugs
+  order: $order
+  orderBy: $orderBy
+  filter: $filter
+) {
+  _id
+  name
+  maxValue
+  productionTime
+  level
+  slug
+  profitOwnProduction
+  profitOwnByMinute
+  profitOwnByHour
+  billCost
+  usedIn {
+    _id
+    name
+    slug
+  }
+  depends {
+    item {
+      _id
+      name
+      slug
+    }
+    quantity
+  }
+  building {
+    _id
+    name
+    slug
+    items {
+      _id
+      name
+      maxValue
+    }
+  }
+
+}}
+`
+
+
+export const QUERY_ITEMS_USED_BY_ITEMS = gql`
+query(
+  $slugs: [String]!
+  $order: String!
+  $orderBy: String!
+  $filter: ItemFilter!
+) {
+  itemsUsedByItems(
+  slugs: $slugs
+  order: $order
+  orderBy: $orderBy
+  filter: $filter
+) {
+  _id
+  name
+  maxValue
+  productionTime
+  level
+  slug
+  profitOwnProduction
+  profitOwnByMinute
+  profitOwnByHour
+  billCost
+  usedIn {
+    _id
+    name
+    slug
+  }
+  depends {
+    item {
+      _id
+      name
+      slug
+    }
+    quantity
+  }
+  building {
+    _id
+    name
+    slug
+    items {
+      _id
+      name
+      maxValue
+    }
+  }
+
+}}
+`
+
 export const QUERY_ITEMS = gql`
   query(
     $order: String!

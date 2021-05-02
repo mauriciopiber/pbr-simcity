@@ -65,6 +65,14 @@ export interface IItemArgs {
   slug?: string;
 }
 
+export interface IItemSlugsArgs {
+  order: string;
+  orderBy: string;
+  filter: IItemFilter;
+  building?: string;
+  slugs: string[];
+}
+
 export interface ItemDependencyGraph {
   slug: string;
   building: string;
@@ -133,7 +141,9 @@ export interface IItemDataSource {
   resolveFindAll(args: IItemArgs): Promise<IItemModel[]>
   resolveFindItemsByBuildingSlug(args: IItemArgs): Promise<IItemModel[]>
   resolveFindItemsDependsByBuildingSlug(args: IItemArgs): Promise<IItemModel[]>
+  resolveFindItemsDependsByItemsSlug(args: IItemSlugsArgs): Promise<IItemModel[]>
   resolveFindItemsUsedInByBuildingSlug(args: IItemArgs): Promise<IItemModel[]>
+  resolveFindItemsUsedInByItemsSlug(args: IItemSlugsArgs): Promise<IItemModel[]>
   resolveFindItemsByBuildingId(parent: string, args: IItemArgs): Promise<IItemModel[]>
   resolveUsedInByItemId(parent: string, args: IItemArgs): Promise<IItemModel[]>
   resolveItemDependsByItemId(parent: string): Promise<IItemModel>

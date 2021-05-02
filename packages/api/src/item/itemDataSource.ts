@@ -11,6 +11,7 @@ import {
   // ItemMatchRepository,
   IItemDependency,
   IItemArgs,
+  IItemSlugsArgs,
   // IBuilding,
   IItemProfitBuilding,
   IItemDependencyGraph,
@@ -66,17 +67,44 @@ export default class ItemDataSource implements IItemDataSource {
     return this.itemRepository.findDependsByBuildingSlug(building, match, order);
   }
 
+  async resolveFindItemsDependsByItemsSlug(args: IItemSlugsArgs): Promise<IItemModel[]> {
+    const {
+      slugs,
+    } = args;
+
+    if (!slugs) {
+      throw new Error('Missing building slug on call');
+    }
+    const match = ItemDataSource.createMatch(args);
+    const order = ItemDataSource.createOrder(args);
+    // console.log(slugs, match, order);
+    return this.itemRepository.findDependsByItemsSlugs(slugs, match, order);
+  }
+
   async resolveFindItemsUsedInByBuildingSlug(args: IItemArgs): Promise<IItemModel[]> {
     const {
       building,
     } = args;
 
     if (!building) {
-      throw new Error('Missing building slug on call');
+      throw new Error('Missing slugs on call');
     }
     const match = ItemDataSource.createMatch(args);
     const order = ItemDataSource.createOrder(args);
     return this.itemRepository.findUsedInByBuildingSlug(building, match, order);
+  }
+
+  async resolveFindItemsUsedInByItemsSlug(args: IItemSlugsArgs): Promise<IItemModel[]> {
+    const {
+      slugs,
+    } = args;
+
+    if (!slugs) {
+      throw new Error('Missing slugs on call');
+    }
+    const match = ItemDataSource.createMatch(args);
+    const order = ItemDataSource.createOrder(args);
+    return this.itemRepository.findUsedInByItemsSlugs(slugs, match, order);
   }
 
   async resolveFindOneItem(args: IItemArgs): Promise<IItemModel> {

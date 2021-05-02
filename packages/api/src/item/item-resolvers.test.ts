@@ -103,7 +103,7 @@ describe('Test Item Resolvers', () => {
     expect(slots[0].item.slug).toEqual('nails');
   });
 
-  it('Test find all Items for tables', async () => {
+  it('Test find all Items', async () => {
     const ITEMS = gql`
       query {
         items(order: "asc", orderBy: "slug", filter: { level: 43 }) {
@@ -133,7 +133,7 @@ describe('Test Item Resolvers', () => {
     expect(items.length).toEqual(63);
   });
 
-  it('Test Item Structure - Burgers', async () => {
+  it('Test Get Item By Slug - Burgers', async () => {
     const ITEMS = gql`
       query {
         item(slug: "burgers", order: "asc", orderBy: "slug", filter: { level: 43 }) {
@@ -164,7 +164,7 @@ describe('Test Item Resolvers', () => {
     expect(item.name).toEqual('Burgers');
   });
 
-  it('Test Item Structure - Beefs', async () => {
+  it('Test Get Item By Slug  - Beefs', async () => {
     const ITEMS = gql`
       query {
         item(slug: "beef", order: "asc", orderBy: "maxValue", filter: { level: 43 }) {
@@ -227,7 +227,7 @@ describe('Test Item Resolvers', () => {
     expect(item.depends[0].item.slug).toEqual('animal-feed');
   });
 
-  it('Test Find Item by slug', async () => {
+  it('Test Get Item By Slug - Planks', async () => {
     const ADD_ITEM_TO_PROFIT = gql`
       query {
         item(slug: "planks") {
@@ -346,5 +346,110 @@ describe('Test Item Resolvers', () => {
     } = data;
 
     expect(itemsDependsByBuilding.length).toEqual(5);
+  });
+
+  it('Test Find all items used by item', async () => {
+    const ITEMS = gql`
+      query {
+        itemsUsedByItems(
+          slugs: ["planks"]
+          order: "asc"
+          orderBy: "slug"
+          filter: { level: 43 }
+        ) {
+          _id
+          name
+          slug
+        }
+      }
+    `;
+
+    const res = await query({ query: ITEMS });
+
+    expect(res.errors).toBe(undefined);
+
+    expect(res).toHaveProperty('data');
+
+    const {
+      data,
+    } = res;
+
+    expect(data).toHaveProperty('itemsUsedByItems');
+
+    const {
+      itemsUsedByItems,
+    } = data;
+
+    expect(itemsUsedByItems.length).toEqual(4);
+  });
+
+  it('Test Find all items depends by item - pizza', async () => {
+    const ITEMS = gql`
+      query {
+        itemsDependsByItems(
+          slugs: ["pizza"]
+          order: "asc"
+          orderBy: "slug"
+          filter: { level: 43 }
+        ) {
+          _id
+          name
+          slug
+        }
+      }
+    `;
+
+    const res = await query({ query: ITEMS });
+
+    expect(res.errors).toBe(undefined);
+
+    expect(res).toHaveProperty('data');
+
+    const {
+      data,
+    } = res;
+
+    expect(data).toHaveProperty('itemsDependsByItems');
+
+    const {
+      itemsDependsByItems,
+    } = data;
+
+    expect(itemsDependsByItems.length).toEqual(3);
+  });
+
+  it('Test Find all items depends by item - burgers', async () => {
+    const ITEMS = gql`
+      query {
+        itemsDependsByItems(
+          slugs: ["burgers"]
+          order: "asc"
+          orderBy: "slug"
+          filter: { level: 43 }
+        ) {
+          _id
+          name
+          slug
+        }
+      }
+    `;
+
+    const res = await query({ query: ITEMS });
+
+    expect(res.errors).toBe(undefined);
+
+    expect(res).toHaveProperty('data');
+
+    const {
+      data,
+    } = res;
+
+    expect(data).toHaveProperty('itemsDependsByItems');
+
+    const {
+      itemsDependsByItems,
+    } = data;
+
+    expect(itemsDependsByItems.length).toEqual(3);
   });
 });

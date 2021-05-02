@@ -6,10 +6,12 @@ import {
   calculateDependsCostByMaxValue,
   calculateDependsTime,
 } from '@pbr-simcity/web/lib/items';
-import ItemMap from '@pbr-simcity/web/components/Item/ItemMap';
-import BuildingFlow from '@pbr-simcity/web/components/Item/BuildingFlow';
+// import BuildingFlow from '@pbr-simcity/web/components/Item/BuildingFlow';
 import DependencyGraph from '@pbr-simcity/web/components/Item/DependencyGraph';
 import ItemProfit from '@pbr-simcity/web/components/Item/ItemProfit/ItemProfit';
+import ItemIcon from '@pbr-simcity/web/components/Item/ItemIcon/ItemIcon';
+import ItemsUsedInItems from '@pbr-simcity/web/components/Item/ItemsUsedInItems/ItemsUsedInItems';
+import ItemsUsedByItems from '@pbr-simcity/web/components/Item/ItemsUsedByItems/ItemsUsedByItems';
 
 interface IItemPanelProps {
   slug: string;
@@ -41,7 +43,12 @@ const ItemPanel: FC<IItemPanelProps> = ({ slug }) => {
 
   return (
     <div className="panel">
-      <div className="panel__title"><h1>{item.name}</h1></div>
+      <div className="panel__title">
+        <span className="panel__title__icon">
+          <ItemIcon slug={item.slug} name={item.name} size="sm"/>
+        </span>
+        <h1 className="panel__title__text">{item.name}</h1>
+      </div>
       <table>
         <tr>
           <th>Dependency Graph</th>
@@ -49,12 +56,12 @@ const ItemPanel: FC<IItemPanelProps> = ({ slug }) => {
             <DependencyGraph items={item.depends} />
           </td>
         </tr>
-        <tr>
+        {/* <tr>
           <th>Buildings Flow</th>
           <td>
             <BuildingFlow item={item} />
           </td>
-        </tr>
+        </tr> */}
         <tr>
           <th><Link href={`/buildings/${item.building.slug}`}><a>{item.building.name}</a></Link></th>
         </tr>
@@ -96,11 +103,9 @@ const ItemPanel: FC<IItemPanelProps> = ({ slug }) => {
           <td>{(item.maxValue - dependsCost) / item.productionTime}</td>
         </tr>
       </table>
+      <ItemsUsedByItems slug={item.slug}/>
+      <ItemsUsedInItems slug={item.slug}/>
       <ItemProfit item={item.slug}/>
-      <div>
-        <img alt={item.name} src={`/img/${item.slug}.png`} />
-        <ItemMap name={item.name} depends={item.depends} usedIn={item.usedIn} />
-      </div>
       <div>
         <Link href="/items">
           <a>Items</a>
@@ -116,7 +121,14 @@ const ItemPanel: FC<IItemPanelProps> = ({ slug }) => {
             padding: 5px;
             font-size: 20px;
             line-height: 20px;
+            display: flex;
+            align-items: center;
           }
+
+          .panel__title__icon {
+            margin-right: 10px;
+          }
+
           .link {
             color: #ffffff;
           }

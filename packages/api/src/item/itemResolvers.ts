@@ -6,6 +6,7 @@ import {
   IItemDependency,
   IItemProfit,
   IContext,
+  IItemSlugsArgs,
 } from '@pbr-simcity/types/types';
 
 const resolvers = {
@@ -35,6 +36,17 @@ const resolvers = {
       const data = await item.resolveFindItemsDependsByBuildingSlug(args);
       return data;
     },
+    async itemsDependsByItems(
+      _: unknown,
+      args: IItemSlugsArgs,
+      context: IContext,
+    ): Promise<IItem[]> {
+      const { dataSources } = context;
+      const { item } = dataSources;
+
+      const data = await item.resolveFindItemsDependsByItemsSlug(args);
+      return data;
+    },
     async itemsUsedByBuilding(
       _: unknown,
       args: IItemArgs,
@@ -44,6 +56,16 @@ const resolvers = {
       const { item } = dataSources;
       // console.log(args);
       return item.resolveFindItemsUsedInByBuildingSlug(args);
+    },
+    async itemsUsedByItems(
+      _: unknown,
+      args: IItemSlugsArgs,
+      context: IContext,
+    ): Promise<IItem[]> {
+      const { dataSources } = context;
+      const { item } = dataSources;
+      // console.log(args);
+      return item.resolveFindItemsUsedInByItemsSlug(args);
     },
     async item(_: unknown, args: any, context: IContext): Promise<IItemModel> {
       const { dataSources } = context;

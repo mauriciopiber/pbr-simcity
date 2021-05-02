@@ -118,6 +118,8 @@ export default class ItemRepository extends Collection implements IItemRepositor
   }
 
   async findDependsByItemsSlugs(items: string[], match: any, sort: any): Promise<IItemModel[]> {
+    console.log(match, sort);
+
     const docs = this.collection.aggregate([
       { $match: { slug: { $in: items } } },
       { $unwind: { path: '$depends', preserveNullAndEmptyArrays: true } },
@@ -139,11 +141,12 @@ export default class ItemRepository extends Collection implements IItemRepositor
           productionTime: { $first: '$items.item.productionTime' },
           depends: { $first: '$items.item.depends' },
           building: { $first: '$items.item.building' },
+          level: { $first: '$items.item.level' },
         },
       },
       ...this.pipeline,
-      match || null,
-      sort || null,
+      // match || null,
+      // sort || null,
 
       // { $match: { 'items.item.slug': { $in: _ids } } },
     ]);
@@ -151,6 +154,7 @@ export default class ItemRepository extends Collection implements IItemRepositor
   }
 
   async findUsedInByItemId(id: string, match: any, sort: any): Promise<IItemModel[]> {
+
     const docs = await this.collection.aggregate([
       {
         $match: { 'depends.item': { $eq: new ObjectId(id) } },

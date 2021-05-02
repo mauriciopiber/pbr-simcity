@@ -59,6 +59,42 @@ describe('Item Repository', () => {
     expect(findOne.profitOwnProduction).toEqual(20);
   });
 
+  test('find all items depends by list of ids - pizza', async () => {
+    const findAll: IItemModel[] | null = await itemRepository.findDependsByItemsSlugs(
+      ['pizza'],
+      {
+        $match: null,
+      },
+      {
+        $sort: {
+          maxValue: 1,
+        },
+      },
+    );
+
+    if (!findAll || findAll.length < 1) {
+      throw new Error('Missing Pizza by Slug');
+    }
+
+    expect(findAll.length).toEqual(3);
+    const findOne = findAll.find((a: IItemModel) => a.slug === 'beef');
+
+    if (!findOne) {
+      throw new Error('Missing Depends Item');
+    }
+
+    expect(findOne.name).toEqual('Beef');
+    expect(findOne.slug).toEqual('beef');
+    expect(findOne.productionTime).toEqual(150);
+    expect(findOne.maxValue).toEqual(860);
+
+    expect(findOne.depends.length).toEqual(1);
+    expect(findOne.billTime).toEqual(360);
+    expect(findOne.billCost).toEqual(420);
+    expect(findOne.profitOwnProduction).toEqual(440);
+  });
+
+
   test('find all items depends by list of ids - cherry', async () => {
     const findAll: IItemModel[] | null = await itemRepository.findDependsByItemsSlugs([
       'planks',

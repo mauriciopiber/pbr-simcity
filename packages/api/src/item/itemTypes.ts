@@ -59,8 +59,20 @@ const typeDefs = gql`
       orderBy: String
       filter: ItemFilter
     ): [Item]
+    itemsDependsByItems(
+      slugs: [String]!
+      order: String
+      orderBy: String
+      filter: ItemFilter
+    ): [Item]
     itemsUsedByBuilding(
       building: String!
+      order: String
+      orderBy: String
+      filter: ItemFilter
+    ): [Item]
+    itemsUsedByItems(
+      slugs: [String]!
       order: String
       orderBy: String
       filter: ItemFilter

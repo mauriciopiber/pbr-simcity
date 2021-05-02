@@ -46,6 +46,11 @@ const BuildingTable: FC<BuildingTableProps> = ({ buildings, setOrder }) => (
       {`
         .table {
           width: 100%;
+          font-family: Roboto;
+        }
+
+        td {
+          padding: 0.5rem;
         }
       `}
     </style>
