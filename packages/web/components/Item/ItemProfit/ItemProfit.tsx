@@ -36,7 +36,7 @@ const ItemProfit: FC<ItemProfitProps> = ({ item }) => {
   const { buildings } = itemProfit;
 
   return (
-    <div>
+    <div id="profit">
       <div className="buildings">
         {buildings.map(((a: any) => {
           if (a.slots.length <= 0) {

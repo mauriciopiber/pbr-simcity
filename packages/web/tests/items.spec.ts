@@ -16,7 +16,7 @@ test('Item Stats - Metal', async (t) => {
   const fixture = 'Metal';
 
   await enterItemPage(t, fixture);
-  await t.expect(screen.findByTestId('material-title').exists).ok();
+  // await t.expect(screen.findByTestId('material-title').exists).ok();
 });
 
 test('Item Stats - Planks', async (t) => {
@@ -25,7 +25,7 @@ test('Item Stats - Planks', async (t) => {
   const fixture = 'Planks';
 
   await enterItemPage(t, fixture);
-  await t.expect(screen.findByTestId('material-title').exists).ok();
+  // await t.expect(screen.findByTestId('material-title').exists).ok();
 
   // await t.expect(screen.findByTestId('dependency-quantity-time-planks').textContent).eql('60');
 });
@@ -36,7 +36,7 @@ test('Item Stats - Ladder', async (t) => {
   const fixture = 'Ladder';
 
   await enterItemPage(t, fixture);
-  await t.expect(screen.findByTestId('material-title').exists).ok();
+  // await t.expect(screen.findByTestId('material-title').exists).ok();
 
   await t
     .expect(screen.findByTestId('dependency-quantity-time-planks').textContent)
@@ -44,6 +44,18 @@ test('Item Stats - Ladder', async (t) => {
   await t
     .expect(screen.findByTestId('dependency-time-bill-planks').textContent)
     .eql('63');
+
+  await t
+    .expect(screen.findByTestId('industry-1-wood-schedule').textContent)
+    .eql('0');
+
+    await t
+    .expect(screen.findByTestId('industry-1-wood-start').textContent)
+    .eql('0');
+
+    await t
+    .expect(screen.findByTestId('industry-1-wood-complete').textContent)
+    .eql('3');
 });
 
 test('Item Stats - Cherry Cheesecake', async (t) => {
@@ -52,7 +64,7 @@ test('Item Stats - Cherry Cheesecake', async (t) => {
   const fixture = 'Cherry Cheesecake';
 
   await enterItemPage(t, fixture);
-  await t.expect(screen.findByTestId('material-title').exists).ok();
+  // await t.expect(screen.findByTestId('material-title').exists).ok();
 
   // check seeds from tree saplings
   await t
@@ -138,5 +150,5 @@ test('Item Stats - Cherry Cheesecake', async (t) => {
 test('Item Stats - Cheese Fries', async (t) => {
   const fixture = 'Cheese Fries';
   await enterItemPage(t, fixture);
-  await t.expect(screen.findByTestId('material-title').exists).ok();
+  // await t.expect(screen.findByTestId('material-title').exists).ok();
 });

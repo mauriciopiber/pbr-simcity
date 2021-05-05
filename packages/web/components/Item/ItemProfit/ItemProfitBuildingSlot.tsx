@@ -1,26 +1,29 @@
 import React, { FC } from 'react';
 import {
-  IItemProfitBuildingSlots
+  IItemProfitBuildingSlots,
+  BuildingSlugs,
 } from '@pbr-simcity/types/types';
 import ItemIcon from '@pbr-simcity/web/components/Item/ItemIcon/ItemIcon';
 
 interface ItemProfitBuildingSlotProps {
   slot: IItemProfitBuildingSlots;
+  building: BuildingSlugs;
 }
 
-const ItemProfitBuildingSlot: FC<ItemProfitBuildingSlotProps> = ({ slot }) => {
+const ItemProfitBuildingSlot: FC<ItemProfitBuildingSlotProps> = ({ slot, building }) => {
 
+  const testId = `${building}-${slot.slot}-${slot.item.slug}`;
   return (
-    <div className="slot" key={slot.slot}>
+    <div data-testid={`${testId}`} className="slot" key={slot.slot}>
       [{slot.slot}]
       <ItemIcon name={slot.item.name} size="xs" slug={slot.item.slug}/>
-      <span className="schedule">
+      <span data-testid={`${testId}-schedule`} className="schedule">
         {slot.schedule}
       </span>
-      <span className="start">
+      <span data-testid={`${testId}-start`} className="start">
         {slot.start}
       </span>
-      <span className="complete">
+      <span data-testid={`${testId}-complete`} className="complete">
         {slot.complete}
       </span>
       <style jsx>

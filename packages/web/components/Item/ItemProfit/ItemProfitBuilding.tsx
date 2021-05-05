@@ -21,7 +21,7 @@ const ItemProfitBuilding: FC<ItemProfitBuildingProps> = ({ building }) => {
       <div className="slots">
         {building.slots.map((slotItem: any) => {
           return (
-            <ItemProfitBuildingSlot key={slotItem.slot} slot={slotItem}/>
+            <ItemProfitBuildingSlot key={slotItem.slot} slot={slotItem} building={building.slug}/>
           )
         })}
       </div>

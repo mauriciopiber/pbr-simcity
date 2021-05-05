@@ -94,7 +94,6 @@ describe('Item Repository', () => {
     expect(findOne.profitOwnProduction).toEqual(440);
   });
 
-
   test('find all items depends by list of ids - cherry', async () => {
     const findAll: IItemModel[] | null = await itemRepository.findDependsByItemsSlugs([
       'planks',
