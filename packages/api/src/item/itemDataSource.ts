@@ -550,7 +550,6 @@ export default class ItemDataSource implements IItemDataSource {
   }
 
   async getItemsListDependencyGraph(items: any[], buildingHistory: IItemProfitBuilding[]) {
-
     // console.log('building history', buildingHistory);
     const dependencyGraphItemsPromises = items.map(async (a: any) => {
       const dependencyGraph = await this.resolveItemDependencyGraph(a.slug, buildingHistory);
@@ -581,39 +580,37 @@ export default class ItemDataSource implements IItemDataSource {
   ): Promise<IItemProfitBuildingSlots[]> {
     const dependencyGraphs = await this.getItemsListDependencyGraph(items, dependencyBuilding);
 
-    let lastComplete = 0;
-    let lastCritical = 0;
+    let lastItem: IItemProfitBuildingSlots;
 
     const sequentialSlotsPromises: IItemProfitBuildingSlots[] = items.map(
       (a: any, index: number) => {
         // get item dependency graph
         const dependencyGraph = dependencyGraphs[a.slug];
 
-
-        // console.log(a.slug, a.building, dependencyGraph, dependencyBuilding);
-
-        // const dependencyBuildingItem =
-        // dependencyBuilding.find((a._id == dependencyGraph.building));
-
-        // console.log('dependency graphs', dependencyGraphs);
-
         const { criticalPath } = dependencyGraph;
 
-        const start = lastCritical === criticalPath ? lastComplete : criticalPath;
+        const schedule = criticalPath;
 
-        const complete = lastCritical === criticalPath
+        const start = lastItem && (lastItem.schedule === schedule || lastItem.complete >= schedule)
+          ? lastItem.complete
+          : schedule;
+
+        const complete = lastItem
+          && (lastItem.schedule === schedule || lastItem.complete >= schedule)
           ? start + a.productionTime
-          : criticalPath + a.productionTime;
+          : schedule + a.productionTime;
 
         const slot: IItemProfitBuildingSlots = {
           slot: index + 1,
-          schedule: criticalPath,
+          schedule,
           start,
           complete,
           item: a,
         };
-        lastComplete = complete;
-        lastCritical = criticalPath;
+
+        lastItem = slot;
+        // lastComplete = complete;
+        // lastCritical = criticalPath;
         return slot;
       },
     );

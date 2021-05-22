@@ -56,15 +56,6 @@ describe('Item Data Source', () => {
     expect(itemBySlug.billCost).toEqual(40);
   });
 
-  test('get dependency graph for - pizza', async () => {
-    const item: IItemDependencyGraph = await itemDataSource.resolveItemDependencyGraph(
-      'pizza',
-    );
-
-    expect(item.slug).toEqual('pizza');
-    expect(item.criticalPath).toEqual(615);
-  });
-
   test('get dependency graph for - burgers', async () => {
     const item: IItemDependencyGraph = await itemDataSource.resolveItemDependencyGraph(
       'burgers',
@@ -475,9 +466,13 @@ describe('Items Profit - Critical Path', () => {
     const itemProfit: IItemProfit = await itemDataSource.resolveItemProfit(
       'tables',
     );
-    const { furniture } = itemProfit.buildings;
+    const { furniture, supplies } = itemProfit.buildings;
 
-    expectSlot(furniture, 1, 'tables', 44, 44, 74);
+    expectSlot(supplies, 1, 'nails', 1, 1, 6);
+    expectSlot(supplies, 2, 'nails', 1, 6, 11);
+    expectSlot(supplies, 3, 'planks', 3, 11, 41);
+
+    expectSlot(furniture, 1, 'tables', 41, 41, 71);
   });
 
   test('workflow - path - lawn-mower', async () => {
@@ -646,9 +641,21 @@ describe('Items Profit - Critical Path', () => {
     const itemProfit: IItemProfit = await itemDataSource.resolveItemProfit(
       'green-smoothie',
     );
-    const { donut } = itemProfit.buildings;
+    const {
+      donut,
+      gardening,
+      hardware,
+      farmers,
+    } = itemProfit.buildings;
 
-    expectSlot(donut, 1, 'green-smoothie', 129, 129, 159);
+    expectSlot(hardware, 1, 'shovel', 9, 9, 39);
+
+    expectSlot(gardening, 1, 'tree-saplings', 39, 39, 129);
+
+    expectSlot(farmers, 2, 'fruit-and-berries', 129, 129, 219);
+
+
+    expectSlot(donut, 1, 'green-smoothie', 219, 219, 249);
   });
 
   test('workflow - path - tv', async () => {
@@ -747,7 +754,7 @@ describe('Items Profit - Critical Path', () => {
     );
     const food = itemProfit.buildings['fast-food'];
 
-    expectSlot(food, 1, 'burgers', 585, 585, 615);
+    expectSlot(food, 1, 'burgers', 585, 585, 620);
   });
   // test('workflow - path - business-suits', async () => {
   //   const itemProfit: IItemProfit = await itemDataSource.resolveItemProfit(
