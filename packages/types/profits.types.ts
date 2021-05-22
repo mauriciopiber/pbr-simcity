@@ -2,7 +2,8 @@ import {
   IItemModel,
 } from './items.types';
 import {
-  IBuildingPreviewModel,
+  IBuilding,
+  IBuildingModel,
 } from './buildings.types';
 
 /**
@@ -69,7 +70,7 @@ export interface IItemProfitBuldingList {
 }
 
 export interface IItemProfitBuildingPreviewList {
- [key: string]: IBuildingPreviewModel
+ [key: string]: IBuildingModel
 }
 /**
  * Profit
@@ -84,6 +85,7 @@ export interface IItemProfit {
 
 export interface IItemDependencyGraph {
   slug: string;
+  building: IBuilding;
   criticalPath: number;
   productionTime: number;
   maxTime: number;

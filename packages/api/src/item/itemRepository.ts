@@ -4,7 +4,7 @@ import {
   IItemModel,
   IItemDoc,
   IItemRepository,
-  IBuildingPreviewModel,
+  IBuildingModel,
 } from '@pbr-simcity/types/types';
 import Collection from '@pbr-simcity/api/src/collection';
 
@@ -24,7 +24,7 @@ export default class ItemRepository extends Collection implements IItemRepositor
     return docs.toArray();
   }
 
-  async findBuildings(): Promise<IBuildingPreviewModel[]> {
+  async findBuildings(): Promise<IBuildingModel[]> {
     const docs = this.collection.aggregate([
       {
         $lookup: {
@@ -64,7 +64,7 @@ export default class ItemRepository extends Collection implements IItemRepositor
       },
     ]);
 
-    const buildings: IBuildingPreviewModel[] = await docs.toArray();
+    const buildings: IBuildingModel[] = await docs.toArray();
     return buildings;
   }
 
@@ -117,8 +117,8 @@ export default class ItemRepository extends Collection implements IItemRepositor
     return docs.toArray();
   }
 
-  async findDependsByItemsSlugs(items: string[], match: any, sort: any): Promise<IItemModel[]> {
-    console.log(match, sort);
+  async findDependsByItemsSlugs(items: string[]): Promise<IItemModel[]> {
+    // console.log(match, sort);
 
     const docs = this.collection.aggregate([
       { $match: { slug: { $in: items } } },
@@ -144,7 +144,13 @@ export default class ItemRepository extends Collection implements IItemRepositor
           level: { $first: '$items.item.level' },
         },
       },
+      {
+        $sort: {
+          'building.order': 1,
+        },
+      },
       ...this.pipeline,
+
       // match || null,
       // sort || null,
 
@@ -154,7 +160,6 @@ export default class ItemRepository extends Collection implements IItemRepositor
   }
 
   async findUsedInByItemId(id: string, match: any, sort: any): Promise<IItemModel[]> {
-
     const docs = await this.collection.aggregate([
       {
         $match: { 'depends.item': { $eq: new ObjectId(id) } },
@@ -167,7 +172,8 @@ export default class ItemRepository extends Collection implements IItemRepositor
     return docs.toArray();
   }
 
-  async findUsedInByBuildingSlug(slug: string, match: any, sort: any): Promise<IItemModel[]> {
+  async findUsedInByBuildingSlug(slug: string): Promise<IItemModel[]> {
+    // console.log(match, sort);
     // const { match, sort }: any = await ItemRepository.createMatchFilter(args);
 
     const docs = this.collection.aggregate([
@@ -234,8 +240,14 @@ export default class ItemRepository extends Collection implements IItemRepositor
         },
       },
       ...this.pipeline,
-      match || null,
-      sort || null,
+      {
+        $sort: {
+          'building.slug': 1,
+        },
+      },
+      // match || null,
+      // sort || null,
+
       // { $match: match },
       // {
       //   $sort: sort,
@@ -245,7 +257,8 @@ export default class ItemRepository extends Collection implements IItemRepositor
     return docs.toArray();
   }
 
-  async findUsedInByItemsSlugs(items: string[], match: any, sort: any): Promise<IItemModel[]> {
+  async findUsedInByItemsSlugs(items: string[]): Promise<IItemModel[]> {
+    // console.log(match, sort);
     const docs = this.collection.aggregate([
       { $unwind: { path: '$depends', preserveNullAndEmptyArrays: true } },
       {
@@ -299,8 +312,7 @@ export default class ItemRepository extends Collection implements IItemRepositor
         },
       },
       ...this.pipeline,
-      match || null,
-      sort || null,
+
     ]);
     return docs.toArray();
   }
@@ -361,7 +373,6 @@ export default class ItemRepository extends Collection implements IItemRepositor
     return docs;
   }
 
-
   // async findByBuildingId(building: string): Promise<IItemModel[]> {
   //   // const { building } = args;
   //   const docs = await this.collection
@@ -390,7 +401,6 @@ export default class ItemRepository extends Collection implements IItemRepositor
 
   //   return docs;
   // }
-
 
   async findByBuildingId(building: string, match: any, sort: any): Promise<IItemModel[]> {
     const docs = await this.collection

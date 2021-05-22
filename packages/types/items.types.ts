@@ -1,7 +1,7 @@
-import { IBuilding, IBuildingPreviewModel } from './buildings.types';
+import { IBuilding } from './buildings.types';
 import {
   IItemProfit,
-  // IItemProfitBuilding,
+  IItemProfitBuilding,
   IItemProfitDependency,
   IItemDependencyGraph,
 } from './profits.types';
@@ -110,7 +110,7 @@ export interface ItemSortRepository {
 //         innerPath: criticalPath,
 
 export interface IItemRepository {
-  findBuildings(): Promise<IBuildingPreviewModel[]>
+  findBuildings(): Promise<IBuilding[]>
   findAll(match: any, sort: any): Promise<IItemModel[]>
   findByBuildingId(building: string, match: any, sort: any): Promise<IItemModel[]>
   findByBuildingSlug(building: string, match: any, sort: any): Promise<IItemModel[]>
@@ -148,5 +148,7 @@ export interface IItemDataSource {
   resolveUsedInByItemId(parent: string, args: IItemArgs): Promise<IItemModel[]>
   resolveItemDependsByItemId(parent: string): Promise<IItemModel>
   resolveFindOneItem(args: IItemArgs): Promise<IItemModel>
-  resolveItemDependencyGraph(slug: string): Promise<IItemDependencyGraph>
+  resolveItemDependencyGraph(
+    slug: string, buildingHistory: IItemProfitBuilding[]
+  ): Promise<IItemDependencyGraph>
 }

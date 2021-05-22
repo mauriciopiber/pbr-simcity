@@ -273,7 +273,7 @@ describe('Items Profit - Critical Path', () => {
     }
     const index = slot - 1;
 
-    expect(building?.slots[index]?.slot).toEqual(1);
+    expect(building?.slots[index]?.slot).toEqual(slot);
     expect(building?.slots[index]?.item.slug).toEqual(slug);
     expect(building?.slots[index]?.schedule).toEqual(schedule);
     expect(building?.slots[index]?.start).toEqual(start);
@@ -365,8 +365,10 @@ describe('Items Profit - Critical Path', () => {
     const itemProfit: IItemProfit = await itemDataSource.resolveItemProfit(
       'ladder',
     );
-    const { hardware } = itemProfit.buildings;
+    const { hardware, supplies } = itemProfit.buildings;
 
+    expectSlot(supplies, 1, 'planks', 3, 3, 33);
+    expectSlot(supplies, 2, 'planks', 3, 33, 63);
     expectSlot(hardware, 1, 'ladder', 63, 63, 123);
   });
 
