@@ -17,10 +17,10 @@ const typeDefs = gql`
     profitOwnProduction: Int!
     profitOwnByMinute: Float!
     profitOwnByHour: Float!
-    profit: Float!
-    profitByMinute: Float!
-    profitByHour: Float!
     billTime: Int!
+    totalTime: Int!
+    profitTotalByMinute: Float!
+    profitTotalByHour: Float!
     slug: String!
     usedIn: [Item]
     depends: [ItemDepends]

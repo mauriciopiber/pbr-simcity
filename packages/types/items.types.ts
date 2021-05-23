@@ -136,6 +136,7 @@ export interface IItemDataSource {
   // ): IItemProfitBuilding;
   // createSequentialBuildingProfitSlots(): IItemProfitBuilding;
   // getItemCriticalPath(item: IItemProfitDependency, items: IItemProfitDependency[]): number;
+  resolveBillTime(item: string): Promise<number>
   resolveItemProfit(item: string): Promise<IItemProfit>
   /** Item itself */
   resolveFindAll(args: IItemArgs): Promise<IItemModel[]>

@@ -118,8 +118,6 @@ export default class ItemRepository extends Collection implements IItemRepositor
   }
 
   async findDependsByItemsSlugs(items: string[]): Promise<IItemModel[]> {
-
-
     const docs = this.collection.aggregate([
       { $match: { slug: { $in: items } } },
       { $unwind: { path: '$depends', preserveNullAndEmptyArrays: true } },
@@ -173,7 +171,6 @@ export default class ItemRepository extends Collection implements IItemRepositor
   }
 
   async findUsedInByBuildingSlug(slug: string): Promise<IItemModel[]> {
-
     // const { match, sort }: any = await ItemRepository.createMatchFilter(args);
 
     const docs = this.collection.aggregate([
@@ -258,7 +255,6 @@ export default class ItemRepository extends Collection implements IItemRepositor
   }
 
   async findUsedInByItemsSlugs(items: string[]): Promise<IItemModel[]> {
-
     const docs = this.collection.aggregate([
       { $unwind: { path: '$depends', preserveNullAndEmptyArrays: true } },
       {
@@ -666,7 +662,6 @@ export default class ItemRepository extends Collection implements IItemRepositor
         ...this.pipeline,
       ])
       .toArray();
-
 
     // const docs = await this.collection.findOne({_id: {$eq: new ObjectId(id)}});
     // return docs;

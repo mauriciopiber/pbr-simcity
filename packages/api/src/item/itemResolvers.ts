@@ -126,35 +126,61 @@ const resolvers = {
 
       return item.resolveUsedInByItemId(_id, args);
     },
-    async profitByMinute(parent: IItemModel, args: IItemArgs, context: IContext): Promise<number> {
-      return 0;
+    async billTime(parent: IItemModel, _args: IItemArgs, context: IContext): Promise<number> {
+      const { dataSources } = context;
+      const { item } = dataSources;
 
-      /**
-       * profit
-          profitByMinute
-          profitByHour
-          billTime
-       */
+      const {
+        slug,
+      } = parent;
+
+      return item.resolveBillTime(slug);
     },
-    async profitByHour(parent: IItemModel, args: IItemArgs, context: IContext): Promise<number> {
-      return 0;
+    async totalTime(parent: IItemModel, _args: IItemArgs, context: IContext): Promise<number> {
+      const { dataSources } = context;
+      const { item } = dataSources;
 
-      /**
-       * profit
-          profitByMinute
-          profitByHour
-          billTime
-       */
+      const {
+        slug,
+      } = parent;
+
+      const billTime = await item.resolveBillTime(slug);
+      return billTime + parent.productionTime;
     },
-    async billTime(parent: IItemModel, args: IItemArgs, context: IContext): Promise<number> {
-      return 0;
 
-      /**
-       * profit
-          profitByMinute
-          profitByHour
-          billTime
-       */
+    async profitTotalByMinute(
+      parent: IItemModel,
+      _args: IItemArgs,
+      context: IContext,
+    ): Promise<number> {
+      const { dataSources } = context;
+      const { item } = dataSources;
+
+      const {
+        slug,
+      } = parent;
+
+      const billTime = await item.resolveBillTime(slug);
+      const totalTime = billTime + parent.productionTime;
+
+      return (parent.maxValue / totalTime);
+    },
+    async profitTotalByHour(
+      parent: IItemModel,
+      args: IItemArgs,
+      context: IContext,
+    ): Promise<number> {
+      const { dataSources } = context;
+      const { item } = dataSources;
+
+      const {
+        slug,
+      } = parent;
+
+      const billTime = await item.resolveBillTime(slug);
+      const totalTime = billTime + parent.productionTime;
+
+      return (parent.maxValue / (totalTime / 60));
     },
   },
   ItemDepends: {

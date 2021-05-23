@@ -28,6 +28,10 @@ export default class ItemDataSource implements IItemDataSource {
     this.itemRepository = itemRepository;
   }
 
+  async resolveBillTime(slug: string): Promise<number> {
+    return 585;
+  }
+
   async resolveFindAll(args: IItemArgs): Promise<IItemModel[]> {
     const match = ItemDataSource.createMatch(args);
     const order = ItemDataSource.createOrder(args);

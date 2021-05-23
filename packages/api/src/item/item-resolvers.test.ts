@@ -247,6 +247,11 @@ describe('Test Item Resolvers', () => {
           _id
           name
           slug
+          billCost
+          billTime
+          totalTime
+          profitTotalByMinute
+          profitTotalByHour
           building {
             _id
             name
@@ -274,6 +279,11 @@ describe('Test Item Resolvers', () => {
 
     expect(item.slug).toEqual('burgers');
     expect(item.name).toEqual('Burgers');
+
+    expect(item.billTime).toEqual(585);
+    expect(item.totalTime).toEqual(620);
+    expect(item.profitTotalByHour).toEqual(3620 / (620 / 60));
+    expect(item.profitTotalByMinute).toEqual(3620 / 620);
   });
 
   it('Test Get Item By Slug - Beef', async () => {
@@ -563,55 +573,5 @@ describe('Test Item Resolvers', () => {
     } = data;
 
     expect(itemsDependsByItems.length).toEqual(3);
-  });
-
-  it('Test Find all items depends by item with critical path and total profit - burgers', async () => {
-    const ITEMS = gql`
-      query {
-        itemsDependsByItems(
-          slugs: ["burgers"]
-          order: "asc"
-          orderBy: "slug"
-          filter: { level: 43 }
-        ) {
-          _id
-          name
-          maxValue
-          productionTime
-          level
-          slug
-          profitOwnProduction
-          profitOwnByMinute
-          profitOwnByHour
-          profitByMinute
-          profitByHour
-          billTime
-          billCost
-        }
-      }
-    `;
-
-    const res = await query({ query: ITEMS });
-
-    expect(res.errors).toBe(undefined);
-    expect(res).toHaveProperty('data');
-
-    const { data } = res;
-    expect(data).toHaveProperty('itemsDependsByItems');
-
-    const { itemsDependsByItems } = data;
-    expect(itemsDependsByItems.length).toEqual(3);
-
-    const beef = itemsDependsByItems.find((a: any) => a.slug === 'beef');
-
-    if (!beef) {
-      throw new Error('Missing Burger');
-    }
-
-    // expect(beef.billTime).toEqual(585);
-    // expect(beef.profitByMinute).toEqual(5.83);
-    // expect(beef.profitByHour).toEqual(350.322580645);
-
-    // expect(beef.item)
   });
 });
