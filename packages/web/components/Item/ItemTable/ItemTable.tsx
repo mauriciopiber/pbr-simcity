@@ -55,6 +55,10 @@ const ItemTable: FC<ItemTableProps> = ({ items, setOrder }) => {
           >
             P/H
           </th>
+          <th>B.T</th>
+          <th>T.T</th>
+          <th>T.P.H</th>
+          {/* <th>T.P.M</th> */}
           <th>Depends</th>
           <th>Used In</th>
           <th>FP</th>
@@ -86,6 +90,10 @@ const ItemTable: FC<ItemTableProps> = ({ items, setOrder }) => {
             <td>{p.profitOwnProduction}</td>
             <td>{p.profitOwnByMinute}</td>
             <td>{p.profitOwnByHour}</td>
+            <td>{p.billTime}</td>
+            <td>{p.totalTime}</td>
+            <td>{p.profitTotalByHour}</td>
+            {/* <td>{p.profitTotalByMinute}</td> */}
             <td>{p && p.depends && p.depends.map((p: any) => (
               <>
               <ItemIcon size="xs" key={p.item.slug} name={p.item.name} slug={p.item.slug} />

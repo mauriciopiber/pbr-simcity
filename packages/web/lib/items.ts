@@ -23,6 +23,10 @@ export const QUERY_ITEMS_BY_BUILDING = gql`
     profitOwnByMinute
     profitOwnByHour
     billCost
+    billTime
+    totalTime
+    profitTotalByHour
+    profitTotalByMinute
     depends {
       item {
         _id
@@ -74,6 +78,10 @@ export const QUERY_ITEMS_DEPEND_BY_BUILDING = gql`
     profitOwnByMinute
     profitOwnByHour
     billCost
+    billTime
+    totalTime
+    profitTotalByHour
+    profitTotalByMinute
     depends {
       item {
         _id
@@ -170,6 +178,10 @@ export const QUERY_ITEMS_USED_BY_BUILDING = gql`
     profitOwnByMinute
     profitOwnByHour
     billCost
+    billTime
+    totalTime
+    profitTotalByHour
+    profitTotalByMinute
     usedIn {
       _id
       name
@@ -221,6 +233,10 @@ query(
   profitOwnByMinute
   profitOwnByHour
   billCost
+  billTime
+  totalTime
+  profitTotalByHour
+  profitTotalByMinute
   usedIn {
     _id
     name
@@ -272,6 +288,10 @@ query(
   profitOwnByMinute
   profitOwnByHour
   billCost
+  billTime
+  totalTime
+  profitTotalByHour
+  profitTotalByMinute
   usedIn {
     _id
     name
@@ -320,6 +340,10 @@ export const QUERY_ITEMS = gql`
       profitOwnByMinute
       profitOwnByHour
       billCost
+      billTime
+      totalTime
+      profitTotalByHour
+      profitTotalByMinute
       usedIn {
         _id
         name

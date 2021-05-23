@@ -180,7 +180,7 @@ const resolvers = {
       const billTime = await item.resolveBillTime(slug);
       const totalTime = billTime + parent.productionTime;
 
-      return (parent.maxValue / (totalTime / 60));
+      return Math.floor((parent.maxValue / (totalTime / 60)));
     },
   },
   ItemDepends: {
