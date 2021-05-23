@@ -293,6 +293,11 @@ describe('Test Item Resolvers', () => {
           _id
           name
           slug
+          billTime
+          totalTime
+          maxValue
+          profitTotalByMinute
+          profitTotalByHour
           building {
             _id
             name
@@ -302,12 +307,20 @@ describe('Test Item Resolvers', () => {
             _id
             name
             slug
+            billTime
+            totalTime
+            profitTotalByMinute
+            profitTotalByHour
           }
           depends {
             item {
               _id
               name
               slug
+              billTime
+              totalTime
+              profitTotalByMinute
+              profitTotalByHour
             }
             quantity
           }
@@ -333,6 +346,7 @@ describe('Test Item Resolvers', () => {
 
     expect(item.slug).toEqual('beef');
     expect(item.name).toEqual('Beef');
+    expect(item.maxValue).toEqual(860);
 
     expect(item).toHaveProperty('building');
 
@@ -347,6 +361,11 @@ describe('Test Item Resolvers', () => {
     expect(item.depends.length).toEqual(1);
     expect(item.depends[0].quantity).toEqual(3);
     expect(item.depends[0].item.slug).toEqual('animal-feed');
+
+    expect(item.billTime).toEqual(360);
+    expect(item.totalTime).toEqual(510);
+    expect(item.profitTotalByHour).toEqual(860 / (510 / 60));
+    expect(item.profitTotalByMinute).toEqual(860 / 510);
   });
 
   it('Test Get Item By Slug - Planks', async () => {

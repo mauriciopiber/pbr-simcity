@@ -3,11 +3,9 @@ import Link from 'next/link';
 import { useQuery } from '@apollo/react-hooks';
 import {
   QUERY_ITEM,
-  calculateDependsCostByMaxValue,
-  calculateDependsTime,
 } from '@pbr-simcity/web/lib/items';
 // import BuildingFlow from '@pbr-simcity/web/components/Item/BuildingFlow';
-import DependencyGraph from '@pbr-simcity/web/components/Item/DependencyGraph';
+
 import ItemProfit from '@pbr-simcity/web/components/Item/ItemProfit/ItemProfit';
 import ItemIcon from '@pbr-simcity/web/components/Item/ItemIcon/ItemIcon';
 import ItemsUsedInItems from '@pbr-simcity/web/components/Item/ItemsUsedInItems/ItemsUsedInItems';
@@ -38,8 +36,6 @@ const ItemPanel: FC<IItemPanelProps> = ({ slug }) => {
 
   const { item } = data;
 
-  const dependsTime = calculateDependsTime(item.depends);
-  const dependsCost = calculateDependsCostByMaxValue(item.depends);
 
   return (
     <div className="panel">
@@ -59,20 +55,20 @@ const ItemPanel: FC<IItemPanelProps> = ({ slug }) => {
         </tr>
         <tr>
           <th>Bill Cost</th>
-          <td>{dependsCost}</td>
+          <td>{item.billCost}</td>
         </tr>
         <tr>
           <th>Bill Time</th>
           <td>
-            {dependsTime} ({dependsTime / 60}
+            {item.billTime} ({item.billTime / 60}
             h)
           </td>
         </tr>
         <tr>
           <th>Total Production</th>
           <td>
-            {dependsTime + item.productionTime}m (
-            {(dependsTime + item.productionTime) / 60}
+            {item.totalTime}m (
+            {(item.totalTime) / 60}
             h)
           </td>
         </tr>
@@ -83,12 +79,12 @@ const ItemPanel: FC<IItemPanelProps> = ({ slug }) => {
         <tr>
           <th>Profit From Own Production</th>
           <td>
-            {item.maxValue - dependsCost} = ({item.maxValue}) - ({dependsCost})
+            {item.maxValue - item.billCost} = ({item.maxValue}) - ({item.billCost})
           </td>
         </tr>
         <tr>
           <th>Profit/H From Own Production</th>
-          <td>{(item.maxValue - dependsCost) / item.productionTime}</td>
+          <td>{(item.maxValue - item.billCost) / item.productionTime}</td>
         </tr>
       </table>
       <ItemsUsedByItems slug={item.slug}/>

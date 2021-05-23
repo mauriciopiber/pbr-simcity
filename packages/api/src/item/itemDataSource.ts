@@ -28,9 +28,6 @@ export default class ItemDataSource implements IItemDataSource {
     this.itemRepository = itemRepository;
   }
 
-  async resolveBillTime(slug: string): Promise<number> {
-    return 585;
-  }
 
   async resolveFindAll(args: IItemArgs): Promise<IItemModel[]> {
     const match = ItemDataSource.createMatch(args);
@@ -183,6 +180,26 @@ export default class ItemDataSource implements IItemDataSource {
         innerPath: criticalPath,
       };
     });
+  }
+
+  async resolveBillTime(slug: string): Promise<number> {
+    const { cycles } = await this.resolveItemProfit(slug);
+
+    const [lastCycle] = cycles.slice(-1);
+
+    if (!lastCycle) {
+      throw new Error('Missing last cycle');
+    }
+
+    const { slots } = lastCycle;
+
+    const [lastSlot] = slots.slice(-1);
+
+    if (!lastSlot) {
+      throw new Error('Missing last slot');
+    }
+
+    return lastSlot.schedule;
   }
 
   async resolveItemProfit(item: string): Promise<IItemProfit> {
