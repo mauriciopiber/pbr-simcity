@@ -86,7 +86,11 @@ const ItemTable: FC<ItemTableProps> = ({ items, setOrder }) => {
             <td>{p.profitOwnProduction}</td>
             <td>{p.profitOwnByMinute}</td>
             <td>{p.profitOwnByHour}</td>
-            <td>{p && p.depends && p.depends.map((p: any) => <ItemIcon size="xs" key={p.item.slug} name={p.item.name} slug={p.item.slug} />)}</td>
+            <td>{p && p.depends && p.depends.map((p: any) => (
+              <>
+              <ItemIcon size="xs" key={p.item.slug} name={p.item.name} slug={p.item.slug} />
+              </>
+            ))}</td>
             <td>{p && p.usedIn && p.usedIn.map((p: any) => <ItemIcon size="xs" key={p.slug} name={p.name} slug={p.slug} />)}</td>
 
             <td
