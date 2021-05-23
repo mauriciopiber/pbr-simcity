@@ -47,7 +47,7 @@ export interface IBuildingArgs {
 
 export interface IBuildingRepository {
   findAll(): Promise<IBuilding[]>
-  findOneById(id: string): Promise<IBuilding>
+  findOneById(id: any): Promise<IBuilding>
   findOneBySlug(slug: string): Promise<IBuilding>
 }
 

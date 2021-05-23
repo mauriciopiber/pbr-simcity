@@ -109,16 +109,14 @@ const resolvers = {
   },
   Item: {
     async building(
-      parent: IItemModel | string,
+      parent: IItemModel | IItem,
       _args: unknown,
       context: IContext,
     ): Promise<IBuilding> {
       const { dataSources } = context;
       const { building } = dataSources;
 
-      console.log(parent);
-
-      return building.resolveOneBuildingByParentItemId(parent.building);
+      return building.resolveOneBuildingByParentItemId(parent);
     },
     async usedIn(parent: IItemModel, args: IItemArgs, context: IContext): Promise<IItemModel[]> {
       const { dataSources } = context;

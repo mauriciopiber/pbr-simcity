@@ -1,5 +1,5 @@
 import {
-  IBuildingDataSource, IBuildingRepository, IBuilding, IBuildingFilter,
+  IBuildingDataSource, IBuildingRepository, IBuilding, IBuildingFilter, IItemModel, IItem,
 } from '@pbr-simcity/types/types';
 
 export default class BuildingDataSource implements IBuildingDataSource {
@@ -14,8 +14,16 @@ export default class BuildingDataSource implements IBuildingDataSource {
     return allBuildings;
   }
 
-  resolveOneBuildingByParentItemId(parent: string): Promise<IBuilding> {
-    return this.buildingRepository.findOneById(parent);
+  resolveOneBuildingByParentItemId(parent: IItemModel | IItem): Promise<IBuilding> {
+    if (parent.building.slug) {
+      return Promise.resolve(parent.building);
+    }
+
+    if (typeof parent.building === 'object') {
+      return this.buildingRepository.findOneById(parent.building);
+    }
+
+    throw new Error('Missing parent to find building');
   }
 
   resolveOneBuilding(filter: IBuildingFilter): Promise<IBuilding> {
@@ -23,7 +31,6 @@ export default class BuildingDataSource implements IBuildingDataSource {
       slug,
       _id,
     } = filter;
-
 
     if (slug) {
       return this.buildingRepository.findOneBySlug(slug);

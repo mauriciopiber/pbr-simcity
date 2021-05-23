@@ -166,6 +166,7 @@ query(
           slug
           name
           building {
+            _id
             slug
           }
         }

@@ -276,7 +276,7 @@ describe('Test Item Resolvers', () => {
     expect(item.name).toEqual('Burgers');
   });
 
-  it('Test Get Item By Slug  - Beefs', async () => {
+  it('Test Get Item By Slug - Beef', async () => {
     const ITEMS = gql`
       query {
         item(slug: "beef", order: "asc", orderBy: "maxValue", filter: { level: 43 }) {
