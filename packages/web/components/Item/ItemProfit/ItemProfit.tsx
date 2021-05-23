@@ -8,6 +8,7 @@ import {
   QUERY_ITEM_PROFIT,
 } from '@pbr-simcity/web/lib/items';
 import ItemProfitBuilding from '@pbr-simcity/web/components/Item/ItemProfit/ItemProfitBuilding';
+import ItemProfitCycles from '@pbr-simcity/web/components/Item/ItemProfit/ItemProfitCycles';
 
 export interface ItemProfitProps {
   item: string;
@@ -33,10 +34,13 @@ const ItemProfit: FC<ItemProfitProps> = ({ item }) => {
 
   const { itemProfit } = data;
 
-  const { buildings } = itemProfit;
+  const { buildings, cycles } = itemProfit;
 
   return (
     <div id="profit">
+      <div className="cycles">
+        <ItemProfitCycles cycles={cycles}/>
+      </div>
       <div className="buildings">
         {buildings.map(((a: any) => {
           if (a.slots.length <= 0) {
@@ -55,7 +59,7 @@ const ItemProfit: FC<ItemProfitProps> = ({ item }) => {
             padding: 15px;
             flex-wrap: wrap;
           }
-                 `}
+        `}
       </style>
     </div>
   )

@@ -18,20 +18,6 @@ export interface IProfitItem {
   item: IItemModel;
 }
 
-/**
- * Profit Cycle
- *
- * Cada ciclo que o usuário deverá interagir com o app para produção andar.
- */
-export interface IProfitCycle {
-  cycle: number;
-  startProduction: string;
-  endProduction: string;
-  // quantity: number;
-  items: IItemModel[];
-  // building: IBuildingModel;
-}
-
 export interface IItemProfitDependency extends IItemModel {
   quantity: number;
 }
@@ -50,6 +36,10 @@ export interface IItemProfitBuildingSlots {
   complete: number;
 }
 
+export interface IItemProfitBuildingSlotsCycle extends IItemProfitBuildingSlots {
+  building: string;
+}
+
 /**
  * Profit - Building
  * Cada building do projeto e a descrição de como os slots de produção serão ocupados no ciclo.
@@ -61,6 +51,19 @@ export interface IItemProfitBuilding {
   slots: IItemProfitBuildingSlots[];
 }
 
+/**
+ * Profit Cycle
+ *
+ * Cada ciclo que o usuário deverá interagir com o app para produção andar.
+ */
+export interface IProfitCycle {
+  cycle: number;
+  startProduction: number;
+  endProduction: number;
+  // quantity: number;
+  slots: IItemProfitBuildingSlots[];
+  // building: IBuildingModel;
+}
 /**
  * Profit - Building List
  * Todas buildings existentes e como seus slots serão ocupados

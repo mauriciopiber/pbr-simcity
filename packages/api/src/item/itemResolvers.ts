@@ -109,14 +109,15 @@ const resolvers = {
   },
   Item: {
     async building(
-      parent: IItemModel,
+      parent: IItemModel | string,
       _args: unknown,
       context: IContext,
     ): Promise<IBuilding> {
       const { dataSources } = context;
       const { building } = dataSources;
-      /* eslint-disable  @typescript-eslint/ban-ts-comment */
-      /** @ts-ignore */
+
+      console.log(parent);
+
       return building.resolveOneBuildingByParentItemId(parent.building);
     },
     async usedIn(parent: IItemModel, args: IItemArgs, context: IContext): Promise<IItemModel[]> {
@@ -126,6 +127,36 @@ const resolvers = {
       const { _id } = parent;
 
       return item.resolveUsedInByItemId(_id, args);
+    },
+    async profitByMinute(parent: IItemModel, args: IItemArgs, context: IContext): Promise<number> {
+      return 0;
+
+      /**
+       * profit
+          profitByMinute
+          profitByHour
+          billTime
+       */
+    },
+    async profitByHour(parent: IItemModel, args: IItemArgs, context: IContext): Promise<number> {
+      return 0;
+
+      /**
+       * profit
+          profitByMinute
+          profitByHour
+          billTime
+       */
+    },
+    async billTime(parent: IItemModel, args: IItemArgs, context: IContext): Promise<number> {
+      return 0;
+
+      /**
+       * profit
+          profitByMinute
+          profitByHour
+          billTime
+       */
     },
   },
   ItemDepends: {

@@ -51,18 +51,6 @@ const ItemPanel: FC<IItemPanelProps> = ({ slug }) => {
       </div>
       <table>
         <tr>
-          <th>Dependency Graph</th>
-          <td>
-            <DependencyGraph items={item.depends} />
-          </td>
-        </tr>
-        {/* <tr>
-          <th>Buildings Flow</th>
-          <td>
-            <BuildingFlow item={item} />
-          </td>
-        </tr> */}
-        <tr>
           <th><Link href={`/buildings/${item.building.slug}`}><a>{item.building.name}</a></Link></th>
         </tr>
         <tr>

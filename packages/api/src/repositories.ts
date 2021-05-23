@@ -12,7 +12,7 @@ function createRepository(client: any): any {
     }
 
     fs.readdirSync(path.join(__dirname, dir)).forEach((file): void => {
-      // console.log(file);
+
       if (
         file.match(/Repository.(ts|js)$/) !== null
         && file !== 'index.ts'
@@ -42,7 +42,7 @@ function createRepository(client: any): any {
     });
   });
 
-  // console.log(dataSources);
+
   return dataSources;
 }
 

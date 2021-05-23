@@ -1,5 +1,6 @@
 import {
   IItem,
+  IItemModel,
 } from './items.types';
 
 export type BuildingSlugs = 'industry'
@@ -35,6 +36,8 @@ export interface IBuildingFilter {
   _id?: string;
 }
 
+
+
 export interface IBuildingArgs {
   filter: IBuildingFilter;
   order: string;
@@ -52,5 +55,5 @@ export interface IBuildingDataSource {
   buildingRepository: IBuildingRepository;
   resolveAllBuildings(): Promise<IBuilding[]>
   resolveOneBuilding(filter: IBuildingFilter): Promise<IBuilding>
-  resolveOneBuildingByParentItemId(parent: string): Promise<IBuilding>
+  resolveOneBuildingByParentItemId(parent: IItemModel | IItem): Promise<IBuilding>
 }

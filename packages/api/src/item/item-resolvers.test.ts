@@ -68,6 +68,27 @@ describe('Test Item Resolvers', () => {
               complete
             }
           }
+          cycles {
+            startProduction
+            endProduction
+            slots {
+              slot
+              item {
+                _id
+                slug
+                name
+                building {
+                  _id
+                  name
+                  slug
+                }
+              }
+              schedule
+              start
+              complete
+            }
+            cycle
+          }
         }
       }
     `;
@@ -92,6 +113,7 @@ describe('Test Item Resolvers', () => {
 
     const {
       buildings,
+      cycles,
     } = itemProfit;
 
     const supplies = buildings.find((a: any) => a.slug === 'supplies');
@@ -101,6 +123,86 @@ describe('Test Item Resolvers', () => {
     } = supplies;
 
     expect(slots[0].item.slug).toEqual('nails');
+
+    expect(cycles.length).toEqual(4);
+  });
+
+  it('Get Item Profit - Lemonade', async () => {
+    const ITEMS = gql`
+      query {
+        itemProfit(slug: "lemonade") {
+          slug
+          buildings {
+            slug
+            name
+            slots {
+              slot
+              item {
+                _id
+                slug
+                name
+              }
+              schedule
+              start
+              complete
+            }
+          }
+          cycles {
+            startProduction
+            endProduction
+            slots {
+              slot
+              item {
+                _id
+                slug
+                name
+                building {
+                  _id
+                  slug
+                }
+              }
+              schedule
+              start
+              complete
+            }
+            cycle
+          }
+        }
+      }
+    `;
+
+    const res = await query({ query: ITEMS });
+
+    expect(res.errors).toBe(undefined);
+
+    expect(res).toHaveProperty('data');
+
+    const {
+      data,
+    } = res;
+
+    expect(data).toHaveProperty('itemProfit');
+
+    const {
+      itemProfit,
+    } = data;
+
+    expect(itemProfit.slug).toEqual('lemonade');
+
+    // const {
+    //   buildings,
+    //   cycles,
+    // } = itemProfit;
+
+    // const supplies = buildings.find((a: any) => a.slug === 'supplies');
+
+    // const {
+    //   slots,
+    // } = supplies;
+
+    // expect(slots[0].item.slug).toEqual('nails');
+
+    // expect(cycles.length).toEqual(4);
   });
 
   it('Test find all Items', async () => {
@@ -110,6 +212,11 @@ describe('Test Item Resolvers', () => {
           _id
           name
           slug
+          building {
+            _id
+            name
+            slug
+          }
         }
       }
     `;
@@ -140,6 +247,11 @@ describe('Test Item Resolvers', () => {
           _id
           name
           slug
+          building {
+            _id
+            name
+            slug
+          }
         }
       }
     `;
@@ -451,5 +563,55 @@ describe('Test Item Resolvers', () => {
     } = data;
 
     expect(itemsDependsByItems.length).toEqual(3);
+  });
+
+  it('Test Find all items depends by item with critical path and total profit - burgers', async () => {
+    const ITEMS = gql`
+      query {
+        itemsDependsByItems(
+          slugs: ["burgers"]
+          order: "asc"
+          orderBy: "slug"
+          filter: { level: 43 }
+        ) {
+          _id
+          name
+          maxValue
+          productionTime
+          level
+          slug
+          profitOwnProduction
+          profitOwnByMinute
+          profitOwnByHour
+          profitByMinute
+          profitByHour
+          billTime
+          billCost
+        }
+      }
+    `;
+
+    const res = await query({ query: ITEMS });
+
+    expect(res.errors).toBe(undefined);
+    expect(res).toHaveProperty('data');
+
+    const { data } = res;
+    expect(data).toHaveProperty('itemsDependsByItems');
+
+    const { itemsDependsByItems } = data;
+    expect(itemsDependsByItems.length).toEqual(3);
+
+    const beef = itemsDependsByItems.find((a: any) => a.slug === 'beef');
+
+    if (!beef) {
+      throw new Error('Missing Burger');
+    }
+
+    // expect(beef.billTime).toEqual(585);
+    // expect(beef.profitByMinute).toEqual(5.83);
+    // expect(beef.profitByHour).toEqual(350.322580645);
+
+    // expect(beef.item)
   });
 });

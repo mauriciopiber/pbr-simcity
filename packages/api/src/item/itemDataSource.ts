@@ -7,6 +7,8 @@ import {
   IItemProfitBuldingList,
   IItemProfitBuildingSlots,
   IBuilding,
+  IProfitCycle,
+  IItemProfitBuildingSlotsCycle,
   ItemSortRepository,
   // ItemMatchRepository,
   IItemDependency,
@@ -195,11 +197,6 @@ export default class ItemDataSource implements IItemDataSource {
       building: buildings.find((b: any) => `${b._id}` === `${a.building}`),
     }));
 
-    // itemsFlats.forEach((itemFlat: any) => {
-    //   console.log(itemFlat, buildingStats, itemsWithStats);
-    // });
-
-    // console.log(itemsFlats);
     // const itemsWith
     // prepare buildings - industry
 
@@ -297,14 +294,54 @@ export default class ItemDataSource implements IItemDataSource {
       supplies: suppliesBuilding,
     };
 
+    const cycles: IProfitCycle[] = await this.createItemsCycles(profitBuildings);
+
     const itemProfit: IItemProfit = {
       slug: item,
-      cycles: [],
+      cycles,
       buildings: profitBuildings,
     };
 
     // find depends.
     return itemProfit;
+  }
+
+  async createItemsCycles(profitBuildings: IItemProfitBuldingList): Promise<IProfitCycle[]> {
+    const allSlotsGroupBySchedule = Object.keys(profitBuildings).map((buildingSlug: string) => {
+      const { slots } = profitBuildings[buildingSlug] || {};
+
+      if (!slots) {
+        throw new Error('Slots not found');
+      }
+
+      return slots.map((slot: IItemProfitBuildingSlots): IItemProfitBuildingSlotsCycle => ({
+        ...slot,
+        building: buildingSlug,
+      }));
+    }).flat().reduce((rv: any, x: any) => {
+      const slots = rv;
+      // /** @ts-ignore */
+      (slots[x.schedule] = rv[x.schedule] || []).push(x);
+      return rv;
+    }, {});
+
+    const scheduleKeys = Object.keys(allSlotsGroupBySchedule);
+
+    return scheduleKeys.map((schedule: any, index: number): IProfitCycle => {
+      const slots = allSlotsGroupBySchedule[schedule];
+
+      const max = slots.reduce(
+        (prev: any, current: any) => (prev.complete > current.complete ? prev : current),
+        {},
+      );
+
+      return {
+        cycle: index,
+        startProduction: parseInt(schedule, 10),
+        endProduction: max.complete,
+        slots,
+      };
+    });
   }
 
   /**
@@ -425,7 +462,7 @@ export default class ItemDataSource implements IItemDataSource {
           maxTime: slot.complete + item.productionTime,
         };
       }
-      // console.log(slots);
+
     }
 
     const criticalConflict = dependencyGraph.find(
@@ -550,7 +587,7 @@ export default class ItemDataSource implements IItemDataSource {
   }
 
   async getItemsListDependencyGraph(items: any[], buildingHistory: IItemProfitBuilding[]) {
-    // console.log('building history', buildingHistory);
+
     const dependencyGraphItemsPromises = items.map(async (a: any) => {
       const dependencyGraph = await this.resolveItemDependencyGraph(a.slug, buildingHistory);
       return {

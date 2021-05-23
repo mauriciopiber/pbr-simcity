@@ -47,13 +47,13 @@ const ItemTable: FC<ItemTableProps> = ({ items, setOrder }) => {
             className="header--order"
             onClick={() => setOrder('profitOwnByMinute')}
           >
-            OPPBM
+            P/M
           </th>
           <th
             className="header--order"
             onClick={() => setOrder('profitOwnByHour')}
           >
-            OPPBH
+            P/H
           </th>
           <th>Depends</th>
           <th>Used In</th>

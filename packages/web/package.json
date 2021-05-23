@@ -24,6 +24,7 @@
     "@types/prop-types": "^15.7.3",
     "apollo-boost": "^0.4.9",
     "classnames": "^2.2.6",
+    "dayjs": "^1.10.4",
     "eslint-import-resolver-alias": "^1.1.2",
     "graphql": "^15.5.0",
     "graphql-request": "^3.4.0",

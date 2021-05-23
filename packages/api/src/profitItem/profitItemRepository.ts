@@ -16,7 +16,6 @@ class ProfitItemRepository extends Collection {
   }
 
   async addProfitItem(profit: string, item: string) {
-    //    console.log(args);
     const docs = await this.collection.insertOne({
       profit: new ObjectId(profit),
       item: new ObjectId(item),
@@ -31,11 +30,10 @@ class ProfitItemRepository extends Collection {
   }
 
   async removeById(_id: string) {
-    const docs = await this.collection.deleteOne({
+    await this.collection.deleteOne({
       _id: { $eq: new ObjectId(_id) },
     });
 
-    console.log(docs);
     return _id;
   }
 }

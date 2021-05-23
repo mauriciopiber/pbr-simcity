@@ -17,6 +17,10 @@ const typeDefs = gql`
     profitOwnProduction: Int!
     profitOwnByMinute: Float!
     profitOwnByHour: Float!
+    profit: Float!
+    profitByMinute: Float!
+    profitByHour: Float!
+    billTime: Int!
     slug: String!
     usedIn: [Item]
     depends: [ItemDepends]
@@ -40,9 +44,17 @@ const typeDefs = gql`
     slots: [BuildingProfitSlot]
   }
 
+  type CycleProfit {
+    startProduction: Int!
+    endProduction: Int!
+    slots: [BuildingProfitSlot]
+    cycle: Int!
+  }
+
   type ItemProfit {
     slug: String!
     buildings: [BuildingProfit]
+    cycles: [CycleProfit]
   }
 
   type Query {

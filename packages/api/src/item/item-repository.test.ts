@@ -286,7 +286,7 @@ describe('Item Repository', () => {
         },
       },
     );
-    // console.log(findAll);
+
 
     if (!findAll || findAll.length < 1) {
       throw new Error('Missing Planks by ID');

@@ -118,7 +118,7 @@ export default class ItemRepository extends Collection implements IItemRepositor
   }
 
   async findDependsByItemsSlugs(items: string[]): Promise<IItemModel[]> {
-    // console.log(match, sort);
+
 
     const docs = this.collection.aggregate([
       { $match: { slug: { $in: items } } },
@@ -173,7 +173,7 @@ export default class ItemRepository extends Collection implements IItemRepositor
   }
 
   async findUsedInByBuildingSlug(slug: string): Promise<IItemModel[]> {
-    // console.log(match, sort);
+
     // const { match, sort }: any = await ItemRepository.createMatchFilter(args);
 
     const docs = this.collection.aggregate([
@@ -258,7 +258,7 @@ export default class ItemRepository extends Collection implements IItemRepositor
   }
 
   async findUsedInByItemsSlugs(items: string[]): Promise<IItemModel[]> {
-    // console.log(match, sort);
+
     const docs = this.collection.aggregate([
       { $unwind: { path: '$depends', preserveNullAndEmptyArrays: true } },
       {
@@ -614,7 +614,7 @@ export default class ItemRepository extends Collection implements IItemRepositor
         maxValue: 1,
         profitOwnProduction: 1,
         profitOwnByMinute: {
-          $divide: ['$profitOwnProduction', '$productionTime'],
+          $round: [{ $divide: ['$profitOwnProduction', '$productionTime'] }, 2],
         },
 
         billCost: 1,
@@ -632,7 +632,9 @@ export default class ItemRepository extends Collection implements IItemRepositor
     {
       $addFields: {
         // profitOwnProduction: { $subtract: [ "$maxValue", "$billCost"  ] },
-        profitOwnByHour: { $multiply: ['$profitOwnByMinute', 60] },
+        profitOwnByHour: {
+          $round: [{ $multiply: ['$profitOwnByMinute', 60] }],
+        },
       },
     },
   ];
@@ -664,6 +666,7 @@ export default class ItemRepository extends Collection implements IItemRepositor
         ...this.pipeline,
       ])
       .toArray();
+
 
     // const docs = await this.collection.findOne({_id: {$eq: new ObjectId(id)}});
     // return docs;

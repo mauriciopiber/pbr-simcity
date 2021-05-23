@@ -53,7 +53,6 @@ class ProfitRepository extends Collection {
       .aggregate([...this.aggregate, { $match: { _id: new ObjectId(id) } }])
       .toArray();
 
-    console.log(docs, id);
     return docs[0];
   }
 

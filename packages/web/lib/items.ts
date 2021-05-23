@@ -156,6 +156,25 @@ query(
         complete
       }
     }
+    cycles {
+      startProduction
+      endProduction
+      slots {
+        slot
+        item {
+          _id
+          slug
+          name
+          building {
+            slug
+          }
+        }
+        schedule
+        start
+        complete
+      }
+      cycle
+    }
   }
 }
 `

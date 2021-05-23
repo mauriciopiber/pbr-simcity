@@ -97,7 +97,12 @@ describe('Items Profit - Critical Path', () => {
       'planks',
     );
 
-    expect(findAll.cycles.length).toEqual(0);
+    expect(findAll.cycles.length).toEqual(2);
+
+    expect(findAll.cycles[0]?.startProduction).toEqual(0);
+    expect(findAll.cycles[0]?.endProduction).toEqual(3);
+
+
     expect(findAll.buildings).toHaveProperty('industry');
     expect(findAll.buildings).toHaveProperty('supplies');
     expect(findAll.buildings).toHaveProperty('hardware');
@@ -148,7 +153,7 @@ describe('Items Profit - Critical Path', () => {
       'pizza',
     );
 
-    expect(findAll.cycles.length).toEqual(0);
+    expect(findAll.cycles.length).toEqual(4);
 
     expect(findAll.buildings).toHaveProperty('farmers');
     expect(findAll.buildings).toHaveProperty('industry');
@@ -845,7 +850,7 @@ describe('Items Profit - Critical Path', () => {
       'burgers',
     );
 
-    expect(findAll.cycles.length).toEqual(0);
+    expect(findAll.cycles.length).toEqual(7);
     // expect(findAll.buildings).toHaveProperty('farmers');
     // expect(findAll.buildings).toHaveProperty('industry');
     const { industry, farmers, hardware, donut } = findAll.buildings;
