@@ -1,0 +1,10 @@
+version: "3.9"
+services:
+  service:
+    image: registry.piber.network/dev-node:v3.0.0
+    ports:
+      - "4000:4000"
+      - "8080:8080"
+    volumes:
+      - ./../../:/var/www
+    command: yarn --cwd /var/www/packages/api dev
