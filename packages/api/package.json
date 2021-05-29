@@ -40,7 +40,7 @@
     "eslint": "eslint . --ext ts,tsx",
     "lint": "yarn eslint; yarn ts-check",
     "lint:fix": "eslint . --ext ts,tsx --fix",
-    "start": "node -r ts-node/register/transpile-only -r tsconfig-paths/register lib/server.js"
+    "start": "node -r ts-node/register/transpile-only -r tsconfig-paths/register lib/api/src/server.js"
   },
   "devDependencies": {
     "@babel/core": "^7.13.10",
