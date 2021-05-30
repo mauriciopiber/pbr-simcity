@@ -1,4 +1,4 @@
-FROM registry.piber.network/dev-node:v3.0.0 AS builder
+FROM registry.piber.network/dev-node:v3.0.1 AS builder
 
 
 COPY ./node_modules /var/www/node_modules

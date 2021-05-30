@@ -1,12 +1,18 @@
 import { IItem, IBuilding } from '@pbr-simcity/types/types';
 import { MongoClient } from 'mongodb';
 import { buildingsList, itemsList } from '@pbr-simcity/api/src/itemList';
+import 'dotenv/config';
 
 async function persistModel(
   buildings: IBuilding[],
   items: IItem[],
 ): Promise<void> {
-  const mongoStr = 'mongodb://localhost:27017/simcity';
+  const mongoStr: string | undefined = process.env.MONGO_DATABASE;
+
+  if (!mongoStr) {
+    throw new Error('Missing Mongo Database String');
+  }
+
   const client = new MongoClient(mongoStr, { useUnifiedTopology: true });
 
   try {

@@ -18,21 +18,31 @@ const InitComponentWithApollo: FC<PageProps> = ({ Page, props }) => (
   </ApolloProvider>
 )
 
-export default withApollo(
-  ({ ctx, initialState }) => new ApolloClient({
-    uri: 'http://localhost:4000',
-    request: (operation) => {
-      const cookies = parseCookies(ctx);
-      const { token } = cookies;
 
-      operation.setContext({
-        headers: {
-          authorization: token ? `Bearer ${token}` : '',
-        },
-      });
-    },
-    cache: new InMemoryCache().restore(initialState || {}),
-  }),
+export default withApollo(
+  ({ ctx, initialState }) => {
+
+    const GRAPHQL_API: string | undefined = process.env.GRAPHQL_API;
+    console.log(GRAPHQL_API);
+    if (GRAPHQL_API === undefined) {
+      throw new Error('Missing GRAPHQL_API environment');
+    }
+
+    return new ApolloClient({
+      uri: GRAPHQL_API,
+      request: (operation) => {
+        const cookies = parseCookies(ctx);
+        const { token } = cookies;
+
+        operation.setContext({
+          headers: {
+            authorization: token ? `Bearer ${token}` : '',
+          },
+        });
+      },
+      cache: new InMemoryCache().restore(initialState || {}),
+    })
+  },
   {
     render: InitComponentWithApollo,
   },

@@ -96,7 +96,11 @@ const Page: FC<BuildingProps> = ({ id }) => {
 // }
 
 export async function getStaticPaths(): Promise<IStaticPaths> {
-  const data = await request('http://localhost:4000', QUERY_PROFITS_PATHS);
+  const GRAPHQL_API: string | undefined = process.env.GRAPHQL_API;
+  if (!GRAPHQL_API) {
+    throw new Error('Missing GRAPHQL_API environment');
+  }
+  const data = await request(GRAPHQL_API, QUERY_PROFITS_PATHS);
 
   const { profits } = data;
 

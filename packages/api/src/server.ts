@@ -4,8 +4,13 @@ import resolvers from '@pbr-simcity/api/src/resolvers';
 import typeDefs from '@pbr-simcity/api/src/typeDefs';
 import repositories from '@pbr-simcity/api/src/repositories';
 import dataSource from '@pbr-simcity/api/src/dataSource';
+import 'dotenv/config';
 
-const mongoStr = 'mongodb://localhost:27017/simcity';
+const mongoStr: string | undefined = process.env.MONGO_DATABASE;
+
+if (!mongoStr) {
+  throw new Error('Missing Mongo Database String');
+}
 
 const client = new MongoClient(mongoStr, { useUnifiedTopology: true });
 client.connect();

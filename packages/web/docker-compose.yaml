@@ -1,13 +1,13 @@
 version: "3.9"
 services:
   web:
-    image: registry.piber.network/dev-node:v3.0.0
+    image: registry.piber.network/dev-node:v3.0.1
     ports:
       - "3000:3000"
     volumes:
       - ./../../:/var/www
     command: yarn --cwd /var/www/packages/web dev
-    networks:
-      - pbr-simcity-dev
 networks:
-  pbr-simcity-dev:
+  default:
+    external:
+      name: pbr-simcity-dev

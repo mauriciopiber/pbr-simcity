@@ -32,7 +32,11 @@ const Page: FC<BuildingProps> = ({ slug }) => {
 }
 
 export async function getStaticPaths() {
-  const data = await request('http://localhost:4000', QUERY_PATHS);
+  const GRAPHQL_API: string | undefined = process.env.GRAPHQL_API;
+  if (!GRAPHQL_API) {
+    throw new Error('Missing GRAPHQL_API environment');
+  }
+  const data = await request(GRAPHQL_API, QUERY_PATHS);
 
   const { buildings } = data;
 
