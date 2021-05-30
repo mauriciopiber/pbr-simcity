@@ -1,2 +1,4 @@
-**/yarn-log
+*/**/.env
+*/**/node_modules
 node_modules
+lerna-debug.log

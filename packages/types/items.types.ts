@@ -49,6 +49,9 @@ export interface IItemModel extends IItem {
   usedIn: IItemModel[];
   profitOwnByMinute: number;
   profitOwnByHour: number;
+  totalTime: number;
+  profitTotalByHour: number;
+  profitTotalByMinute: number;
 }
 
 export interface IItemFilter {

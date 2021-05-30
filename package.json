@@ -6,6 +6,9 @@
   },
   "workspaces": ["packages/*"],
   "scripts": {
-    "dev": "lerna run dev --parallel"
+    "dev": "lerna run dev --parallel",
+    "dkc-up": "lerna run dkc-up --parallel",
+    "dkc-down": "lerna run dkc-down --parallel",
+    "dkc-status": "lerna run dkc-down --parallel"
   }
 }

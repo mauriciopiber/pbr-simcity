@@ -11,7 +11,10 @@
     "test": "yarn test:unit; yarn test:e2e",
     "ts-check": "tsc --noEmit",
     "storybook": "start-storybook -s ./public -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "dkc-up": "docker-compose up -d",
+    "dkc-down": "docker-compose down --remove-orphans",
+    "dkc-ps": "docker-compose ps"
   },
   "dependencies": {
     "@apollo/react-hooks": "^4.0.0",

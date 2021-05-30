@@ -8,3 +8,7 @@ services:
     volumes:
       - ./../../:/var/www
     command: yarn --cwd /var/www/packages/api dev
+    networks:
+      - pbr-simcity-dev
+networks:
+  pbr-simcity-dev:

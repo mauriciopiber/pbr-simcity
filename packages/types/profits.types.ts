@@ -2,6 +2,7 @@ import {
   IItemModel,
 } from './items.types';
 import {
+  BuildingSlugs,
   IBuilding,
   IBuildingModel,
 } from './buildings.types';
@@ -46,7 +47,7 @@ export interface IItemProfitBuildingSlotsCycle extends IItemProfitBuildingSlots 
  */
 export interface IItemProfitBuilding {
   name: string;
-  slug: string;
+  slug: BuildingSlugs;
   order: number;
   slots: IItemProfitBuildingSlots[];
 }
