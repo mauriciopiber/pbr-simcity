@@ -7,6 +7,9 @@ services:
     volumes:
       - ./../../:/var/www
     command: yarn --cwd /var/www/packages/web dev
+    environment:
+      - VIRTUAL_HOST=web.simcity
+      - VIRTUAL_PORT=3000
 networks:
   default:
     external:
