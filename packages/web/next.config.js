@@ -1,6 +1,6 @@
 
 module.exports = {
   env: {
-    GRAPHQL_API: process.env.GRAPHQL_API,
+    GRAPHQL_API_CLIENT: process.env.GRAPHQL_API_CLIENT,
   },
 };

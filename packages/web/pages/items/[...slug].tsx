@@ -21,7 +21,7 @@ function Page({ slug }: ItemProps) {
 }
 
 export async function getStaticPaths() {
-  const GRAPHQL_API: string | undefined = process.env.GRAPHQL_API;
+  const GRAPHQL_API: string | undefined = process.env.GRAPHQL_API_SERVER;
   if (!GRAPHQL_API) {
     throw new Error('Missing GRAPHQL_API environment');
   }

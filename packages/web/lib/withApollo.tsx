@@ -22,8 +22,8 @@ const InitComponentWithApollo: FC<PageProps> = ({ Page, props }) => (
 export default withApollo(
   ({ ctx, initialState }) => {
 
-    const GRAPHQL_API: string | undefined = process.env.GRAPHQL_API;
-    console.log(GRAPHQL_API);
+    const GRAPHQL_API: string | undefined = process.env.GRAPHQL_API_CLIENT;
+
     if (GRAPHQL_API === undefined) {
       throw new Error('Missing GRAPHQL_API environment');
     }

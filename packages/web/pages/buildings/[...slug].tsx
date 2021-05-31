@@ -32,22 +32,33 @@ const Page: FC<BuildingProps> = ({ slug }) => {
 }
 
 export async function getStaticPaths() {
-  const GRAPHQL_API: string | undefined = process.env.GRAPHQL_API;
+  const GRAPHQL_API: string | undefined = process.env.GRAPHQL_API_SERVER;
   if (!GRAPHQL_API) {
     throw new Error('Missing GRAPHQL_API environment');
   }
-  const data = await request(GRAPHQL_API, QUERY_PATHS);
+  console.log(GRAPHQL_API);
 
-  const { buildings } = data;
+  try {
+    const data = await request(GRAPHQL_API, QUERY_PATHS);
 
-  const paths = buildings.map((b: any) => ({
-    params: { slug: [b.slug] },
-  }));
+    const { buildings } = data;
 
-  return {
-    paths,
-    fallback: false,
-  };
+    const paths = buildings.map((b: any) => ({
+      params: { slug: [b.slug] },
+    }));
+
+    return {
+      paths,
+      fallback: false,
+    };
+  } catch (e) {
+    console.log(e);
+    return {
+      paths: [],
+      fallback: false,
+    };
+  }
+
 }
 
 export async function getStaticProps(ctx: any) {

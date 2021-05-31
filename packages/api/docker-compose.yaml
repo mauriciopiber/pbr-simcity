@@ -7,6 +7,8 @@ services:
     volumes:
       - ./../../:/var/www
     command: yarn --cwd /var/www/packages/api dev
+    expose:
+      - "4000"
     environment:
       - VIRTUAL_HOST=api.simcity
       - VIRTUAL_PORT=4000
