@@ -4,6 +4,10 @@ FROM registry.piber.network/dev-node:v3.0.1 AS builder
 COPY ./node_modules /var/www/node_modules
 COPY ./packages /var/www/packages
 
+USER root
+RUN chown -R pbr:pbr /var/www
+USER pbr
+
 
 RUN ls -l /var/www
 
